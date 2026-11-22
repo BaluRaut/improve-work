@@ -8,6 +8,7 @@
 | Title | Add Marathi and Tamil to the app |
 | Feature owner | Nisha Bhat, Localization |
 | Other authors | Arjun Mehta (mobile), Deepak R. (notifications) |
+| Complexity | Standard: many screens and messages, no new data or infrastructure |
 | Reviewers | Engineering lead, Product, Design, QA, Data, Localization |
 | Status | In review |
 | Created | 2026-10-20 |

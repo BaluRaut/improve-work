@@ -104,6 +104,15 @@ td:first-child{font-weight:600;white-space:nowrap}
 .no{color:var(--muted)}
 .note{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px;max-width:72ch}
 
+/* sizing examples */
+.quick{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.sizes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.sizes .card h3{display:flex;align-items:baseline;gap:8px}
+.sizes .card h3 small{font:500 11.5px/1 var(--mono);color:var(--muted);font-weight:500}
+.sizes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.sizes li span{display:block;color:var(--muted);font-size:13px}
+td.size{font-weight:600}
+
 /* confluence */
 .conf{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
 @media (max-width:820px){.conf{grid-template-columns:1fr}}
@@ -283,7 +292,60 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       </tbody>
     </table>
   </div>
-  <p class="note">Risk beats size. A one-line change to login, payments, personal data or a production migration is Full, however small it looks.</p>
+  <h3>Decide in four questions</h3>
+  <p>Ask them in order and stop at the first yes.</p>
+  <ol class="quick">
+    <li>Does it touch login or permissions, money, personal data, or migrate production data? <strong>Full.</strong></li>
+    <li>Can it only ship if several teams deliver work that depends on each other? <strong>Full.</strong></li>
+    <li>Does it need a technical choice, a new API, table or piece of infrastructure, or more than a few stories? <strong>Standard.</strong></li>
+    <li>None of the above? <strong>Lite.</strong></li>
+  </ol>
+
+  <h3>Examples</h3>
+  <div class="sizes">
+    <div class="card">
+      <h3>Lite <small>a Jira story is enough</small></h3>
+      <ul>
+        <li>Show invoice dates as 22 Nov 2026 instead of 2026-11-22<span>One screen, one team, easy to undo.</span></li>
+        <li>Add a "last updated" column to an internal admin export<span>Internal users only, no new data stored.</span></li>
+        <li>Add the missing loading spinner on the order history page<span>Visual fix, no behaviour change.</span></li>
+        <li>Raise a retry count in one service's config<span>Existing setting, rollback is a config change.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Standard <small>brief, RFC, plan</small></h3>
+      <ul>
+        <li><a href="../examples/rfc-103-dark-mode.html">Dark mode for web and apps</a><span>Several platforms and stories, but no data, money or security risk.</span></li>
+        <li><a href="../examples/rfc-105-marathi-and-tamil-languages.html">Add Marathi and Tamil</a><span>Many screens, emails and SMS, plus translation and font choices.</span></li>
+        <li><a href="../examples/rfc-102-partner-api-rate-limiting.html">Rate limits on the partner API</a><span>One team, but new infrastructure and partners must be told first.</span></li>
+        <li>A new filter on product search that needs a new API field<span>A technical choice and a few stories, within one product area.</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Full <small>everything, plus outcome review</small></h3>
+      <ul>
+        <li><a href="../examples/rfc-101-customer-order-cancellation.html">Customers cancel their own orders</a><span>Automatic refunds touch money, and four teams must ship together.</span></li>
+        <li><a href="../examples/rfc-104-postgres-16-upgrade.html">Upgrade the orders database to PostgreSQL 16</a><span>No visible change, but a production migration with downtime.</span></li>
+        <li>Move login to a new identity provider<span>Every user is affected, and a mistake locks people out.</span></li>
+        <li>Split the orders service in two<span>Data moves between databases, and other teams' integrations change.</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Cases that fool people</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Change</th><th>Looks like</th><th>Actually</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>Password-reset links expire after 1 hour instead of 24</td><td>Lite: one line</td><td class="size">Full</td><td>It changes authentication. Get it wrong and users are locked out, or links stay open too long.</td></tr>
+        <tr><td>Add the customer's phone number to an analytics event</td><td>Lite: one field</td><td class="size">Full</td><td>Personal data is going to a third-party tool, so privacy and consent need review.</td></tr>
+        <tr><td>Change how refunds are rounded</td><td>Lite: one formula</td><td class="size">Full</td><td>It's money. Finance has to agree, and the old and new results must reconcile.</td></tr>
+        <tr><td>Redesign all twelve help centre pages</td><td>Full: lots of work</td><td class="size">Standard</td><td>Big, but one team, with no data, money or security impact. Size of work isn't risk.</td></tr>
+        <tr><td>Bump a library by a patch version</td><td>Standard: touches every service</td><td class="size">Lite</td><td>Covered by automated tests and easy to roll back, unless it's an auth or crypto library.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Risk beats size. A one-line change to login, payments, personal data or a production migration is Full, however small it looks. If unsure between two sizes, pick the bigger one at triage; you can drop sections later with a reason.</p>
 </section>
 
 <section id="confluence">

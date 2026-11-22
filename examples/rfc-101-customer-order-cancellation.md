@@ -53,7 +53,7 @@ Customers will be able to cancel an order from the order page within 30 minutes 
 
 **Guardrail metrics:** overall cancellation rate must not rise more than 0.5 percentage points from 3.2%; refund failure rate must stay below 0.5%.
 
-## 5. Users and use cases
+## 5. Users, requirements and use cases
 
 - As a customer who ordered the wrong item, I want to cancel straight away so that I can reorder correctly.
 - As a customer who found a better slot, I want to cancel without waiting for support.
@@ -267,13 +267,13 @@ The order page shows a "Cancel order" button with a countdown while the order is
 | Refund fails silently | Low | High | Reconciler every hour, DLQ alert, automatic support ticket | Sneha |
 | Cancel-and-reorder abuse for coupons | Low | Medium | Coupon is returned only once per order; fraud dashboard flag | Priya |
 
-## 22. Open questions
+## 22. Open questions, assumptions and decisions
 
 | Question | Owner | Due | Answer |
 |---|---|---|---|
 | Should the window be 30 or 45 minutes? | Product | 2026-10-15 | 30 minutes; revisit after phase 2 data |
 
-## 23. Timeline and estimates
+## 23. Milestones and delivery plan
 
 | Milestone | Estimate | Target date |
 |---|---|---|

@@ -1,6 +1,8 @@
 # Example: Cross-team delivery plan – Peer Field Intelligence
 
 > Fictional example showing how one feature can be decomposed across product, frontend, backend, geospatial/data, platform, QA and analytics teams. Names, estimates, systems and metrics are illustrative only.
+>
+> Unlike the five RFC examples in this folder (set in the fictional Acme Retail), this example shows only the Delivery Plan stage, for a fictional agriculture product. In real use it would sit alongside a Feature Request Brief and an RFC that use the same Feature ID.
 
 | Field | Value |
 |---|---|

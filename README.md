@@ -13,7 +13,7 @@ The workflow connects a business request to refined requirements, an engineering
 3. **Discovery** – clarify users, scope, requirements and acceptance criteria.
 4. **Technical RFC** – document the proposed solution, decisions, risks and operational impact.
 5. **Work breakdown** – engineering teams decompose and estimate independently testable work.
-6. **Jira handoff** – use Rovo to draft Jira work items, review them and create approved items.
+6. **Jira handoff** – draft work items (optionally with Rovo), review them and create approved items in your tracker.
 7. **Delivery and outcome review** – implement, release and measure the result.
 
 See [guides/WORKFLOW.md](guides/WORKFLOW.md) for roles, statuses, gates and complexity levels.
@@ -70,18 +70,18 @@ A new [cross-team Peer Field Intelligence delivery example](examples/CROSS_TEAM_
 
 Use one Feature ID across all artifacts. Link rather than copy large sections between documents.
 
-## Rovo and Jira
+## Rovo and Jira (optional)
 
-Rovo can help draft a work breakdown, but it must not silently decide product scope, architecture, estimates, owners, sprint allocation or delivery dates. Review the proposed hierarchy and each work item's acceptance criteria before creating Jira issues. Follow your organization's Jira issue types, fields, permissions and workflow.
+If your team uses Jira and Rovo, Rovo can help draft a work breakdown, but it must not silently decide product scope, architecture, estimates, owners, sprint allocation or delivery dates. Review the proposed hierarchy and each work item's acceptance criteria before creating Jira issues. Follow your organization's Jira issue types, fields, permissions and workflow.
 
 ## Validation and generated site
 
-Markdown files are the source of truth. The Python build script generates the styled HTML pages and validates example RFC section usage.
+Markdown files are the source of truth. `build.py` generates the styled HTML pages and validates the example RFCs: required sections are present, every omitted section is explained, and section titles match the template.
 
-After editing any Markdown file, rebuild:
+To view the pages locally, build them and open `index.html`:
 
 ```sh
 uv run --with markdown python build.py
 ```
 
-The build writes the HTML pages next to their Markdown sources and refreshes `index.html`.
+Generated HTML is not committed. GitHub Actions builds and validates every pull request, and publishes the site to GitHub Pages when changes reach `main`.

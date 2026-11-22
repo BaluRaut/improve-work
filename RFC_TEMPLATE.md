@@ -2,7 +2,7 @@
 
 > **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.
 >
-> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages.
+> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages. The Jira and Rovo steps apply if your team uses them; the rest works with any tracker.
 >
 > **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the "Sections not included" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.
 
@@ -11,11 +11,7 @@
 | Section | Include when the change… |
 |---|---|
 | 4 Success metrics | is meant to move a product, business or reliability number; record actual results after release |
-| 5.2 Functional requirements | users or systems need specific, testable behaviour |
-| 19 Dependencies | another team, vendor, system or decision affects delivery |
-| 22 Decision log | meaningful options, assumptions or decisions need traceability |
-| 23.2 Work breakdown and Jira handoff | work crosses components or teams, or Jira items need to be planned |
-| 5 Users and use cases | changes what users see or do |
+| 5 Users, requirements and use cases | changes what users see or do; 5.2 when users or systems need specific, testable behaviour |
 | 7 Frontend | touches web or mobile UI |
 | 8 Backend | adds or changes services, APIs, jobs or integrations |
 | 9 Data model | changes schemas, migrations, retention or stored personal data |
@@ -26,7 +22,11 @@
 | 14 Observability | adds or changes anything that runs in production and can fail |
 | 15 Performance | can change latency, throughput, load or bundle size |
 | 16 Testing | always recommended; keep it short for small changes |
-| 19 to 24 | whenever they have content; 24 Launch checklist is recommended for user-facing changes |
+| 19 Dependencies | another team, vendor, system or decision affects delivery |
+| 20 Alternatives | there was a real choice between approaches |
+| 22 Questions, assumptions and decisions | there are open questions, or meaningful options and decisions need traceability |
+| 23 Milestones and delivery plan | the work spans more than one milestone or team; detail lives in the Delivery Plan |
+| 24 Launch checklist | recommended for user-facing changes |
 
 | Field | Value |
 |---|---|
@@ -390,11 +390,9 @@
 |---|---|---|---|---|---|
 | DEC-01 | {Date} | {Decision} | {Options} | {Why this option} | {Name / role} |
 
-## 23. Delivery plan, work breakdown and Jira handoff
+## 23. Milestones and delivery plan
 
-> This section is a feature-level planning summary. Use `templates/DELIVERY_PLAN_TEMPLATE.md` for detailed work items and dependencies. Work items and estimates are proposals until the owning teams review and validate them.
-
-### 23.1 Milestones and forecast
+> Keep this section short. The detailed work breakdown, estimates, dependencies and Jira handoff live in the Delivery Plan (`templates/DELIVERY_PLAN_TEMPLATE.md`); link it here rather than copying it. Dates and estimates are forecasts until the owning teams confirm them in planning.
 
 | Milestone | Scope / exit criteria | Owner | Forecast / confidence | Target date |
 |---|---|---|---|---|
@@ -404,44 +402,11 @@
 | QA and readiness sign-off | {Acceptance criteria and release gates pass} | {Owner} | {TBD} | {Date / TBD} |
 | Rollout and outcome review | {Release complete; metrics reviewed} | {Owner} | {TBD} | {Date / TBD} |
 
-> A requested business date or early forecast is not a delivery commitment. Teams confirm estimates and dates during planning after considering capacity, operational work and dependencies.
-
-### 23.2 Engineering work breakdown
-
-| Work ID | Workstream | Type | Deliverable / outcome | Owning team | Depends on | Estimate | Confidence |
-|---|---|---|---|---|---|---|---|
-| WB-01 | {Frontend / Backend / Data / Platform / QA / Analytics / Localization / Docs / Release} | {Story / Task / Spike} | {Independently testable outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |
-| WB-02 | {Workstream} | {Type} | {Outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |
-
-**Work item quality:** Each item should have a concise outcome, context, testable acceptance criteria, dependencies, relevant technical references, test expectations and owning team. Split oversized work; avoid creating artificial hand-offs. Use a detailed Delivery Plan for repeated item descriptions.
-
-**Estimate rules:** Use the owning team's existing estimation scale. Developers / delivery teams validate estimates and confidence. Do not convert story points to hours or use estimates as individual performance measures. Record discovery as a time-boxed Spike with a clear question and expected decision output.
-
-### 23.3 Jira and Rovo handoff
-
-| Field | Value |
+| Delivery link | Value |
 |---|---|
-| Jira project / space | {Project key} |
-| Proposed Epic | {Summary / key after creation} |
 | Delivery Plan | {URL} |
-| Rovo used? | {Yes / No; link to reviewed output if available} |
-| Work item review owner | {Tech lead / Product owner} |
-| Jira creation approval | {Name / role / date} |
-| Created Jira items | {Epic and issue links} |
-
-**Before creation**
-
-- [ ] Work breakdown matches approved scope and non-goals.
-- [ ] Each Story / Task has a clear outcome and testable acceptance criteria.
-- [ ] Parent-child relationships and issue types match the Jira project configuration.
-- [ ] Dependencies and cross-team blockers are represented.
-- [ ] Team / component values follow existing Jira conventions.
-- [ ] Estimates and confidence are validated by owning teams, or left TBD.
-- [ ] No assignees, sprint assignments, due dates or delivery commitments were invented by automation.
-- [ ] Feature ID, RFC and Delivery Plan links are included.
-- [ ] Product and Engineering approve the proposed Jira work before creation.
-
-Use `templates/ROVO_WORK_BREAKDOWN_PROMPT.md` as the standard starting prompt. Rovo output is a draft; human review is required before Jira creation.
+| Jira Epic | {Key / URL, once created} |
+| Work breakdown reviewed by | {Tech lead, owning teams} |
 
 ## 24. Launch checklist
 

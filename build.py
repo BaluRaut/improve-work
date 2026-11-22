@@ -245,6 +245,12 @@ def check_example(path, source):
     wrongly = listed & present
     if wrongly:
         problems.append(f"sections listed as not included but present: {sorted(wrongly)}")
+    # Section titles must match the template, so examples cannot drift from it.
+    template_titles = dict(re.findall(r"^## (\d+)\. (.+)$", (HERE / "RFC_TEMPLATE.md").read_text(encoding="utf-8"), re.M))
+    for number, title in re.findall(r"^## (\d+)\. (.+)$", source, re.M):
+        expected = template_titles.get(number)
+        if expected and title.strip() != expected.strip():
+            problems.append(f"section {number} is titled '{title}' but the template says '{expected}'")
     return present, problems
 
 

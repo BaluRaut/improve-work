@@ -22,6 +22,7 @@ See [guides/WORKFLOW.md](guides/WORKFLOW.md) for roles, statuses, gates and comp
 
 | Audience | Start with | Purpose |
 |---|---|---|
+| Everyone, first | [Feature delivery playbook](https://baluraut.github.io/improve-work/playbook/) | One diagram of roles and stages, plus how to set it up in Confluence and roll it out |
 | Business requestor | [Feature Request Brief](intake/FEATURE_REQUEST_TEMPLATE.md) | Describe the problem and desired outcome without prescribing the technical solution |
 | Product / Engineering | [Technical RFC](RFC_TEMPLATE.md) | Refine requirements and document the proposed technical approach |
 | Tech lead / delivery teams | [Delivery Plan](templates/DELIVERY_PLAN_TEMPLATE.md) | Break scope into workstreams, deliverables, dependencies and team estimates |
@@ -84,4 +85,4 @@ To view the pages locally, build them and open `index.html`:
 uv run --with markdown python build.py
 ```
 
-Generated HTML is not committed. GitHub Actions builds and validates every pull request, and publishes the site to GitHub Pages when changes reach `main`.
+Generated HTML is not committed (except the hand-written `playbook/index.html`). GitHub Actions builds and validates every pull request, and publishes the site to GitHub Pages when changes reach `main`.

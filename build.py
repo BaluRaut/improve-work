@@ -357,6 +357,10 @@ def main():
 <main>
 <h1>Feature request-to-delivery toolkit</h1>
 <p>Connect business outcomes, product requirements, engineering design, team breakdown and Jira execution. Select the lightest process that safely covers the change.</p>
+<div class="cards">
+<a class="card" href="playbook/index.html"><span class="tag">Start here</span>
+<h3>Feature delivery playbook</h3><p>One diagram of who does what at each stage, which document each role writes, how to lay it out in Confluence and how to roll it out.</p></a>
+</div>
 <h2>Feature workflow toolkit</h2>
 <div class="cards">{support_card_html}</div>
 <h2>Technical RFC</h2>

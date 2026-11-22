@@ -1,6 +1,9 @@
 # improve-work
 
-An RFC template for full-stack features, plus five worked examples. Fill in an RFC before work starts so frontend, backend, infrastructure, security, analytics, translations and monitoring are all thought through up front.
+An RFC template for full-stack features, plus five worked examples.
+
+**Browse it online:** https://baluraut.github.io/improve-work/
+ Fill in an RFC before work starts so frontend, backend, infrastructure, security, analytics, translations and monitoring are all thought through up front.
 
 **Not every RFC needs every section.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required. Include the others only when the change needs them, and list what you left out in the "Sections not included" row with a reason.
 

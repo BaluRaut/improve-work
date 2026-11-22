@@ -10,8 +10,8 @@
 | Engineering lead | Engineering |
 | Participating teams | Product, Frontend, Backend, Data/GIS, Platform, QA, Analytics |
 | Complexity | Full |
-| Feature Request Brief | examples/intake-brief.md (illustrative) |
-| Technical RFC | examples/rfc-106-peer-field-intelligence.md (illustrative) |
+| Feature Request Brief | Not included in this worked example |
+| Technical RFC | Not included in this worked example |
 | Status | Example only |
 
 ## 1. Delivery objective and scope baseline

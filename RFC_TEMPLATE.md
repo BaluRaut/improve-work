@@ -2,13 +2,19 @@
 
 > **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.
 >
+> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages.
+>
 > **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the "Sections not included" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.
 
 **When to include each section**
 
 | Section | Include when the change… |
 |---|---|
-| 4 Success metrics | is meant to move a product, business or reliability number |
+| 4 Success metrics | is meant to move a product, business or reliability number; record actual results after release |
+| 5.2 Functional requirements | users or systems need specific, testable behaviour |
+| 19 Dependencies | another team, vendor, system or decision affects delivery |
+| 22 Decision log | meaningful options, assumptions or decisions need traceability |
+| 23.2 Work breakdown and Jira handoff | work crosses components or teams, or Jira items need to be planned |
 | 5 Users and use cases | changes what users see or do |
 | 7 Frontend | touches web or mobile UI |
 | 8 Backend | adds or changes services, APIs, jobs or integrations |
@@ -24,16 +30,22 @@
 
 | Field | Value |
 |---|---|
+| Feature ID | FEAT-{number} |
 | RFC ID | RFC-{number} |
 | Title | {Feature name} |
-| Feature owner | {Name, team} |
+| Requestor | {Name, role, team} |
+| Business sponsor / decision owner | {Name, role} |
+| Product owner | {Name, team} |
+| Feature owner | {Engineering owner, team} |
 | Other authors | {Names} |
-| Reviewers | {Engineering lead, Product, Design, QA, SRE/Platform, Security, Data, Localization} |
+| Impacted teams | {Teams} |
+| Complexity | Lite / Standard / Full |
+| Reviewers | {Select by impact; see guides/REVIEW_AND_APPROVAL.md} |
 | Status | Draft / In review / Approved / Rejected / Superseded by RFC-{n} |
 | Created | {YYYY-MM-DD} |
 | Last updated | {YYYY-MM-DD} |
 | Target release | {Version or date} |
-| Links | Ticket: {link} · PRD: {link} · Designs: {link} · Prior RFCs: {link} |
+| Links | Intake brief: {link} · Delivery plan: {link} · Jira Epic: {link} · Designs: {link} · Prior RFCs: {link} |
 | Sections not included | {e.g. 7 Frontend: no UI change; 13 Translations: no user-facing text} |
 
 ---
@@ -73,12 +85,39 @@
 
 **Guardrail metrics** (must not get worse): {e.g. error rate, refund rate, support tickets}
 
-## 5. Users and use cases
+### 4.1 Post-release outcome review
 
-> Who uses this and what they are trying to do. User stories or short scenarios; include edge cases (new users, power users, low bandwidth, accessibility needs).
+> Complete this after the agreed review window. Record actual results, explain material gaps and assign follow-up actions. Do not mark a metric as achieved without a measured result.
+
+| Metric | Baseline | Target | Actual | Result / explanation | Data source | Reviewed on |
+|---|---|---|---|---|---|---|
+| {Metric} | {Value} | {Value} | {Value / Not yet measured} | {Achieved / Partial / Not achieved; context} | {Dashboard / report} | {Date} |
+
+**Outcome owner:** {Name, role}
+
+**Follow-up actions:** {Action, owner, due date, or none}
+
+## 5. Users, requirements and use cases
+
+### 5.1 Users and use cases
+
+> Who uses this and what they are trying to do. Include important scenarios and edge cases (new users, power users, low bandwidth, accessibility needs).
 
 - As a {user type}, I want {action} so that {outcome}.
 - As a {user type}, I want {action} so that {outcome}.
+
+### 5.2 Functional requirements and acceptance criteria
+
+> Give each requirement a stable ID. Acceptance criteria must describe observable behaviour and be testable by Product, Engineering and QA. Use Given / When / Then where it helps. Link to detailed designs or test cases rather than duplicating them.
+
+| ID | Requirement / expected behaviour | Priority | Acceptance criteria | Owner / source |
+|---|---|---|---|---|
+| FR-01 | {Requirement} | Must / Should / Could | Given {context}, when {action}, then {result} | {Product / source} |
+| FR-02 | {Requirement} | Must / Should / Could | Given {edge case}, when {action}, then {result} | {Product / source} |
+
+**Out of scope:** {Explicitly excluded behaviour; align with section 3}
+
+**Requirement notes:** {Business rules, permissions, validations, empty/loading/error states, boundary conditions, audit needs}
 
 ## 6. Proposed solution
 
@@ -309,10 +348,14 @@
 
 ## 19. Dependencies and impact on other teams
 
-| Team / system | What we need or what changes for them | Contact | Status |
-|---|---|---|---|
-| {Payments team} | {New webhook} | {Name} | {Agreed / Pending} |
-| {Support} | {New FAQ and macros} | {Name} | {Pending} |
+| Team / system | Required input or impact | Dependency owner | Needed by | Status | Blocking? |
+|---|---|---|---|---|---|
+| {Payments team} | {New webhook} | {Name / role} | {Date / milestone} | {Open / Agreed / In progress} | {Yes / No} |
+| {Support} | {New FAQ and macros} | {Name / role} | {Date / milestone} | {Pending} | {No} |
+
+**Cross-team coordination:** {Integration points, hand-off expectations, meeting / async review, escalation path}
+
+**External dependencies:** {Vendor, partner, data source or platform constraints; include service owner and contingency}
 
 ## 20. Alternatives considered
 
@@ -327,21 +370,78 @@
 |---|---|---|---|---|
 | {Payment provider latency spikes} | {Medium} | {High} | {Timeout 3 s, retry once, show pending state} | {Name} |
 
-## 22. Open questions
+## 22. Open questions, assumptions and decisions
 
-| Question | Owner | Due | Answer |
-|---|---|---|---|
-| {Question} | {Name} | {Date} | {Filled in when decided} |
+### 22.1 Open questions
 
-## 23. Timeline and estimates
+| Question | Blocks delivery? | Owner | Due | Answer / status |
+|---|---|---|---|---|
+| {Question} | {Yes / No} | {Name} | {Date} | {Open / Answer} |
 
-| Milestone | Scope | Estimate | Target date |
-|---|---|---|---|
-| RFC approved | | | |
-| Backend and infra ready in staging | | {n days} | |
-| Frontend complete behind flag | | {n days} | |
-| QA sign-off | | {n days} | |
-| Rollout complete | | | |
+### 22.2 Assumptions
+
+| Assumption | Why it is needed | Validation method | Owner | Due | Status |
+|---|---|---|---|---|---|
+| {Assumption} | {Reason} | {Evidence / test} | {Name} | {Date} | {Unvalidated / Validated / Rejected} |
+
+### 22.3 Decision log
+
+| Decision ID | Date | Decision | Options considered | Rationale / trade-off | Decision owner |
+|---|---|---|---|---|---|
+| DEC-01 | {Date} | {Decision} | {Options} | {Why this option} | {Name / role} |
+
+## 23. Delivery plan, work breakdown and Jira handoff
+
+> This section is a feature-level planning summary. Use `templates/DELIVERY_PLAN_TEMPLATE.md` for detailed work items and dependencies. Work items and estimates are proposals until the owning teams review and validate them.
+
+### 23.1 Milestones and forecast
+
+| Milestone | Scope / exit criteria | Owner | Forecast / confidence | Target date |
+|---|---|---|---|---|
+| Requirements and RFC approved | {Scope and decisions agreed} | {Owner} | {TBD} | {Date / TBD} |
+| Technical foundations ready | {API / data / platform contracts available} | {Owner} | {TBD} | {Date / TBD} |
+| Feature integrated in test environment | {Critical end-to-end flow works} | {Owner} | {TBD} | {Date / TBD} |
+| QA and readiness sign-off | {Acceptance criteria and release gates pass} | {Owner} | {TBD} | {Date / TBD} |
+| Rollout and outcome review | {Release complete; metrics reviewed} | {Owner} | {TBD} | {Date / TBD} |
+
+> A requested business date or early forecast is not a delivery commitment. Teams confirm estimates and dates during planning after considering capacity, operational work and dependencies.
+
+### 23.2 Engineering work breakdown
+
+| Work ID | Workstream | Type | Deliverable / outcome | Owning team | Depends on | Estimate | Confidence |
+|---|---|---|---|---|---|---|---|
+| WB-01 | {Frontend / Backend / Data / Platform / QA / Analytics / Localization / Docs / Release} | {Story / Task / Spike} | {Independently testable outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |
+| WB-02 | {Workstream} | {Type} | {Outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |
+
+**Work item quality:** Each item should have a concise outcome, context, testable acceptance criteria, dependencies, relevant technical references, test expectations and owning team. Split oversized work; avoid creating artificial hand-offs. Use a detailed Delivery Plan for repeated item descriptions.
+
+**Estimate rules:** Use the owning team's existing estimation scale. Developers / delivery teams validate estimates and confidence. Do not convert story points to hours or use estimates as individual performance measures. Record discovery as a time-boxed Spike with a clear question and expected decision output.
+
+### 23.3 Jira and Rovo handoff
+
+| Field | Value |
+|---|---|
+| Jira project / space | {Project key} |
+| Proposed Epic | {Summary / key after creation} |
+| Delivery Plan | {URL} |
+| Rovo used? | {Yes / No; link to reviewed output if available} |
+| Work item review owner | {Tech lead / Product owner} |
+| Jira creation approval | {Name / role / date} |
+| Created Jira items | {Epic and issue links} |
+
+**Before creation**
+
+- [ ] Work breakdown matches approved scope and non-goals.
+- [ ] Each Story / Task has a clear outcome and testable acceptance criteria.
+- [ ] Parent-child relationships and issue types match the Jira project configuration.
+- [ ] Dependencies and cross-team blockers are represented.
+- [ ] Team / component values follow existing Jira conventions.
+- [ ] Estimates and confidence are validated by owning teams, or left TBD.
+- [ ] No assignees, sprint assignments, due dates or delivery commitments were invented by automation.
+- [ ] Feature ID, RFC and Delivery Plan links are included.
+- [ ] Product and Engineering approve the proposed Jira work before creation.
+
+Use `templates/ROVO_WORK_BREAKDOWN_PROMPT.md` as the standard starting prompt. Rovo output is a draft; human review is required before Jira creation.
 
 ## 24. Launch checklist
 
@@ -377,16 +477,20 @@
 
 ## 25. Approvals
 
-| Role | Name | Decision | Date | Comments |
-|---|---|---|---|---|
-| Engineering lead | | Approve / Request changes | | |
-| Product manager | | | | |
-| Design | | | | |
-| QA | | | | |
-| SRE / Platform | | | | |
-| Security | | | | |
-| Data / Analytics | | | | |
-| Localization | | | | |
+> Select approvers and consulted reviewers according to the actual impact. Do not require every specialist to approve every change. See `guides/REVIEW_AND_APPROVAL.md`.
+
+| Decision area / role | Name | Responsibility | Decision | Date | Conditions / comments |
+|---|---|---|---|---|---|
+| Business outcome / sponsor | | Approver | Approve / Changes requested / N/A | | |
+| Product scope | | Approver | Approve / Changes requested / N/A | | |
+| Engineering approach | | Approver | Approve / Changes requested / N/A | | |
+| Design | | Consulted / Approver where applicable | Reviewed / Changes requested / N/A | | |
+| QA | | Consulted | Reviewed / Changes requested / N/A | | |
+| SRE / Platform | | Approver where infrastructure / operations affected | Approve / Changes requested / N/A | | |
+| Security / Privacy | | Required where relevant | Approve / Changes requested / N/A | | |
+| Data / Analytics | | Required where tracking / data definitions affected | Approve / Changes requested / N/A | | |
+| Localization | | Required where user-facing language affected | Approve / Changes requested / N/A | | |
+| Delivery readiness | | Product + Engineering | Ready / Not ready | | |
 
 ---
 

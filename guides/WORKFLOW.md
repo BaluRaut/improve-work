@@ -38,6 +38,41 @@ Choose the lightest level that safely covers the change. Escalate when risk, imp
 
 **Risk overrides size:** a small authentication, payment, personal-data or production-migration change may require Full review.
 
+### Deciding the level
+
+The product owner picks the level at triage, with the tech lead. Ask these questions in order and stop at the first yes:
+
+1. Does it touch login or permissions, money, personal data, or migrate production data? **Full.**
+2. Can it only ship if several teams deliver work that depends on each other? **Full.**
+3. Does it need a technical choice, a new API, table or piece of infrastructure, or more than a few stories? **Standard.**
+4. None of the above? **Lite.**
+
+If unsure between two levels, pick the higher one; sections can be dropped later with a reason.
+
+### Examples
+
+| Change | Level | Why |
+|---|---|---|
+| Show invoice dates as 22 Nov 2026 instead of 2026-11-22 | Lite | One screen, one team, easy to undo |
+| Add a "last updated" column to an internal admin export | Lite | Internal users only, no new data stored |
+| Raise a retry count in one service's config | Lite | Existing setting; rollback is a config change |
+| Dark mode for web and apps ([RFC-103](../examples/rfc-103-dark-mode.md)) | Standard | Several platforms and stories, but no data, money or security risk |
+| Add Marathi and Tamil ([RFC-105](../examples/rfc-105-marathi-and-tamil-languages.md)) | Standard | Many screens and messages, plus translation and font choices |
+| Rate limits on the partner API ([RFC-102](../examples/rfc-102-partner-api-rate-limiting.md)) | Standard | One team, but new infrastructure and partners must be told first |
+| Customers cancel their own orders ([RFC-101](../examples/rfc-101-customer-order-cancellation.md)) | Full | Automatic refunds touch money, and several teams must ship together |
+| Upgrade the orders database to PostgreSQL 16 ([RFC-104](../examples/rfc-104-postgres-16-upgrade.md)) | Full | No visible change, but a production migration with downtime |
+| Move login to a new identity provider | Full | Every user is affected; a mistake locks people out |
+
+**Cases that fool people**
+
+| Change | Looks like | Actually | Why |
+|---|---|---|---|
+| Password-reset links expire after 1 hour instead of 24 | Lite | Full | It changes authentication |
+| Add the customer's phone number to an analytics event | Lite | Full | Personal data goes to a third-party tool; privacy and consent need review |
+| Change how refunds are rounded | Lite | Full | It's money; finance must agree and results must reconcile |
+| Redesign all twelve help centre pages | Full | Standard | Lots of work, but one team and no data, money or security impact |
+| Bump a library by a patch version | Standard | Lite | Covered by tests and easy to roll back, unless it is an auth or crypto library |
+
 ## Workflow statuses
 
 | Status | Meaning |

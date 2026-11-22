@@ -7,6 +7,7 @@
 | RFC ID | RFC-103 |
 | Title | Dark mode for web and app |
 | Feature owner | Ananya Joshi, Design Systems |
+| Complexity | Standard: several platforms, no data, money or security risk |
 | Reviewers | Engineering lead, Design, QA, Accessibility champion, Data |
 | Status | Approved |
 | Created | 2026-09-29 |

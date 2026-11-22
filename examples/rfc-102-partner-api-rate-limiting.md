@@ -7,6 +7,7 @@
 | RFC ID | RFC-102 |
 | Title | Rate limiting for the partner API |
 | Feature owner | Karthik Subramanian, Platform team |
+| Complexity | Standard: one team, new infrastructure, partners notified first |
 | Reviewers | Engineering lead, SRE, Security, Partner Success |
 | Status | In review |
 | Created | 2026-10-13 |

@@ -8,6 +8,7 @@
 | Title | Customers can cancel their own orders |
 | Feature owner | Priya Kulkarni, Orders team |
 | Other authors | Arjun Mehta (mobile), Sneha Iyer (payments) |
+| Complexity | Full: automatic refunds touch money, and several teams ship together |
 | Reviewers | Engineering lead, Product, Design, QA, SRE, Security, Data, Localization |
 | Status | Approved |
 | Created | 2026-10-06 |

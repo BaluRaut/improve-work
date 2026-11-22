@@ -7,6 +7,7 @@
 | RFC ID | RFC-104 |
 | Title | Upgrade the orders database from PostgreSQL 13 to 16 |
 | Feature owner | Tejas Patil, SRE |
+| Complexity | Full: production database migration with downtime |
 | Reviewers | Engineering lead, SRE, Orders team, Data, Security |
 | Status | Approved |
 | Created | 2026-09-15 |

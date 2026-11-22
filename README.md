@@ -78,7 +78,7 @@ Rovo can help draft a work breakdown, but it must not silently decide product sc
 
 Markdown files are the source of truth. The Python build script generates the styled HTML pages and validates example RFC section usage.
 
-After editing the RFC or example Markdown files, rebuild:
+After editing any Markdown file, rebuild:
 
 ```sh
 uv run --with markdown python build.py

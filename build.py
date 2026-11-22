@@ -18,6 +18,20 @@ HERE = Path(__file__).parent
 REQUIRED = {1, 2, 3, 6, 17, 18, 21, 25}
 ALL_SECTIONS = set(range(1, 26))
 
+# Supporting workflow documents rendered as styled HTML pages by the same builder.
+SUPPORT_DOCS = [
+    ("intake/FEATURE_REQUEST_TEMPLATE.md", "Feature intake", "Business-facing request brief"),
+    ("guides/WORKFLOW.md", "End-to-end workflow", "Stages, roles, statuses and hand-offs"),
+    ("guides/DEFINITION_OF_READY.md", "Definition of Ready", "Feature and story readiness checks"),
+    ("guides/DEFINITION_OF_DONE.md", "Definition of Done", "Shared completion and release checks"),
+    ("guides/REVIEW_AND_APPROVAL.md", "Review and approval", "Impact-based review and approval matrix"),
+    ("guides/ESTIMATION_GUIDELINES.md", "Estimation guidelines", "Team estimates, confidence and planning"),
+    ("templates/DELIVERY_PLAN_TEMPLATE.md", "Delivery plan", "Workstreams, deliverables and dependencies"),
+    ("templates/JIRA_STORY_TEMPLATE.md", "Jira story template", "Consistent Story and Task descriptions"),
+    ("templates/ROVO_WORK_BREAKDOWN_PROMPT.md", "Rovo work breakdown", "Human-reviewed Jira work item prompt"),
+    ("examples/CROSS_TEAM_DELIVERY_PLAN.md", "Cross-team example", "Peer Field Intelligence delivery example"),
+]
+
 CSS = """
   :root { --bg:#f7f8fa; --paper:#fff; --ink:#1f2430; --muted:#5d6475; --line:#e3e6ec; --accent:#3b5bdb; --accent-soft:#edf2ff;
     --guide-bg:#fff8e6; --guide-line:#f0b429; --ph:#b4235a; --ph-bg:#fdecf2; --code:#f1f3f7;
@@ -191,6 +205,47 @@ def main():
         shape = re.search(r'^> Example RFC[^.]*\.\s*(.+)$', src, re.M)
         cards.append((rid, title.replace('RFC: ', ''), f'examples/{out.name}', shape.group(1) if shape else '', present))
         print(f'{out.relative_to(HERE)}: {len(secs)} sections')
+    # Supporting workflow documents
+    support_cards = []
+    for rel_path, label, description in SUPPORT_DOCS:
+        path = HERE / rel_path
+        src = path.read_text(encoding='utf-8')
+        body, secs = render(src, highlight_placeholders=True)
+        out = path.with_suffix('.html')
+        title_match = re.search(r'^# (.+)
+        return '<div class="bar" aria-label="sections used">' + ''.join(f'<i class="{"on" if n in present else ""}" title="Section {n}"></i>' for n in range(1, 26)) + '</div>'
+    card_html = ''.join(f'<a class="card" href="{href}"><span class="tag">{rid} · {len(pr)} of 25 sections</span><h3>{html.escape(t)}</h3><p>{html.escape(shape)}</p>{bar(pr)}</a>' for rid, t, href, shape, pr in cards)
+    index = f'''<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RFC Template and Examples</title><style>{CSS} main {{ max-width:1100px; margin:0 auto; }}</style></head>
+<body><main>
+<h1>Feature request-to-delivery toolkit</h1>
+<p>Use the feature request-to-delivery workflow to connect business outcomes, product requirements, engineering design, team breakdown and Jira execution. Select the lightest process that safely covers the change.</p>
+<h2>Feature workflow toolkit</h2>
+<div class="cards">{''.join(f'<a class="card" href="{href}"><span class="tag">Workflow resource</span><h3>{html.escape(label)}</h3><p>{html.escape(description)}</p></a>' for href, label, description in support_cards)}</div>
+<h2>Technical RFC</h2>
+<div class="cards"><a class="card" href="rfc-template.html"><span class="tag">Template</span><h3>RFC template</h3><p>Technical requirements, architecture, risk, delivery and operational planning.</p>{bar(ALL_SECTIONS)}</a></div>
+<h2>Examples</h2>
+<p>Technical RFC examples for a fictional online store. The bars show which of the 25 technical sections each example uses.</p>
+<div class="cards">{card_html}</div>
+</main></body></html>
+'''
+    (HERE / 'index.html').write_text(index, encoding='utf-8')
+    print('index.html written')
+    if errors:
+        print('\nCHECK FAILED:\n  - ' + '\n  - '.join(errors))
+        sys.exit(1)
+    print('all examples pass the section checks')
+
+
+main()
+, src, re.M)
+        title = title_match.group(1) if title_match else label
+        out.write_text(page(title=title, src=src, body=body, sections=secs,
+            download=path.name, home_href='../index.html', guides_button=True), encoding='utf-8')
+        href = out.relative_to(HERE).as_posix()
+        support_cards.append((href, label, description))
+        print(f'{href}: {len(secs)} sections')
     # index
     def bar(present):
         return '<div class="bar" aria-label="sections used">' + ''.join(f'<i class="{"on" if n in present else ""}" title="Section {n}"></i>' for n in range(1, 26)) + '</div>'

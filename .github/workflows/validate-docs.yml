@@ -8,8 +8,11 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Push builds publish the generated HTML back to the same branch so the
+# GitHub Pages source and the Markdown source stay in sync. PR builds remain
+# read-only, including PRs from forks.
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -28,3 +31,16 @@ jobs:
 
       - name: Build and validate documentation
         run: python build.py
+
+      - name: Commit generated documentation pages
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- '*.html'
+          if git diff --cached --quiet; then
+            echo "Generated HTML is already up to date."
+          else
+            git commit -m "Build generated documentation pages"
+            git push
+          fi

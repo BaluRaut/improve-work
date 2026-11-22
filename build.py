@@ -222,7 +222,7 @@ def main():
 <h1>Feature request-to-delivery toolkit</h1>
 <p>Use the feature request-to-delivery workflow to connect business outcomes, product requirements, engineering design, team breakdown and Jira execution. Select the lightest process that safely covers the change.</p>
 <h2>Feature workflow toolkit</h2>
-<div class="cards">{''.join(f'<a class="card" href="{href}"><span class="tag">Workflow resource</span><h3>{html.escape(label)}</h3><p>{html.escape(description)}</p></a>' for href, label, description in support_cards)}</div>
+<div class="cards">{support_card_html}</div>
 <h2>Technical RFC</h2>
 <div class="cards"><a class="card" href="rfc-template.html"><span class="tag">Template</span><h3>RFC template</h3><p>Technical requirements, architecture, risk, delivery and operational planning.</p>{bar(ALL_SECTIONS)}</a></div>
 <h2>Examples</h2>
@@ -247,6 +247,12 @@ main()
         support_cards.append((href, label, description))
         print(f'{href}: {len(secs)} sections')
     # index
+    support_card_html = ''.join(
+        f'<a class="card" href="{html.escape(href, quote=True)}"><span class="tag">Workflow resource</span>'
+        f'<h3>{html.escape(label)}</h3><p>{html.escape(description)}</p></a>'
+        for href, label, description in support_cards
+    )
+
     def bar(present):
         return '<div class="bar" aria-label="sections used">' + ''.join(f'<i class="{"on" if n in present else ""}" title="Section {n}"></i>' for n in range(1, 26)) + '</div>'
     card_html = ''.join(f'<a class="card" href="{href}"><span class="tag">{rid} · {len(pr)} of 25 sections</span><h3>{html.escape(t)}</h3><p>{html.escape(shape)}</p>{bar(pr)}</a>' for rid, t, href, shape, pr in cards)

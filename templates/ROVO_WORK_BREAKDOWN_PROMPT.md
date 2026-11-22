@@ -4,7 +4,7 @@
 
 ## Prompt
 
-You are assisting the Product Owner, Tech Lead and delivery teams to prepare a Jira work breakdown from an approved feature.
+You are assisting the Product Owner, Feature Owner and delivery teams to prepare a Jira work breakdown from an approved feature.
 
 **Feature context**
 

@@ -4,7 +4,7 @@
 
 A feature is **Ready for Development** when its scope is understood well enough for teams to plan and deliver it safely. It does not mean every implementation detail is predetermined.
 
-- [ ] Feature ID, requestor, business sponsor and Product owner are identified.
+- [ ] Feature ID, requestor, business sponsor, Product owner and feature owner are identified.
 - [ ] Business problem, evidence and desired outcome are documented.
 - [ ] Goals, non-goals and in-scope / out-of-scope boundaries are agreed.
 - [ ] Affected users, applications, regions and teams are identified.

@@ -3,69 +3,85 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RFC Template</title>
+<title>Technical RFC template</title>
 <style>
-  :root { --bg:#f7f8fa; --paper:#fff; --ink:#1f2430; --muted:#5d6475; --line:#e3e6ec; --accent:#3b5bdb; --accent-soft:#edf2ff;
-    --guide-bg:#fff8e6; --guide-line:#f0b429; --ph:#b4235a; --ph-bg:#fdecf2; --code:#f1f3f7;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color-scheme:light; }
-  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#14171d; --paper:#1c2028; --ink:#e8ebf1; --muted:#a3aab9; --line:#2e3440;
-    --accent:#8ea8ff; --accent-soft:#232b45; --guide-bg:#2a2416; --guide-line:#c9971f; --ph:#ff8fb5; --ph-bg:#3a1f2b; --code:#252a34; color-scheme:dark; } }
-  :root[data-theme="dark"] { color-scheme:dark; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); font:15.5px/1.6 var(--sans); }
-  a { color:var(--accent); }
-  .layout { display:grid; grid-template-columns:260px minmax(0,1fr); max-width:1280px; margin:0 auto; }
-  nav.side { position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; padding:20px 14px 20px 20px; border-right:1px solid var(--line); }
-  nav.side h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 8px; }
-  nav.side ol { list-style:none; margin:0; padding:0; }
-  nav.side a { display:block; padding:4px 8px; border-radius:6px; color:var(--ink); text-decoration:none; font-size:.9rem; }
-  nav.side a:hover, nav.side a.on { background:var(--accent-soft); color:var(--accent); }
-  .home { font-size:.9rem; text-decoration:none; }
-  .actions { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 6px; }
-  .actions button { font:inherit; font-size:.85rem; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
-  .actions button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
-  main { padding:28px 32px 80px; min-width:0; }
-  article { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:28px 32px; }
-  h1 { font-size:1.9rem; margin:0 0 14px; line-height:1.25; }
-  h2 { font-size:1.3rem; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--line); scroll-margin-top:16px; }
-  h3 { font-size:1.05rem; margin:22px 0 8px; scroll-margin-top:16px; }
-  p, li { margin:6px 0; }
-  hr { border:0; border-top:1px solid var(--line); margin:22px 0; }
-  .table-wrap { overflow-x:auto; margin:10px 0; border:1px solid var(--line); border-radius:10px; }
-  table { border-collapse:collapse; width:100%; font-size:.9rem; }
-  th, td { text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--line); }
-  th { background:var(--accent-soft); font-weight:650; white-space:nowrap; }
-  tr:last-child td { border-bottom:0; }
-  blockquote.guide { margin:10px 0; padding:8px 14px; background:var(--guide-bg); border-left:4px solid var(--guide-line); border-radius:0 8px 8px 0; color:var(--muted); font-size:.92rem; }
-  blockquote.guide p { margin:4px 0; }
-  .hide-guides blockquote.guide { display:none; }
-  .ph { color:var(--ph); background:var(--ph-bg); border-radius:4px; padding:0 3px; font-size:.92em; }
-  code { font-family:var(--mono); font-size:.88em; background:var(--code); padding:1px 5px; border-radius:5px; }
-  pre { background:var(--code); padding:12px 14px; border-radius:10px; overflow-x:auto; }
-  pre code { background:none; padding:0; }
-  li.task { list-style:none; margin-left:-1.2em; }
-  li.task input { width:16px; height:16px; margin-right:6px; vertical-align:-2px; accent-color:var(--accent); }
-  .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:10px; font-size:.9rem; opacity:0; transition:opacity .2s; pointer-events:none; }
-  .toast.show { opacity:1; }
-  .cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); margin-top:14px; }
-  .card { display:block; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:var(--ink); }
-  .card:hover { border-color:var(--accent); }
-  .card .tag { font-size:.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
-  .card h3 { margin:4px 0 6px; font-size:1.05rem; }
-  .card p { margin:0; color:var(--muted); font-size:.92rem; }
-  .bar { display:flex; gap:2px; margin-top:10px; }
-  .bar i { flex:1; height:8px; border-radius:2px; background:var(--line); }
-  .bar i.on { background:var(--accent); }
-  @media (max-width:900px) { .layout { grid-template-columns:1fr; } nav.side { position:static; height:auto; border-right:0; border-bottom:1px solid var(--line); padding:14px 16px; }
-    nav.side ol { display:none; } main { padding:16px; } article { padding:18px 16px; } }
-  @media print { nav.side, .actions, .toast { display:none !important; } .layout { display:block; } main { padding:0; } body { background:#fff; color:#000; }
-    article { border:0; padding:0; } h2 { break-after:avoid; } .table-wrap { overflow:visible; } }
+:root { --bg:#f7f8fa; --paper:#fff; --ink:#1f2430; --muted:#5d6475; --line:#e3e6ec;
+  --accent:#3b5bdb; --accent-soft:#edf2ff; --guide-bg:#fff8e6; --guide-line:#f0b429;
+  --ph:#b4235a; --ph-bg:#fdecf2; --code:#f1f3f7;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color-scheme:light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg:#14171d; --paper:#1c2028; --ink:#e8ebf1; --muted:#a3aab9;
+    --line:#2e3440; --accent:#8ea8ff; --accent-soft:#232b45; --guide-bg:#2a2416;
+    --guide-line:#c9971f; --ph:#ff8fb5; --ph-bg:#3a1f2b; --code:#252a34; color-scheme:dark; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15.5px/1.6 var(--sans); }
+a { color:var(--accent); }
+.layout { display:grid; grid-template-columns:260px minmax(0,1fr); max-width:1280px; margin:0 auto; }
+nav.side { position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; padding:20px 14px 20px 20px; border-right:1px solid var(--line); }
+nav.side h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 8px; }
+nav.side ol { list-style:none; margin:0; padding:0; }
+nav.side a { display:block; padding:4px 8px; border-radius:6px; color:var(--ink); text-decoration:none; font-size:.9rem; }
+nav.side a:hover, nav.side a.on { background:var(--accent-soft); color:var(--accent); }
+.home { font-size:.9rem; text-decoration:none; }
+.actions { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 6px; }
+.actions button { font:inherit; font-size:.85rem; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
+.actions button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+main { padding:28px 32px 80px; min-width:0; }
+article { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:28px 32px; }
+h1 { font-size:1.9rem; margin:0 0 14px; line-height:1.25; }
+h2 { font-size:1.3rem; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--line); scroll-margin-top:16px; }
+h3 { font-size:1.05rem; margin:22px 0 8px; scroll-margin-top:16px; }
+p, li { margin:6px 0; }
+hr { border:0; border-top:1px solid var(--line); margin:22px 0; }
+.table-wrap { overflow-x:auto; margin:10px 0; border:1px solid var(--line); border-radius:10px; }
+table { border-collapse:collapse; width:100%; font-size:.9rem; }
+th, td { text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--line); }
+th { background:var(--accent-soft); font-weight:650; white-space:nowrap; }
+tr:last-child td { border-bottom:0; }
+blockquote.guide { margin:10px 0; padding:8px 14px; background:var(--guide-bg); border-left:4px solid var(--guide-line); border-radius:0 8px 8px 0; color:var(--muted); font-size:.92rem; }
+blockquote.guide p { margin:4px 0; }
+.hide-guides blockquote.guide { display:none; }
+.ph { color:var(--ph); background:var(--ph-bg); border-radius:4px; padding:0 3px; font-size:.92em; }
+code { font-family:var(--mono); font-size:.88em; background:var(--code); padding:1px 5px; border-radius:5px; }
+pre { background:var(--code); padding:12px 14px; border-radius:10px; overflow-x:auto; }
+pre code { background:none; padding:0; }
+li.task { list-style:none; margin-left:-1.2em; }
+li.task input { width:16px; height:16px; margin-right:6px; vertical-align:-2px; accent-color:var(--accent); }
+.toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:10px; font-size:.9rem; opacity:0; transition:opacity .2s; pointer-events:none; }
+.toast.show { opacity:1; }
+.cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); margin-top:14px; }
+.card { display:block; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:var(--ink); }
+.card:hover { border-color:var(--accent); }
+.card .tag { font-size:.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
+.card h3 { margin:4px 0 6px; font-size:1.05rem; }
+.card p { margin:0; color:var(--muted); font-size:.92rem; }
+.bar { display:flex; gap:2px; margin-top:10px; }
+.bar i { flex:1; height:8px; border-radius:2px; background:var(--line); }
+.bar i.on { background:var(--accent); }
+@media (max-width:900px) {
+  .layout { grid-template-columns:1fr; }
+  nav.side { position:static; height:auto; border-right:0; border-bottom:1px solid var(--line); padding:14px 16px; }
+  nav.side ol { display:none; }
+  main { padding:16px; }
+  article { padding:18px 16px; }
+}
+@media print {
+  nav.side, .actions, .toast { display:none !important; }
+  .layout { display:block; }
+  main { padding:0; }
+  body { background:#fff; color:#000; }
+  article { border:0; padding:0; }
+  h2 { break-after:avoid; }
+  .table-wrap { overflow:visible; }
+}
 </style>
 </head>
 <body data-download="rfc-000-feature-name.md">
 <div class="layout">
   <nav class="side" aria-label="Sections">
-    <a class="home" href="index.html">← All RFC documents</a>
+    <a class="home" href="index.html">← All documents</a>
     <div class="actions">
       <button class="primary" id="copyMd">Copy Markdown</button>
       <button id="dlMd">Download .md</button>
@@ -73,11 +89,12 @@
       <button id="print">Print / PDF</button>
     </div>
     <h2>Sections</h2>
-    <ol><li><a href="#1-summary">1. Summary</a></li><li><a href="#2-background-and-problem">2. Background and problem</a></li><li><a href="#3-goals-and-non-goals">3. Goals and non-goals</a></li><li><a href="#4-success-metrics">4. Success metrics</a></li><li><a href="#5-users-and-use-cases">5. Users and use cases</a></li><li><a href="#6-proposed-solution">6. Proposed solution</a></li><li><a href="#7-frontend-changes">7. Frontend changes</a></li><li><a href="#8-backend-changes">8. Backend changes</a></li><li><a href="#9-data-model-and-migrations">9. Data model and migrations</a></li><li><a href="#10-infrastructure-changes">10. Infrastructure changes</a></li><li><a href="#11-security-privacy-and-compliance">11. Security, privacy and compliance</a></li><li><a href="#12-event-tracking-and-analytics">12. Event tracking and analytics</a></li><li><a href="#13-translations-and-localization">13. Translations and localization</a></li><li><a href="#14-observability-and-monitoring">14. Observability and monitoring</a></li><li><a href="#15-performance-and-scalability">15. Performance and scalability</a></li><li><a href="#16-testing-strategy">16. Testing strategy</a></li><li><a href="#17-rollout-plan">17. Rollout plan</a></li><li><a href="#18-rollback-plan">18. Rollback plan</a></li><li><a href="#19-dependencies-and-impact-on-other-teams">19. Dependencies and impact on other teams</a></li><li><a href="#20-alternatives-considered">20. Alternatives considered</a></li><li><a href="#21-risks-and-mitigations">21. Risks and mitigations</a></li><li><a href="#22-open-questions">22. Open questions</a></li><li><a href="#23-timeline-and-estimates">23. Timeline and estimates</a></li><li><a href="#24-launch-checklist">24. Launch checklist</a></li><li><a href="#25-approvals">25. Approvals</a></li><li><a href="#appendix">Appendix</a></li></ol>
+    <ol><li><a href="#1-summary">1. Summary</a></li><li><a href="#2-background-and-problem">2. Background and problem</a></li><li><a href="#3-goals-and-non-goals">3. Goals and non-goals</a></li><li><a href="#4-success-metrics">4. Success metrics</a></li><li><a href="#5-users-requirements-and-use-cases">5. Users, requirements and use cases</a></li><li><a href="#6-proposed-solution">6. Proposed solution</a></li><li><a href="#7-frontend-changes">7. Frontend changes</a></li><li><a href="#8-backend-changes">8. Backend changes</a></li><li><a href="#9-data-model-and-migrations">9. Data model and migrations</a></li><li><a href="#10-infrastructure-changes">10. Infrastructure changes</a></li><li><a href="#11-security-privacy-and-compliance">11. Security, privacy and compliance</a></li><li><a href="#12-event-tracking-and-analytics">12. Event tracking and analytics</a></li><li><a href="#13-translations-and-localization">13. Translations and localization</a></li><li><a href="#14-observability-and-monitoring">14. Observability and monitoring</a></li><li><a href="#15-performance-and-scalability">15. Performance and scalability</a></li><li><a href="#16-testing-strategy">16. Testing strategy</a></li><li><a href="#17-rollout-plan">17. Rollout plan</a></li><li><a href="#18-rollback-plan">18. Rollback plan</a></li><li><a href="#19-dependencies-and-impact-on-other-teams">19. Dependencies and impact on other teams</a></li><li><a href="#20-alternatives-considered">20. Alternatives considered</a></li><li><a href="#21-risks-and-mitigations">21. Risks and mitigations</a></li><li><a href="#22-open-questions-assumptions-and-decisions">22. Open questions, assumptions and decisions</a></li><li><a href="#23-delivery-plan-work-breakdown-and-jira-handoff">23. Delivery plan, work breakdown and Jira handoff</a></li><li><a href="#24-launch-checklist">24. Launch checklist</a></li><li><a href="#25-approvals">25. Approvals</a></li><li><a href="#appendix">Appendix</a></li></ol>
   </nav>
   <main><article id="doc"><h1 id="rfc-feature-name">RFC: <span class="ph">{Feature name}</span></h1>
 <blockquote class="guide">
 <p><strong>How to use this template.</strong> Copy this file to <code>rfc-{number}-{short-name}.md</code> and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like <code>{this}</code>; replace each one.</p>
+<p><strong>Start with a Feature Request Brief.</strong> Business requestors should describe the problem and desired outcome in <code>intake/FEATURE_REQUEST_TEMPLATE.md</code>; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use <code>guides/WORKFLOW.md</code> to follow the request-to-delivery stages.</p>
 <p><strong>Include only the sections your change needs.</strong> Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the "Sections not included" row below with a one-line reason each. That way reviewers know an omission was deliberate. See <code>examples/</code> for five RFCs that each use a different subset.</p>
 </blockquote>
 <p><strong>When to include each section</strong></p>
@@ -91,7 +108,23 @@
 <tbody>
 <tr>
 <td>4 Success metrics</td>
-<td>is meant to move a product, business or reliability number</td>
+<td>is meant to move a product, business or reliability number; record actual results after release</td>
+</tr>
+<tr>
+<td>5.2 Functional requirements</td>
+<td>users or systems need specific, testable behaviour</td>
+</tr>
+<tr>
+<td>19 Dependencies</td>
+<td>another team, vendor, system or decision affects delivery</td>
+</tr>
+<tr>
+<td>22 Decision log</td>
+<td>meaningful options, assumptions or decisions need traceability</td>
+</tr>
+<tr>
+<td>23.2 Work breakdown and Jira handoff</td>
+<td>work crosses components or teams, or Jira items need to be planned</td>
 </tr>
 <tr>
 <td>5 Users and use cases</td>
@@ -152,6 +185,10 @@
 </thead>
 <tbody>
 <tr>
+<td>Feature ID</td>
+<td>FEAT-<span class="ph">{number}</span></td>
+</tr>
+<tr>
 <td>RFC ID</td>
 <td>RFC-<span class="ph">{number}</span></td>
 </tr>
@@ -160,16 +197,36 @@
 <td><span class="ph">{Feature name}</span></td>
 </tr>
 <tr>
-<td>Feature owner</td>
+<td>Requestor</td>
+<td><span class="ph">{Name, role, team}</span></td>
+</tr>
+<tr>
+<td>Business sponsor / decision owner</td>
+<td><span class="ph">{Name, role}</span></td>
+</tr>
+<tr>
+<td>Product owner</td>
 <td><span class="ph">{Name, team}</span></td>
+</tr>
+<tr>
+<td>Feature owner</td>
+<td><span class="ph">{Engineering owner, team}</span></td>
 </tr>
 <tr>
 <td>Other authors</td>
 <td><span class="ph">{Names}</span></td>
 </tr>
 <tr>
+<td>Impacted teams</td>
+<td><span class="ph">{Teams}</span></td>
+</tr>
+<tr>
+<td>Complexity</td>
+<td>Lite / Standard / Full</td>
+</tr>
+<tr>
 <td>Reviewers</td>
-<td><span class="ph">{Engineering lead, Product, Design, QA, SRE/Platform, Security, Data, Localization}</span></td>
+<td><span class="ph">{Select by impact; see guides/REVIEW_AND_APPROVAL.md}</span></td>
 </tr>
 <tr>
 <td>Status</td>
@@ -189,7 +246,7 @@
 </tr>
 <tr>
 <td>Links</td>
-<td>Ticket: <span class="ph">{link}</span> · PRD: <span class="ph">{link}</span> · Designs: <span class="ph">{link}</span> · Prior RFCs: <span class="ph">{link}</span></td>
+<td>Intake brief: <span class="ph">{link}</span> · Delivery plan: <span class="ph">{link}</span> · Jira Epic: <span class="ph">{link}</span> · Designs: <span class="ph">{link}</span> · Prior RFCs: <span class="ph">{link}</span></td>
 </tr>
 <tr>
 <td>Sections not included</td>
@@ -251,14 +308,78 @@
 </tbody>
 </table>
 <p><strong>Guardrail metrics</strong> (must not get worse): <span class="ph">{e.g. error rate, refund rate, support tickets}</span></p>
-<h2 id="5-users-and-use-cases">5. Users and use cases</h2>
+<h3 id="41-post-release-outcome-review">4.1 Post-release outcome review</h3>
 <blockquote class="guide">
-<p>Who uses this and what they are trying to do. User stories or short scenarios; include edge cases (new users, power users, low bandwidth, accessibility needs).</p>
+<p>Complete this after the agreed review window. Record actual results, explain material gaps and assign follow-up actions. Do not mark a metric as achieved without a measured result.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Baseline</th>
+<th>Target</th>
+<th>Actual</th>
+<th>Result / explanation</th>
+<th>Data source</th>
+<th>Reviewed on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="ph">{Metric}</span></td>
+<td><span class="ph">{Value}</span></td>
+<td><span class="ph">{Value}</span></td>
+<td><span class="ph">{Value / Not yet measured}</span></td>
+<td><span class="ph">{Achieved / Partial / Not achieved; context}</span></td>
+<td><span class="ph">{Dashboard / report}</span></td>
+<td><span class="ph">{Date}</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Outcome owner:</strong> <span class="ph">{Name, role}</span></p>
+<p><strong>Follow-up actions:</strong> <span class="ph">{Action, owner, due date, or none}</span></p>
+<h2 id="5-users-requirements-and-use-cases">5. Users, requirements and use cases</h2>
+<h3 id="51-users-and-use-cases">5.1 Users and use cases</h3>
+<blockquote class="guide">
+<p>Who uses this and what they are trying to do. Include important scenarios and edge cases (new users, power users, low bandwidth, accessibility needs).</p>
 </blockquote>
 <ul>
 <li>As a <span class="ph">{user type}</span>, I want <span class="ph">{action}</span> so that <span class="ph">{outcome}</span>.</li>
 <li>As a <span class="ph">{user type}</span>, I want <span class="ph">{action}</span> so that <span class="ph">{outcome}</span>.</li>
 </ul>
+<h3 id="52-functional-requirements-and-acceptance-criteria">5.2 Functional requirements and acceptance criteria</h3>
+<blockquote class="guide">
+<p>Give each requirement a stable ID. Acceptance criteria must describe observable behaviour and be testable by Product, Engineering and QA. Use Given / When / Then where it helps. Link to detailed designs or test cases rather than duplicating them.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement / expected behaviour</th>
+<th>Priority</th>
+<th>Acceptance criteria</th>
+<th>Owner / source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR-01</td>
+<td><span class="ph">{Requirement}</span></td>
+<td>Must / Should / Could</td>
+<td>Given <span class="ph">{context}</span>, when <span class="ph">{action}</span>, then <span class="ph">{result}</span></td>
+<td><span class="ph">{Product / source}</span></td>
+</tr>
+<tr>
+<td>FR-02</td>
+<td><span class="ph">{Requirement}</span></td>
+<td>Must / Should / Could</td>
+<td>Given <span class="ph">{edge case}</span>, when <span class="ph">{action}</span>, then <span class="ph">{result}</span></td>
+<td><span class="ph">{Product / source}</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Out of scope:</strong> <span class="ph">{Explicitly excluded behaviour; align with section 3}</span></p>
+<p><strong>Requirement notes:</strong> <span class="ph">{Business rules, permissions, validations, empty/loading/error states, boundary conditions, audit needs}</span></p>
 <h2 id="6-proposed-solution">6. Proposed solution</h2>
 <h3 id="61-overview">6.1 Overview</h3>
 <blockquote class="guide">
@@ -954,26 +1075,34 @@
 <thead>
 <tr>
 <th>Team / system</th>
-<th>What we need or what changes for them</th>
-<th>Contact</th>
+<th>Required input or impact</th>
+<th>Dependency owner</th>
+<th>Needed by</th>
 <th>Status</th>
+<th>Blocking?</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><span class="ph">{Payments team}</span></td>
 <td><span class="ph">{New webhook}</span></td>
-<td><span class="ph">{Name}</span></td>
-<td><span class="ph">{Agreed / Pending}</span></td>
+<td><span class="ph">{Name / role}</span></td>
+<td><span class="ph">{Date / milestone}</span></td>
+<td><span class="ph">{Open / Agreed / In progress}</span></td>
+<td><span class="ph">{Yes / No}</span></td>
 </tr>
 <tr>
 <td><span class="ph">{Support}</span></td>
 <td><span class="ph">{New FAQ and macros}</span></td>
-<td><span class="ph">{Name}</span></td>
+<td><span class="ph">{Name / role}</span></td>
+<td><span class="ph">{Date / milestone}</span></td>
 <td><span class="ph">{Pending}</span></td>
+<td><span class="ph">{No}</span></td>
 </tr>
 </tbody>
 </table>
+<p><strong>Cross-team coordination:</strong> <span class="ph">{Integration points, hand-off expectations, meeting / async review, escalation path}</span></p>
+<p><strong>External dependencies:</strong> <span class="ph">{Vendor, partner, data source or platform constraints; include service owner and contingency}</span></p>
 <h2 id="20-alternatives-considered">20. Alternatives considered</h2>
 <table>
 <thead>
@@ -1020,68 +1149,221 @@
 </tr>
 </tbody>
 </table>
-<h2 id="22-open-questions">22. Open questions</h2>
+<h2 id="22-open-questions-assumptions-and-decisions">22. Open questions, assumptions and decisions</h2>
+<h3 id="221-open-questions">22.1 Open questions</h3>
 <table>
 <thead>
 <tr>
 <th>Question</th>
+<th>Blocks delivery?</th>
 <th>Owner</th>
 <th>Due</th>
-<th>Answer</th>
+<th>Answer / status</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><span class="ph">{Question}</span></td>
+<td><span class="ph">{Yes / No}</span></td>
 <td><span class="ph">{Name}</span></td>
 <td><span class="ph">{Date}</span></td>
-<td><span class="ph">{Filled in when decided}</span></td>
+<td><span class="ph">{Open / Answer}</span></td>
 </tr>
 </tbody>
 </table>
-<h2 id="23-timeline-and-estimates">23. Timeline and estimates</h2>
+<h3 id="222-assumptions">22.2 Assumptions</h3>
+<table>
+<thead>
+<tr>
+<th>Assumption</th>
+<th>Why it is needed</th>
+<th>Validation method</th>
+<th>Owner</th>
+<th>Due</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="ph">{Assumption}</span></td>
+<td><span class="ph">{Reason}</span></td>
+<td><span class="ph">{Evidence / test}</span></td>
+<td><span class="ph">{Name}</span></td>
+<td><span class="ph">{Date}</span></td>
+<td><span class="ph">{Unvalidated / Validated / Rejected}</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="223-decision-log">22.3 Decision log</h3>
+<table>
+<thead>
+<tr>
+<th>Decision ID</th>
+<th>Date</th>
+<th>Decision</th>
+<th>Options considered</th>
+<th>Rationale / trade-off</th>
+<th>Decision owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEC-01</td>
+<td><span class="ph">{Date}</span></td>
+<td><span class="ph">{Decision}</span></td>
+<td><span class="ph">{Options}</span></td>
+<td><span class="ph">{Why this option}</span></td>
+<td><span class="ph">{Name / role}</span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-delivery-plan-work-breakdown-and-jira-handoff">23. Delivery plan, work breakdown and Jira handoff</h2>
+<blockquote class="guide">
+<p>This section is a feature-level planning summary. Use <code>templates/DELIVERY_PLAN_TEMPLATE.md</code> for detailed work items and dependencies. Work items and estimates are proposals until the owning teams review and validate them.</p>
+</blockquote>
+<h3 id="231-milestones-and-forecast">23.1 Milestones and forecast</h3>
 <table>
 <thead>
 <tr>
 <th>Milestone</th>
-<th>Scope</th>
-<th>Estimate</th>
+<th>Scope / exit criteria</th>
+<th>Owner</th>
+<th>Forecast / confidence</th>
 <th>Target date</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>RFC approved</td>
-<td></td>
-<td></td>
-<td></td>
+<td>Requirements and RFC approved</td>
+<td><span class="ph">{Scope and decisions agreed}</span></td>
+<td><span class="ph">{Owner}</span></td>
+<td><span class="ph">{TBD}</span></td>
+<td><span class="ph">{Date / TBD}</span></td>
 </tr>
 <tr>
-<td>Backend and infra ready in staging</td>
-<td></td>
-<td><span class="ph">{n days}</span></td>
-<td></td>
+<td>Technical foundations ready</td>
+<td><span class="ph">{API / data / platform contracts available}</span></td>
+<td><span class="ph">{Owner}</span></td>
+<td><span class="ph">{TBD}</span></td>
+<td><span class="ph">{Date / TBD}</span></td>
 </tr>
 <tr>
-<td>Frontend complete behind flag</td>
-<td></td>
-<td><span class="ph">{n days}</span></td>
-<td></td>
+<td>Feature integrated in test environment</td>
+<td><span class="ph">{Critical end-to-end flow works}</span></td>
+<td><span class="ph">{Owner}</span></td>
+<td><span class="ph">{TBD}</span></td>
+<td><span class="ph">{Date / TBD}</span></td>
 </tr>
 <tr>
-<td>QA sign-off</td>
-<td></td>
-<td><span class="ph">{n days}</span></td>
-<td></td>
+<td>QA and readiness sign-off</td>
+<td><span class="ph">{Acceptance criteria and release gates pass}</span></td>
+<td><span class="ph">{Owner}</span></td>
+<td><span class="ph">{TBD}</span></td>
+<td><span class="ph">{Date / TBD}</span></td>
 </tr>
 <tr>
-<td>Rollout complete</td>
-<td></td>
-<td></td>
-<td></td>
+<td>Rollout and outcome review</td>
+<td><span class="ph">{Release complete; metrics reviewed}</span></td>
+<td><span class="ph">{Owner}</span></td>
+<td><span class="ph">{TBD}</span></td>
+<td><span class="ph">{Date / TBD}</span></td>
 </tr>
 </tbody>
 </table>
+<blockquote class="guide">
+<p>A requested business date or early forecast is not a delivery commitment. Teams confirm estimates and dates during planning after considering capacity, operational work and dependencies.</p>
+</blockquote>
+<h3 id="232-engineering-work-breakdown">23.2 Engineering work breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Work ID</th>
+<th>Workstream</th>
+<th>Type</th>
+<th>Deliverable / outcome</th>
+<th>Owning team</th>
+<th>Depends on</th>
+<th>Estimate</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WB-01</td>
+<td><span class="ph">{Frontend / Backend / Data / Platform / QA / Analytics / Localization / Docs / Release}</span></td>
+<td><span class="ph">{Story / Task / Spike}</span></td>
+<td><span class="ph">{Independently testable outcome}</span></td>
+<td><span class="ph">{Team}</span></td>
+<td><span class="ph">{WB IDs / none}</span></td>
+<td><span class="ph">{Team estimate / TBD}</span></td>
+<td><span class="ph">{High / Medium / Low}</span></td>
+</tr>
+<tr>
+<td>WB-02</td>
+<td><span class="ph">{Workstream}</span></td>
+<td><span class="ph">{Type}</span></td>
+<td><span class="ph">{Outcome}</span></td>
+<td><span class="ph">{Team}</span></td>
+<td><span class="ph">{WB IDs / none}</span></td>
+<td><span class="ph">{Team estimate / TBD}</span></td>
+<td><span class="ph">{High / Medium / Low}</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Work item quality:</strong> Each item should have a concise outcome, context, testable acceptance criteria, dependencies, relevant technical references, test expectations and owning team. Split oversized work; avoid creating artificial hand-offs. Use a detailed Delivery Plan for repeated item descriptions.</p>
+<p><strong>Estimate rules:</strong> Use the owning team's existing estimation scale. Developers / delivery teams validate estimates and confidence. Do not convert story points to hours or use estimates as individual performance measures. Record discovery as a time-boxed Spike with a clear question and expected decision output.</p>
+<h3 id="233-jira-and-rovo-handoff">23.3 Jira and Rovo handoff</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jira project / space</td>
+<td><span class="ph">{Project key}</span></td>
+</tr>
+<tr>
+<td>Proposed Epic</td>
+<td><span class="ph">{Summary / key after creation}</span></td>
+</tr>
+<tr>
+<td>Delivery Plan</td>
+<td><span class="ph">{URL}</span></td>
+</tr>
+<tr>
+<td>Rovo used?</td>
+<td><span class="ph">{Yes / No; link to reviewed output if available}</span></td>
+</tr>
+<tr>
+<td>Work item review owner</td>
+<td><span class="ph">{Tech lead / Product owner}</span></td>
+</tr>
+<tr>
+<td>Jira creation approval</td>
+<td><span class="ph">{Name / role / date}</span></td>
+</tr>
+<tr>
+<td>Created Jira items</td>
+<td><span class="ph">{Epic and issue links}</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Before creation</strong></p>
+<ul>
+<li class="task"><input type="checkbox"> Work breakdown matches approved scope and non-goals.</li>
+<li class="task"><input type="checkbox"> Each Story / Task has a clear outcome and testable acceptance criteria.</li>
+<li class="task"><input type="checkbox"> Parent-child relationships and issue types match the Jira project configuration.</li>
+<li class="task"><input type="checkbox"> Dependencies and cross-team blockers are represented.</li>
+<li class="task"><input type="checkbox"> Team / component values follow existing Jira conventions.</li>
+<li class="task"><input type="checkbox"> Estimates and confidence are validated by owning teams, or left TBD.</li>
+<li class="task"><input type="checkbox"> No assignees, sprint assignments, due dates or delivery commitments were invented by automation.</li>
+<li class="task"><input type="checkbox"> Feature ID, RFC and Delivery Plan links are included.</li>
+<li class="task"><input type="checkbox"> Product and Engineering approve the proposed Jira work before creation.</li>
+</ul>
+<p>Use <code>templates/ROVO_WORK_BREAKDOWN_PROMPT.md</code> as the standard starting prompt. Rovo output is a draft; human review is required before Jira creation.</p>
 <h2 id="24-launch-checklist">24. Launch checklist</h2>
 <p><strong>Before development starts</strong></p>
 <ul>
@@ -1114,70 +1396,98 @@
 <li class="task"><input type="checkbox"> RFC status updated and lessons learned recorded</li>
 </ul>
 <h2 id="25-approvals">25. Approvals</h2>
+<blockquote class="guide">
+<p>Select approvers and consulted reviewers according to the actual impact. Do not require every specialist to approve every change. See <code>guides/REVIEW_AND_APPROVAL.md</code>.</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>Role</th>
+<th>Decision area / role</th>
 <th>Name</th>
+<th>Responsibility</th>
 <th>Decision</th>
 <th>Date</th>
-<th>Comments</th>
+<th>Conditions / comments</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Engineering lead</td>
+<td>Business outcome / sponsor</td>
 <td></td>
-<td>Approve / Request changes</td>
+<td>Approver</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td>Product manager</td>
+<td>Product scope</td>
+<td></td>
+<td>Approver</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
+</tr>
+<tr>
+<td>Engineering approach</td>
+<td></td>
+<td>Approver</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Design</td>
 <td></td>
-<td></td>
+<td>Consulted / Approver where applicable</td>
+<td>Reviewed / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>QA</td>
 <td></td>
-<td></td>
+<td>Consulted</td>
+<td>Reviewed / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>SRE / Platform</td>
 <td></td>
-<td></td>
+<td>Approver where infrastructure / operations affected</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td>Security</td>
+<td>Security / Privacy</td>
 <td></td>
-<td></td>
+<td>Required where relevant</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Data / Analytics</td>
 <td></td>
-<td></td>
+<td>Required where tracking / data definitions affected</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
 <td></td>
 </tr>
 <tr>
 <td>Localization</td>
 <td></td>
+<td>Required where user-facing language affected</td>
+<td>Approve / Changes requested / N/A</td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td>Delivery readiness</td>
+<td></td>
+<td>Product + Engineering</td>
+<td>Ready / Not ready</td>
 <td></td>
 <td></td>
 </tr>
@@ -1208,25 +1518,58 @@
 </table></article></main>
 </div>
 <div class="toast" id="toast" role="status"></div>
-<script id="md-source" type="application/json">"# RFC: {Feature name}\n\n> **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.\n>\n> **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the \"Sections not included\" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.\n\n**When to include each section**\n\n| Section | Include when the change\u2026 |\n|---|---|\n| 4 Success metrics | is meant to move a product, business or reliability number |\n| 5 Users and use cases | changes what users see or do |\n| 7 Frontend | touches web or mobile UI |\n| 8 Backend | adds or changes services, APIs, jobs or integrations |\n| 9 Data model | changes schemas, migrations, retention or stored personal data |\n| 10 Infrastructure | adds or changes cloud resources, config, secrets, scaling or cost |\n| 11 Security and privacy | touches auth, personal data, money, external input or permissions |\n| 12 Event tracking | adds or changes analytics events, funnels or dashboards |\n| 13 Translations | adds or changes any user-facing text |\n| 14 Observability | adds or changes anything that runs in production and can fail |\n| 15 Performance | can change latency, throughput, load or bundle size |\n| 16 Testing | always recommended; keep it short for small changes |\n| 19 to 24 | whenever they have content; 24 Launch checklist is recommended for user-facing changes |\n\n| Field | Value |\n|---|---|\n| RFC ID | RFC-{number} |\n| Title | {Feature name} |\n| Feature owner | {Name, team} |\n| Other authors | {Names} |\n| Reviewers | {Engineering lead, Product, Design, QA, SRE/Platform, Security, Data, Localization} |\n| Status | Draft / In review / Approved / Rejected / Superseded by RFC-{n} |\n| Created | {YYYY-MM-DD} |\n| Last updated | {YYYY-MM-DD} |\n| Target release | {Version or date} |\n| Links | Ticket: {link} \u00b7 PRD: {link} \u00b7 Designs: {link} \u00b7 Prior RFCs: {link} |\n| Sections not included | {e.g. 7 Frontend: no UI change; 13 Translations: no user-facing text} |\n\n---\n\n## 1. Summary\n\n> Three to five sentences. What are we building, for whom, and why now? A reader who stops here should understand the change.\n\n{Summary}\n\n## 2. Background and problem\n\n> The current situation, the user or business pain, and evidence (data, support tickets, user research). Link to sources.\n\n{Background}\n\n## 3. Goals and non-goals\n\n**Goals**\n\n- {Goal 1}\n- {Goal 2}\n\n**Non-goals** (explicitly out of scope for this RFC)\n\n- {Non-goal 1}\n- {Non-goal 2}\n\n## 4. Success metrics\n\n> How we will know it worked. Every metric needs a baseline, a target and a source. The events that feed these metrics belong in section 12.\n\n| Metric | Baseline | Target | Measured by | Review date |\n|---|---|---|---|---|\n| {e.g. Checkout conversion} | {3.1%} | {3.6%} | {Amplitude funnel \"checkout_v2\"} | {4 weeks after 100% rollout} |\n| {e.g. p95 page load} | {2.4 s} | {\u2264 1.8 s} | {Datadog RUM} | {2 weeks after launch} |\n\n**Guardrail metrics** (must not get worse): {e.g. error rate, refund rate, support tickets}\n\n## 5. Users and use cases\n\n> Who uses this and what they are trying to do. User stories or short scenarios; include edge cases (new users, power users, low bandwidth, accessibility needs).\n\n- As a {user type}, I want {action} so that {outcome}.\n- As a {user type}, I want {action} so that {outcome}.\n\n## 6. Proposed solution\n\n### 6.1 Overview\n\n> The approach in plain words, then a diagram. Show the main components and the data flow between them.\n\n{Overview}\n\n```text\n{Architecture or sequence diagram, or a link to one (Excalidraw, Mermaid, draw.io)}\n```\n\n### 6.2 User flow\n\n> Step-by-step flow, including empty, loading, error and permission-denied states. Link the designs.\n\n1. {Step}\n2. {Step}\n\n## 7. Frontend changes\n\n> Web and/or mobile. Name the screens and components touched, how state is managed, and how the feature is switched on.\n\n| Area | Change | Notes |\n|---|---|---|\n| Screens / routes | {New or changed pages} | {Deep links, SEO, redirects} |\n| Components | {New or changed components} | {Design-system components reused or added} |\n| State and data fetching | {Store, cache, query keys} | {Invalidation, optimistic updates} |\n| Feature flag | {Flag name} | {Default off; targeting rules} |\n| Accessibility | {Keyboard, screen reader, contrast, focus management} | {WCAG 2.2 AA target} |\n| Responsive / devices | {Breakpoints, mobile, tablet, low-end Android} | |\n| Offline / poor network | {Behaviour} | |\n| Bundle size impact | {+ n KB} | {Code-split? Lazy-loaded?} |\n\n## 8. Backend changes\n\n### 8.1 Services and business logic\n\n> Which services change, what new logic is added, and where it lives.\n\n{Description}\n\n### 8.2 API changes\n\n> One row per endpoint (REST, GraphQL, gRPC or events). Mark breaking changes clearly and describe versioning.\n\n| Method | Path / operation | Auth | Request | Response | Errors | New / Changed / Breaking |\n|---|---|---|---|---|---|---|\n| {POST} | {/v1/orders} | {User token, scope `orders:write`} | {Body schema link} | {201 + schema link} | {400, 401, 403, 409, 429} | {New} |\n\n**Backward compatibility:** {How old clients keep working; deprecation timeline}\n\n**Idempotency, pagination, rate limits:** {Details}\n\n### 8.3 Background jobs, queues and scheduled tasks\n\n| Job / consumer | Trigger or schedule | Queue / topic | Retries and dead-letter | Expected volume |\n|---|---|---|---|---|\n| {Name} | {Event or cron} | {Topic} | {3 retries, exponential backoff, DLQ `x-dlq`} | {n per minute} |\n\n### 8.4 Third-party integrations\n\n| Provider | Purpose | Auth / keys | Limits and cost | Failure behaviour |\n|---|---|---|---|---|\n| {Provider} | {Purpose} | {Where the secret lives} | {Rate limit, price} | {Timeout, fallback} |\n\n## 9. Data model and migrations\n\n> Schema changes, how existing data is moved, and how long data is kept. Migrations must be safe to run while the old code is still serving traffic.\n\n| Table / collection | Change | Migration type | Backfill needed | Reversible |\n|---|---|---|---|---|\n| {orders} | {Add column `channel` (nullable)} | {Online, expand then contract} | {Yes, batched job} | {Yes} |\n\n- **Migration order:** {expand schema \u2192 deploy code that writes both \u2192 backfill \u2192 switch reads \u2192 contract}\n- **Data volume and duration:** {rows, estimated run time, locking risk}\n- **Retention and deletion:** {how long data is kept; deletion on user request}\n- **Personal data fields:** {list fields that are PII; see section 11}\n\n## 10. Infrastructure changes\n\n> Everything that changes outside application code. Each change should be made through infrastructure-as-code and reviewed by SRE/Platform. Include cost.\n\n| Change | Environments | IaC location / PR | Owner | Monthly cost | Reversible |\n|---|---|---|---|---|---|\n| {New queue `orders-events`} | {dev, staging, prod} | {terraform/modules/queues, PR #} | {Name} | {$x} | {Yes} |\n| {Scale API from 4 to 6 pods} | {prod} | {helm/values-prod.yaml} | {Name} | {$x} | {Yes} |\n| {New S3 bucket / CDN path / DNS record} | | | | | |\n\n**Configuration, environment variables and secrets**\n\n| Name | Purpose | Environments | Stored in | Default | Rotation |\n|---|---|---|---|---|---|\n| {ORDERS_V2_ENABLED} | {Feature switch} | {all} | {Config service} | {false} | {n/a} |\n| {PAYMENT_API_KEY} | {Provider auth} | {staging, prod} | {Vault / Secrets Manager} | {none} | {90 days} |\n\n**Capacity and scaling:** {expected load, autoscaling rules, limits, quotas to raise}\n\n**Network and access:** {security groups, firewall rules, IAM roles, service-to-service permissions}\n\n**Disaster recovery:** {backups, restore time, multi-region impact}\n\n## 11. Security, privacy and compliance\n\n| Topic | Answer |\n|---|---|\n| Authentication and authorization | {Who can call what; role and permission checks} |\n| Personal data collected or exposed | {Fields, purpose, legal basis, consent} |\n| Data protection laws | {DPDP Act (India), GDPR, children's data, data residency} |\n| Input validation and output encoding | {Where and how} |\n| Abuse and rate limiting | {Limits, bot protection} |\n| Secrets handling | {No secrets in code or logs; storage location} |\n| Audit logging | {What is logged, who can read it} |\n| Threat model | {Main risks: e.g. IDOR, injection, replay; mitigations} |\n| Security review needed | {Yes / No; reviewer} |\n\n## 12. Event tracking and analytics\n\n> Every event that feeds a success metric or dashboard. Use one naming convention, for example `object_action` in snake_case (`order_placed`, `filter_applied`). Never send personal data such as names, emails, phone numbers or free text in event properties.\n\n| Event name | Trigger (exactly when it fires) | Properties (name: type, example) | Platforms | Tool | New / Changed | Owner |\n|---|---|---|---|---|---|---|\n| {order_placed} | {Server confirms the order} | {order_id: string, value: number 499, currency: \"INR\", items: int 3} | {Server} | {Amplitude} | {New} | {Name} |\n| {filter_applied} | {User taps Apply in the filter sheet} | {filter: string \"price\", count: int 2} | {Web, iOS, Android} | {Amplitude} | {New} | {Name} |\n\n- **User and session identity:** {how users are identified; anonymous vs logged in}\n- **Consent and opt-out:** {how tracking respects consent, Do Not Track, children}\n- **Dashboards and funnels to create or update:** {links}\n- **QA of events:** {how events are verified before launch, e.g. debug view, test plan}\n- **Removed or renamed events:** {list, and which dashboards they break}\n\n## 13. Translations and localization\n\n> All user-facing text, including errors, emails, push notifications and app-store copy. No hard-coded strings.\n\n| Key | Default text (en) | Context for translators | Max length | Languages | Status |\n|---|---|---|---|---|---|\n| {checkout.button.place_order} | {Place order} | {Primary button on the payment screen} | {20} | {hi, mr, ta, \u2026} | {Sent / Done} |\n\n- **Languages in scope:** {list}; **fallback language:** {en}\n- **Formatting:** dates, times, numbers, currency and plurals use locale-aware formatters\n- **Layout:** long strings and different scripts (e.g. Devanagari) tested; right-to-left support if needed\n- **Translation workflow and owner:** {tool (e.g. Lokalise, Crowdin), who translates, who reviews, deadline}\n- **Testing:** {pseudo-locale run, screenshots per language}\n\n## 14. Observability and monitoring\n\n### 14.1 Logs, metrics and traces\n\n| Signal | What we add | Where |\n|---|---|---|\n| Logs | {Structured logs for order creation, with request_id; no PII} | {Datadog Logs, index `orders`} |\n| Metrics | {orders.created.count, orders.payment.latency} | {Datadog / StatsD} |\n| Traces | {APM spans for checkout service and payment client} | {Datadog APM} |\n| Frontend | {RUM views and errors for /checkout} | {Datadog RUM} |\n\n### 14.2 Service level objectives\n\n| SLI | SLO target | Window | Error budget policy |\n|---|---|---|---|\n| {Availability of POST /v1/orders (non-5xx share)} | {99.9%} | {30 days} | {Freeze risky releases if budget is spent} |\n| {p95 latency of POST /v1/orders} | {\u2264 400 ms} | {30 days} | |\n\n### 14.3 Datadog monitors\n\n> Every monitor needs a runbook. Critical alerts page someone; warnings go to the team channel.\n\n| Monitor name | Type | Query / metric | Warn | Critical | Window | Priority | Notify | Runbook |\n|---|---|---|---|---|---|---|---|---|\n| {[orders] 5xx error rate high} | {APM} | {trace.http.request.errors / hits, service:orders} | {> 1%} | {> 3%} | {5 min} | {P1} | {@pagerduty-orders, @slack-orders-alerts} | {link} |\n| {[orders] p95 latency high} | {APM} | {p95 trace.http.request.duration, resource:POST /v1/orders} | {> 400 ms} | {> 800 ms} | {10 min} | {P2} | {@slack-orders-alerts} | {link} |\n| {[orders] queue backlog} | {Metric} | {aws.sqs.approximate_number_of_messages_visible, queue:orders-events} | {> 1,000} | {> 5,000} | {10 min} | {P2} | {@slack-orders-alerts} | {link} |\n| {[orders] job failures} | {Log} | {status:error service:orders-worker} | {> 10} | {> 50} | {15 min} | {P3} | {@slack-orders-alerts} | {link} |\n| {[orders] checkout synthetic} | {Synthetic} | {Browser test: place a test order} | {1 failure} | {2 consecutive failures} | {every 5 min} | {P1} | {@pagerduty-orders} | {link} |\n\n- **Dashboards:** {new or updated dashboard links}\n- **On-call impact:** {which rotation owns these alerts; handover notes}\n- **Monitor management:** {monitors defined as code with the Terraform Datadog provider, in path/to/monitors}\n\n## 15. Performance and scalability\n\n| Item | Expectation |\n|---|---|\n| Expected traffic | {requests per second at peak; growth} |\n| Latency budget | {p50 / p95 / p99 targets per endpoint or page} |\n| Caching | {What, where, TTL, invalidation} |\n| Heavy queries / N+1 risks | {Indexes added, query plans checked} |\n| Load or stress test plan | {Tool, target, pass criteria} |\n| Frontend performance | {Core Web Vitals targets: LCP, INP, CLS} |\n\n## 16. Testing strategy\n\n| Level | Scope | Owner | Automated |\n|---|---|---|---|\n| Unit | {Business logic, components} | {Dev} | {Yes} |\n| Integration / contract | {API, database, third-party mocks} | {Dev} | {Yes} |\n| End-to-end | {Critical user journeys} | {QA} | {Yes} |\n| Accessibility | {axe checks, screen reader pass} | {QA} | {Partly} |\n| Localization | {Each language, long strings} | {QA} | {Partly} |\n| Event tracking | {Events fire once with correct properties} | {Dev / Data} | {Partly} |\n| Manual exploratory | {Edge cases, devices} | {QA} | {No} |\n\n**Test data and environments:** {seed data, staging setup, test accounts}\n\n## 17. Rollout plan\n\n| Phase | Audience | Flag setting | Duration | Go / no-go criteria |\n|---|---|---|---|---|\n| 0 | Internal team | {on for staff} | {2 days} | {No P1/P2 bugs; events verified} |\n| 1 | {5% of users} | {5%} | {3 days} | {Error rate and latency within SLO; guardrails flat} |\n| 2 | {50%} | {50%} | {3 days} | {Success metric trending to target} |\n| 3 | {100%} | {100%} | \u2014 | {Remove flag within 2 sprints} |\n\n- **Deployment order:** {infra \u2192 migrations (expand) \u2192 backend \u2192 frontend \u2192 flag on}\n- **Kill switch:** {how to turn the feature off in under 5 minutes, and who can do it}\n- **Communication:** {release notes, support team briefing, customer messaging}\n\n## 18. Rollback plan\n\n> How we undo each step safely, including data written by the new version.\n\n| Step | How to roll back | Data impact | Time needed |\n|---|---|---|---|\n| {Feature flag} | {Turn off} | {None} | {1 min} |\n| {Backend deploy} | {Redeploy previous version} | {New column ignored} | {10 min} |\n| {Migration} | {Contract step is delayed until stable; down-migration script} | {Describe} | {n min} |\n\n## 19. Dependencies and impact on other teams\n\n| Team / system | What we need or what changes for them | Contact | Status |\n|---|---|---|---|\n| {Payments team} | {New webhook} | {Name} | {Agreed / Pending} |\n| {Support} | {New FAQ and macros} | {Name} | {Pending} |\n\n## 20. Alternatives considered\n\n| Option | Pros | Cons | Why not chosen |\n|---|---|---|---|\n| {Option A} | | | |\n| {Do nothing} | | | |\n\n## 21. Risks and mitigations\n\n| Risk | Likelihood | Impact | Mitigation | Owner |\n|---|---|---|---|---|\n| {Payment provider latency spikes} | {Medium} | {High} | {Timeout 3 s, retry once, show pending state} | {Name} |\n\n## 22. Open questions\n\n| Question | Owner | Due | Answer |\n|---|---|---|---|\n| {Question} | {Name} | {Date} | {Filled in when decided} |\n\n## 23. Timeline and estimates\n\n| Milestone | Scope | Estimate | Target date |\n|---|---|---|---|\n| RFC approved | | | |\n| Backend and infra ready in staging | | {n days} | |\n| Frontend complete behind flag | | {n days} | |\n| QA sign-off | | {n days} | |\n| Rollout complete | | | |\n\n## 24. Launch checklist\n\n**Before development starts**\n\n- [ ] RFC reviewed and approved by all required reviewers\n- [ ] Designs final, including empty, loading and error states\n- [ ] Success metrics have baselines and a dashboard plan\n- [ ] Infra cost estimate approved\n\n**Before release**\n\n- [ ] Feature flag created, default off, kill switch tested\n- [ ] Migrations tested on a production-sized copy\n- [ ] Infrastructure changes applied through IaC in all environments\n- [ ] Secrets stored in the secret manager; none in code or logs\n- [ ] Events implemented and verified in the analytics debug view\n- [ ] All strings externalized and translated; each language checked on screen\n- [ ] Datadog monitors, dashboards and runbooks created and linked\n- [ ] SLOs defined; on-call team briefed\n- [ ] Accessibility checks passed\n- [ ] Security review complete (if required)\n- [ ] Load test passed (if required)\n- [ ] Support team and documentation updated\n- [ ] Rollback plan rehearsed in staging\n\n**After release**\n\n- [ ] Monitors quiet and SLOs met during each rollout phase\n- [ ] Success and guardrail metrics reviewed on the review date\n- [ ] Feature flag and dead code removed\n- [ ] RFC status updated and lessons learned recorded\n\n## 25. Approvals\n\n| Role | Name | Decision | Date | Comments |\n|---|---|---|---|---|\n| Engineering lead | | Approve / Request changes | | |\n| Product manager | | | | |\n| Design | | | | |\n| QA | | | | |\n| SRE / Platform | | | | |\n| Security | | | | |\n| Data / Analytics | | | | |\n| Localization | | | | |\n\n---\n\n## Appendix\n\n- **Glossary:** {terms and abbreviations used in this RFC}\n- **References:** {links to research, prior RFCs, external docs}\n\n**Change log**\n\n| Date | Author | Change |\n|---|---|---|\n| {YYYY-MM-DD} | {Name} | {First draft} |\n"</script>
+<script id="md-source" type="application/json">"# RFC: {Feature name}\n\n> **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.\n>\n> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages.\n>\n> **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the \"Sections not included\" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.\n\n**When to include each section**\n\n| Section | Include when the change\u2026 |\n|---|---|\n| 4 Success metrics | is meant to move a product, business or reliability number; record actual results after release |\n| 5.2 Functional requirements | users or systems need specific, testable behaviour |\n| 19 Dependencies | another team, vendor, system or decision affects delivery |\n| 22 Decision log | meaningful options, assumptions or decisions need traceability |\n| 23.2 Work breakdown and Jira handoff | work crosses components or teams, or Jira items need to be planned |\n| 5 Users and use cases | changes what users see or do |\n| 7 Frontend | touches web or mobile UI |\n| 8 Backend | adds or changes services, APIs, jobs or integrations |\n| 9 Data model | changes schemas, migrations, retention or stored personal data |\n| 10 Infrastructure | adds or changes cloud resources, config, secrets, scaling or cost |\n| 11 Security and privacy | touches auth, personal data, money, external input or permissions |\n| 12 Event tracking | adds or changes analytics events, funnels or dashboards |\n| 13 Translations | adds or changes any user-facing text |\n| 14 Observability | adds or changes anything that runs in production and can fail |\n| 15 Performance | can change latency, throughput, load or bundle size |\n| 16 Testing | always recommended; keep it short for small changes |\n| 19 to 24 | whenever they have content; 24 Launch checklist is recommended for user-facing changes |\n\n| Field | Value |\n|---|---|\n| Feature ID | FEAT-{number} |\n| RFC ID | RFC-{number} |\n| Title | {Feature name} |\n| Requestor | {Name, role, team} |\n| Business sponsor / decision owner | {Name, role} |\n| Product owner | {Name, team} |\n| Feature owner | {Engineering owner, team} |\n| Other authors | {Names} |\n| Impacted teams | {Teams} |\n| Complexity | Lite / Standard / Full |\n| Reviewers | {Select by impact; see guides/REVIEW_AND_APPROVAL.md} |\n| Status | Draft / In review / Approved / Rejected / Superseded by RFC-{n} |\n| Created | {YYYY-MM-DD} |\n| Last updated | {YYYY-MM-DD} |\n| Target release | {Version or date} |\n| Links | Intake brief: {link} \u00b7 Delivery plan: {link} \u00b7 Jira Epic: {link} \u00b7 Designs: {link} \u00b7 Prior RFCs: {link} |\n| Sections not included | {e.g. 7 Frontend: no UI change; 13 Translations: no user-facing text} |\n\n---\n\n## 1. Summary\n\n> Three to five sentences. What are we building, for whom, and why now? A reader who stops here should understand the change.\n\n{Summary}\n\n## 2. Background and problem\n\n> The current situation, the user or business pain, and evidence (data, support tickets, user research). Link to sources.\n\n{Background}\n\n## 3. Goals and non-goals\n\n**Goals**\n\n- {Goal 1}\n- {Goal 2}\n\n**Non-goals** (explicitly out of scope for this RFC)\n\n- {Non-goal 1}\n- {Non-goal 2}\n\n## 4. Success metrics\n\n> How we will know it worked. Every metric needs a baseline, a target and a source. The events that feed these metrics belong in section 12.\n\n| Metric | Baseline | Target | Measured by | Review date |\n|---|---|---|---|---|\n| {e.g. Checkout conversion} | {3.1%} | {3.6%} | {Amplitude funnel \"checkout_v2\"} | {4 weeks after 100% rollout} |\n| {e.g. p95 page load} | {2.4 s} | {\u2264 1.8 s} | {Datadog RUM} | {2 weeks after launch} |\n\n**Guardrail metrics** (must not get worse): {e.g. error rate, refund rate, support tickets}\n\n### 4.1 Post-release outcome review\n\n> Complete this after the agreed review window. Record actual results, explain material gaps and assign follow-up actions. Do not mark a metric as achieved without a measured result.\n\n| Metric | Baseline | Target | Actual | Result / explanation | Data source | Reviewed on |\n|---|---|---|---|---|---|---|\n| {Metric} | {Value} | {Value} | {Value / Not yet measured} | {Achieved / Partial / Not achieved; context} | {Dashboard / report} | {Date} |\n\n**Outcome owner:** {Name, role}\n\n**Follow-up actions:** {Action, owner, due date, or none}\n\n## 5. Users, requirements and use cases\n\n### 5.1 Users and use cases\n\n> Who uses this and what they are trying to do. Include important scenarios and edge cases (new users, power users, low bandwidth, accessibility needs).\n\n- As a {user type}, I want {action} so that {outcome}.\n- As a {user type}, I want {action} so that {outcome}.\n\n### 5.2 Functional requirements and acceptance criteria\n\n> Give each requirement a stable ID. Acceptance criteria must describe observable behaviour and be testable by Product, Engineering and QA. Use Given / When / Then where it helps. Link to detailed designs or test cases rather than duplicating them.\n\n| ID | Requirement / expected behaviour | Priority | Acceptance criteria | Owner / source |\n|---|---|---|---|---|\n| FR-01 | {Requirement} | Must / Should / Could | Given {context}, when {action}, then {result} | {Product / source} |\n| FR-02 | {Requirement} | Must / Should / Could | Given {edge case}, when {action}, then {result} | {Product / source} |\n\n**Out of scope:** {Explicitly excluded behaviour; align with section 3}\n\n**Requirement notes:** {Business rules, permissions, validations, empty/loading/error states, boundary conditions, audit needs}\n\n## 6. Proposed solution\n\n### 6.1 Overview\n\n> The approach in plain words, then a diagram. Show the main components and the data flow between them.\n\n{Overview}\n\n```text\n{Architecture or sequence diagram, or a link to one (Excalidraw, Mermaid, draw.io)}\n```\n\n### 6.2 User flow\n\n> Step-by-step flow, including empty, loading, error and permission-denied states. Link the designs.\n\n1. {Step}\n2. {Step}\n\n## 7. Frontend changes\n\n> Web and/or mobile. Name the screens and components touched, how state is managed, and how the feature is switched on.\n\n| Area | Change | Notes |\n|---|---|---|\n| Screens / routes | {New or changed pages} | {Deep links, SEO, redirects} |\n| Components | {New or changed components} | {Design-system components reused or added} |\n| State and data fetching | {Store, cache, query keys} | {Invalidation, optimistic updates} |\n| Feature flag | {Flag name} | {Default off; targeting rules} |\n| Accessibility | {Keyboard, screen reader, contrast, focus management} | {WCAG 2.2 AA target} |\n| Responsive / devices | {Breakpoints, mobile, tablet, low-end Android} | |\n| Offline / poor network | {Behaviour} | |\n| Bundle size impact | {+ n KB} | {Code-split? Lazy-loaded?} |\n\n## 8. Backend changes\n\n### 8.1 Services and business logic\n\n> Which services change, what new logic is added, and where it lives.\n\n{Description}\n\n### 8.2 API changes\n\n> One row per endpoint (REST, GraphQL, gRPC or events). Mark breaking changes clearly and describe versioning.\n\n| Method | Path / operation | Auth | Request | Response | Errors | New / Changed / Breaking |\n|---|---|---|---|---|---|---|\n| {POST} | {/v1/orders} | {User token, scope `orders:write`} | {Body schema link} | {201 + schema link} | {400, 401, 403, 409, 429} | {New} |\n\n**Backward compatibility:** {How old clients keep working; deprecation timeline}\n\n**Idempotency, pagination, rate limits:** {Details}\n\n### 8.3 Background jobs, queues and scheduled tasks\n\n| Job / consumer | Trigger or schedule | Queue / topic | Retries and dead-letter | Expected volume |\n|---|---|---|---|---|\n| {Name} | {Event or cron} | {Topic} | {3 retries, exponential backoff, DLQ `x-dlq`} | {n per minute} |\n\n### 8.4 Third-party integrations\n\n| Provider | Purpose | Auth / keys | Limits and cost | Failure behaviour |\n|---|---|---|---|---|\n| {Provider} | {Purpose} | {Where the secret lives} | {Rate limit, price} | {Timeout, fallback} |\n\n## 9. Data model and migrations\n\n> Schema changes, how existing data is moved, and how long data is kept. Migrations must be safe to run while the old code is still serving traffic.\n\n| Table / collection | Change | Migration type | Backfill needed | Reversible |\n|---|---|---|---|---|\n| {orders} | {Add column `channel` (nullable)} | {Online, expand then contract} | {Yes, batched job} | {Yes} |\n\n- **Migration order:** {expand schema \u2192 deploy code that writes both \u2192 backfill \u2192 switch reads \u2192 contract}\n- **Data volume and duration:** {rows, estimated run time, locking risk}\n- **Retention and deletion:** {how long data is kept; deletion on user request}\n- **Personal data fields:** {list fields that are PII; see section 11}\n\n## 10. Infrastructure changes\n\n> Everything that changes outside application code. Each change should be made through infrastructure-as-code and reviewed by SRE/Platform. Include cost.\n\n| Change | Environments | IaC location / PR | Owner | Monthly cost | Reversible |\n|---|---|---|---|---|---|\n| {New queue `orders-events`} | {dev, staging, prod} | {terraform/modules/queues, PR #} | {Name} | {$x} | {Yes} |\n| {Scale API from 4 to 6 pods} | {prod} | {helm/values-prod.yaml} | {Name} | {$x} | {Yes} |\n| {New S3 bucket / CDN path / DNS record} | | | | | |\n\n**Configuration, environment variables and secrets**\n\n| Name | Purpose | Environments | Stored in | Default | Rotation |\n|---|---|---|---|---|---|\n| {ORDERS_V2_ENABLED} | {Feature switch} | {all} | {Config service} | {false} | {n/a} |\n| {PAYMENT_API_KEY} | {Provider auth} | {staging, prod} | {Vault / Secrets Manager} | {none} | {90 days} |\n\n**Capacity and scaling:** {expected load, autoscaling rules, limits, quotas to raise}\n\n**Network and access:** {security groups, firewall rules, IAM roles, service-to-service permissions}\n\n**Disaster recovery:** {backups, restore time, multi-region impact}\n\n## 11. Security, privacy and compliance\n\n| Topic | Answer |\n|---|---|\n| Authentication and authorization | {Who can call what; role and permission checks} |\n| Personal data collected or exposed | {Fields, purpose, legal basis, consent} |\n| Data protection laws | {DPDP Act (India), GDPR, children's data, data residency} |\n| Input validation and output encoding | {Where and how} |\n| Abuse and rate limiting | {Limits, bot protection} |\n| Secrets handling | {No secrets in code or logs; storage location} |\n| Audit logging | {What is logged, who can read it} |\n| Threat model | {Main risks: e.g. IDOR, injection, replay; mitigations} |\n| Security review needed | {Yes / No; reviewer} |\n\n## 12. Event tracking and analytics\n\n> Every event that feeds a success metric or dashboard. Use one naming convention, for example `object_action` in snake_case (`order_placed`, `filter_applied`). Never send personal data such as names, emails, phone numbers or free text in event properties.\n\n| Event name | Trigger (exactly when it fires) | Properties (name: type, example) | Platforms | Tool | New / Changed | Owner |\n|---|---|---|---|---|---|---|\n| {order_placed} | {Server confirms the order} | {order_id: string, value: number 499, currency: \"INR\", items: int 3} | {Server} | {Amplitude} | {New} | {Name} |\n| {filter_applied} | {User taps Apply in the filter sheet} | {filter: string \"price\", count: int 2} | {Web, iOS, Android} | {Amplitude} | {New} | {Name} |\n\n- **User and session identity:** {how users are identified; anonymous vs logged in}\n- **Consent and opt-out:** {how tracking respects consent, Do Not Track, children}\n- **Dashboards and funnels to create or update:** {links}\n- **QA of events:** {how events are verified before launch, e.g. debug view, test plan}\n- **Removed or renamed events:** {list, and which dashboards they break}\n\n## 13. Translations and localization\n\n> All user-facing text, including errors, emails, push notifications and app-store copy. No hard-coded strings.\n\n| Key | Default text (en) | Context for translators | Max length | Languages | Status |\n|---|---|---|---|---|---|\n| {checkout.button.place_order} | {Place order} | {Primary button on the payment screen} | {20} | {hi, mr, ta, \u2026} | {Sent / Done} |\n\n- **Languages in scope:** {list}; **fallback language:** {en}\n- **Formatting:** dates, times, numbers, currency and plurals use locale-aware formatters\n- **Layout:** long strings and different scripts (e.g. Devanagari) tested; right-to-left support if needed\n- **Translation workflow and owner:** {tool (e.g. Lokalise, Crowdin), who translates, who reviews, deadline}\n- **Testing:** {pseudo-locale run, screenshots per language}\n\n## 14. Observability and monitoring\n\n### 14.1 Logs, metrics and traces\n\n| Signal | What we add | Where |\n|---|---|---|\n| Logs | {Structured logs for order creation, with request_id; no PII} | {Datadog Logs, index `orders`} |\n| Metrics | {orders.created.count, orders.payment.latency} | {Datadog / StatsD} |\n| Traces | {APM spans for checkout service and payment client} | {Datadog APM} |\n| Frontend | {RUM views and errors for /checkout} | {Datadog RUM} |\n\n### 14.2 Service level objectives\n\n| SLI | SLO target | Window | Error budget policy |\n|---|---|---|---|\n| {Availability of POST /v1/orders (non-5xx share)} | {99.9%} | {30 days} | {Freeze risky releases if budget is spent} |\n| {p95 latency of POST /v1/orders} | {\u2264 400 ms} | {30 days} | |\n\n### 14.3 Datadog monitors\n\n> Every monitor needs a runbook. Critical alerts page someone; warnings go to the team channel.\n\n| Monitor name | Type | Query / metric | Warn | Critical | Window | Priority | Notify | Runbook |\n|---|---|---|---|---|---|---|---|---|\n| {[orders] 5xx error rate high} | {APM} | {trace.http.request.errors / hits, service:orders} | {> 1%} | {> 3%} | {5 min} | {P1} | {@pagerduty-orders, @slack-orders-alerts} | {link} |\n| {[orders] p95 latency high} | {APM} | {p95 trace.http.request.duration, resource:POST /v1/orders} | {> 400 ms} | {> 800 ms} | {10 min} | {P2} | {@slack-orders-alerts} | {link} |\n| {[orders] queue backlog} | {Metric} | {aws.sqs.approximate_number_of_messages_visible, queue:orders-events} | {> 1,000} | {> 5,000} | {10 min} | {P2} | {@slack-orders-alerts} | {link} |\n| {[orders] job failures} | {Log} | {status:error service:orders-worker} | {> 10} | {> 50} | {15 min} | {P3} | {@slack-orders-alerts} | {link} |\n| {[orders] checkout synthetic} | {Synthetic} | {Browser test: place a test order} | {1 failure} | {2 consecutive failures} | {every 5 min} | {P1} | {@pagerduty-orders} | {link} |\n\n- **Dashboards:** {new or updated dashboard links}\n- **On-call impact:** {which rotation owns these alerts; handover notes}\n- **Monitor management:** {monitors defined as code with the Terraform Datadog provider, in path/to/monitors}\n\n## 15. Performance and scalability\n\n| Item | Expectation |\n|---|---|\n| Expected traffic | {requests per second at peak; growth} |\n| Latency budget | {p50 / p95 / p99 targets per endpoint or page} |\n| Caching | {What, where, TTL, invalidation} |\n| Heavy queries / N+1 risks | {Indexes added, query plans checked} |\n| Load or stress test plan | {Tool, target, pass criteria} |\n| Frontend performance | {Core Web Vitals targets: LCP, INP, CLS} |\n\n## 16. Testing strategy\n\n| Level | Scope | Owner | Automated |\n|---|---|---|---|\n| Unit | {Business logic, components} | {Dev} | {Yes} |\n| Integration / contract | {API, database, third-party mocks} | {Dev} | {Yes} |\n| End-to-end | {Critical user journeys} | {QA} | {Yes} |\n| Accessibility | {axe checks, screen reader pass} | {QA} | {Partly} |\n| Localization | {Each language, long strings} | {QA} | {Partly} |\n| Event tracking | {Events fire once with correct properties} | {Dev / Data} | {Partly} |\n| Manual exploratory | {Edge cases, devices} | {QA} | {No} |\n\n**Test data and environments:** {seed data, staging setup, test accounts}\n\n## 17. Rollout plan\n\n| Phase | Audience | Flag setting | Duration | Go / no-go criteria |\n|---|---|---|---|---|\n| 0 | Internal team | {on for staff} | {2 days} | {No P1/P2 bugs; events verified} |\n| 1 | {5% of users} | {5%} | {3 days} | {Error rate and latency within SLO; guardrails flat} |\n| 2 | {50%} | {50%} | {3 days} | {Success metric trending to target} |\n| 3 | {100%} | {100%} | \u2014 | {Remove flag within 2 sprints} |\n\n- **Deployment order:** {infra \u2192 migrations (expand) \u2192 backend \u2192 frontend \u2192 flag on}\n- **Kill switch:** {how to turn the feature off in under 5 minutes, and who can do it}\n- **Communication:** {release notes, support team briefing, customer messaging}\n\n## 18. Rollback plan\n\n> How we undo each step safely, including data written by the new version.\n\n| Step | How to roll back | Data impact | Time needed |\n|---|---|---|---|\n| {Feature flag} | {Turn off} | {None} | {1 min} |\n| {Backend deploy} | {Redeploy previous version} | {New column ignored} | {10 min} |\n| {Migration} | {Contract step is delayed until stable; down-migration script} | {Describe} | {n min} |\n\n## 19. Dependencies and impact on other teams\n\n| Team / system | Required input or impact | Dependency owner | Needed by | Status | Blocking? |\n|---|---|---|---|---|---|\n| {Payments team} | {New webhook} | {Name / role} | {Date / milestone} | {Open / Agreed / In progress} | {Yes / No} |\n| {Support} | {New FAQ and macros} | {Name / role} | {Date / milestone} | {Pending} | {No} |\n\n**Cross-team coordination:** {Integration points, hand-off expectations, meeting / async review, escalation path}\n\n**External dependencies:** {Vendor, partner, data source or platform constraints; include service owner and contingency}\n\n## 20. Alternatives considered\n\n| Option | Pros | Cons | Why not chosen |\n|---|---|---|---|\n| {Option A} | | | |\n| {Do nothing} | | | |\n\n## 21. Risks and mitigations\n\n| Risk | Likelihood | Impact | Mitigation | Owner |\n|---|---|---|---|---|\n| {Payment provider latency spikes} | {Medium} | {High} | {Timeout 3 s, retry once, show pending state} | {Name} |\n\n## 22. Open questions, assumptions and decisions\n\n### 22.1 Open questions\n\n| Question | Blocks delivery? | Owner | Due | Answer / status |\n|---|---|---|---|---|\n| {Question} | {Yes / No} | {Name} | {Date} | {Open / Answer} |\n\n### 22.2 Assumptions\n\n| Assumption | Why it is needed | Validation method | Owner | Due | Status |\n|---|---|---|---|---|---|\n| {Assumption} | {Reason} | {Evidence / test} | {Name} | {Date} | {Unvalidated / Validated / Rejected} |\n\n### 22.3 Decision log\n\n| Decision ID | Date | Decision | Options considered | Rationale / trade-off | Decision owner |\n|---|---|---|---|---|---|\n| DEC-01 | {Date} | {Decision} | {Options} | {Why this option} | {Name / role} |\n\n## 23. Delivery plan, work breakdown and Jira handoff\n\n> This section is a feature-level planning summary. Use `templates/DELIVERY_PLAN_TEMPLATE.md` for detailed work items and dependencies. Work items and estimates are proposals until the owning teams review and validate them.\n\n### 23.1 Milestones and forecast\n\n| Milestone | Scope / exit criteria | Owner | Forecast / confidence | Target date |\n|---|---|---|---|---|\n| Requirements and RFC approved | {Scope and decisions agreed} | {Owner} | {TBD} | {Date / TBD} |\n| Technical foundations ready | {API / data / platform contracts available} | {Owner} | {TBD} | {Date / TBD} |\n| Feature integrated in test environment | {Critical end-to-end flow works} | {Owner} | {TBD} | {Date / TBD} |\n| QA and readiness sign-off | {Acceptance criteria and release gates pass} | {Owner} | {TBD} | {Date / TBD} |\n| Rollout and outcome review | {Release complete; metrics reviewed} | {Owner} | {TBD} | {Date / TBD} |\n\n> A requested business date or early forecast is not a delivery commitment. Teams confirm estimates and dates during planning after considering capacity, operational work and dependencies.\n\n### 23.2 Engineering work breakdown\n\n| Work ID | Workstream | Type | Deliverable / outcome | Owning team | Depends on | Estimate | Confidence |\n|---|---|---|---|---|---|---|---|\n| WB-01 | {Frontend / Backend / Data / Platform / QA / Analytics / Localization / Docs / Release} | {Story / Task / Spike} | {Independently testable outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |\n| WB-02 | {Workstream} | {Type} | {Outcome} | {Team} | {WB IDs / none} | {Team estimate / TBD} | {High / Medium / Low} |\n\n**Work item quality:** Each item should have a concise outcome, context, testable acceptance criteria, dependencies, relevant technical references, test expectations and owning team. Split oversized work; avoid creating artificial hand-offs. Use a detailed Delivery Plan for repeated item descriptions.\n\n**Estimate rules:** Use the owning team's existing estimation scale. Developers / delivery teams validate estimates and confidence. Do not convert story points to hours or use estimates as individual performance measures. Record discovery as a time-boxed Spike with a clear question and expected decision output.\n\n### 23.3 Jira and Rovo handoff\n\n| Field | Value |\n|---|---|\n| Jira project / space | {Project key} |\n| Proposed Epic | {Summary / key after creation} |\n| Delivery Plan | {URL} |\n| Rovo used? | {Yes / No; link to reviewed output if available} |\n| Work item review owner | {Tech lead / Product owner} |\n| Jira creation approval | {Name / role / date} |\n| Created Jira items | {Epic and issue links} |\n\n**Before creation**\n\n- [ ] Work breakdown matches approved scope and non-goals.\n- [ ] Each Story / Task has a clear outcome and testable acceptance criteria.\n- [ ] Parent-child relationships and issue types match the Jira project configuration.\n- [ ] Dependencies and cross-team blockers are represented.\n- [ ] Team / component values follow existing Jira conventions.\n- [ ] Estimates and confidence are validated by owning teams, or left TBD.\n- [ ] No assignees, sprint assignments, due dates or delivery commitments were invented by automation.\n- [ ] Feature ID, RFC and Delivery Plan links are included.\n- [ ] Product and Engineering approve the proposed Jira work before creation.\n\nUse `templates/ROVO_WORK_BREAKDOWN_PROMPT.md` as the standard starting prompt. Rovo output is a draft; human review is required before Jira creation.\n\n## 24. Launch checklist\n\n**Before development starts**\n\n- [ ] RFC reviewed and approved by all required reviewers\n- [ ] Designs final, including empty, loading and error states\n- [ ] Success metrics have baselines and a dashboard plan\n- [ ] Infra cost estimate approved\n\n**Before release**\n\n- [ ] Feature flag created, default off, kill switch tested\n- [ ] Migrations tested on a production-sized copy\n- [ ] Infrastructure changes applied through IaC in all environments\n- [ ] Secrets stored in the secret manager; none in code or logs\n- [ ] Events implemented and verified in the analytics debug view\n- [ ] All strings externalized and translated; each language checked on screen\n- [ ] Datadog monitors, dashboards and runbooks created and linked\n- [ ] SLOs defined; on-call team briefed\n- [ ] Accessibility checks passed\n- [ ] Security review complete (if required)\n- [ ] Load test passed (if required)\n- [ ] Support team and documentation updated\n- [ ] Rollback plan rehearsed in staging\n\n**After release**\n\n- [ ] Monitors quiet and SLOs met during each rollout phase\n- [ ] Success and guardrail metrics reviewed on the review date\n- [ ] Feature flag and dead code removed\n- [ ] RFC status updated and lessons learned recorded\n\n## 25. Approvals\n\n> Select approvers and consulted reviewers according to the actual impact. Do not require every specialist to approve every change. See `guides/REVIEW_AND_APPROVAL.md`.\n\n| Decision area / role | Name | Responsibility | Decision | Date | Conditions / comments |\n|---|---|---|---|---|---|\n| Business outcome / sponsor | | Approver | Approve / Changes requested / N/A | | |\n| Product scope | | Approver | Approve / Changes requested / N/A | | |\n| Engineering approach | | Approver | Approve / Changes requested / N/A | | |\n| Design | | Consulted / Approver where applicable | Reviewed / Changes requested / N/A | | |\n| QA | | Consulted | Reviewed / Changes requested / N/A | | |\n| SRE / Platform | | Approver where infrastructure / operations affected | Approve / Changes requested / N/A | | |\n| Security / Privacy | | Required where relevant | Approve / Changes requested / N/A | | |\n| Data / Analytics | | Required where tracking / data definitions affected | Approve / Changes requested / N/A | | |\n| Localization | | Required where user-facing language affected | Approve / Changes requested / N/A | | |\n| Delivery readiness | | Product + Engineering | Ready / Not ready | | |\n\n---\n\n## Appendix\n\n- **Glossary:** {terms and abbreviations used in this RFC}\n- **References:** {links to research, prior RFCs, external docs}\n\n**Change log**\n\n| Date | Author | Change |\n|---|---|---|\n| {YYYY-MM-DD} | {Name} | {First draft} |\n"</script>
 <script>
 (() => {
   const md = JSON.parse(document.getElementById('md-source').textContent);
   const name = document.body.dataset.download;
-  const toast = (m) => { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); };
-  document.querySelectorAll('#doc table').forEach((t) => { const w = document.createElement('div'); w.className = 'table-wrap'; t.replaceWith(w); w.appendChild(t); });
+  const toast = (message) => {
+    const element = document.getElementById('toast');
+    element.textContent = message;
+    element.classList.add('show');
+    setTimeout(() => element.classList.remove('show'), 1800);
+  };
+  document.querySelectorAll('#doc table').forEach((table) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-wrap';
+    table.replaceWith(wrapper);
+    wrapper.appendChild(table);
+  });
   document.getElementById('copyMd').addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(md); } catch { const ta = document.createElement('textarea'); ta.value = md; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+    try {
+      await navigator.clipboard.writeText(md);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = md;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
     toast('Markdown copied');
   });
-  document.getElementById('dlMd').addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' })); a.download = name; a.click(); });
-  const tg = document.getElementById('toggleGuides');
-  if (tg) tg.addEventListener('click', () => { const on = document.body.classList.toggle('hide-guides'); tg.setAttribute('aria-pressed', String(on)); tg.textContent = on ? 'Show guidance' : 'Hide guidance'; });
+  document.getElementById('dlMd').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+    link.download = name;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  });
+  const toggle = document.getElementById('toggleGuides');
+  if (toggle) toggle.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('hide-guides');
+    toggle.setAttribute('aria-pressed', String(hidden));
+    toggle.textContent = hidden ? 'Show guidance' : 'Hide guidance';
+  });
   document.getElementById('print').addEventListener('click', () => window.print());
   const links = [...document.querySelectorAll('nav.side ol a')];
-  const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { links.forEach((a) => a.classList.remove('on')); byId.get(e.target.id)?.classList.add('on'); } }), { rootMargin: '0px 0px -75% 0px' });
-  document.querySelectorAll('#doc h2[id]').forEach((h) => io.observe(h));
+  const byId = new Map(links.map((link) => [link.getAttribute('href').slice(1), link]));
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    links.forEach((link) => link.classList.remove('on'));
+    byId.get(entry.target.id)?.classList.add('on');
+  }), { rootMargin: '0px 0px -75% 0px' });
+  document.querySelectorAll('#doc h2[id]').forEach((heading) => observer.observe(heading));
 })();
 </script>
 </body>

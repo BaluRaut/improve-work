@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature request-to-delivery workflow</title>
+<style>
+:root { --bg:#f7f8fa; --paper:#fff; --ink:#1f2430; --muted:#5d6475; --line:#e3e6ec;
+  --accent:#3b5bdb; --accent-soft:#edf2ff; --guide-bg:#fff8e6; --guide-line:#f0b429;
+  --ph:#b4235a; --ph-bg:#fdecf2; --code:#f1f3f7;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color-scheme:light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg:#14171d; --paper:#1c2028; --ink:#e8ebf1; --muted:#a3aab9;
+    --line:#2e3440; --accent:#8ea8ff; --accent-soft:#232b45; --guide-bg:#2a2416;
+    --guide-line:#c9971f; --ph:#ff8fb5; --ph-bg:#3a1f2b; --code:#252a34; color-scheme:dark; }
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15.5px/1.6 var(--sans); }
+a { color:var(--accent); }
+.layout { display:grid; grid-template-columns:260px minmax(0,1fr); max-width:1280px; margin:0 auto; }
+nav.side { position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto; padding:20px 14px 20px 20px; border-right:1px solid var(--line); }
+nav.side h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:14px 0 8px; }
+nav.side ol { list-style:none; margin:0; padding:0; }
+nav.side a { display:block; padding:4px 8px; border-radius:6px; color:var(--ink); text-decoration:none; font-size:.9rem; }
+nav.side a:hover, nav.side a.on { background:var(--accent-soft); color:var(--accent); }
+.home { font-size:.9rem; text-decoration:none; }
+.actions { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 6px; }
+.actions button { font:inherit; font-size:.85rem; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--paper); color:var(--ink); cursor:pointer; }
+.actions button.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+main { padding:28px 32px 80px; min-width:0; }
+article { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:28px 32px; }
+h1 { font-size:1.9rem; margin:0 0 14px; line-height:1.25; }
+h2 { font-size:1.3rem; margin:34px 0 10px; padding-top:14px; border-top:1px solid var(--line); scroll-margin-top:16px; }
+h3 { font-size:1.05rem; margin:22px 0 8px; scroll-margin-top:16px; }
+p, li { margin:6px 0; }
+hr { border:0; border-top:1px solid var(--line); margin:22px 0; }
+.table-wrap { overflow-x:auto; margin:10px 0; border:1px solid var(--line); border-radius:10px; }
+table { border-collapse:collapse; width:100%; font-size:.9rem; }
+th, td { text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid var(--line); }
+th { background:var(--accent-soft); font-weight:650; white-space:nowrap; }
+tr:last-child td { border-bottom:0; }
+blockquote.guide { margin:10px 0; padding:8px 14px; background:var(--guide-bg); border-left:4px solid var(--guide-line); border-radius:0 8px 8px 0; color:var(--muted); font-size:.92rem; }
+blockquote.guide p { margin:4px 0; }
+.hide-guides blockquote.guide { display:none; }
+.ph { color:var(--ph); background:var(--ph-bg); border-radius:4px; padding:0 3px; font-size:.92em; }
+code { font-family:var(--mono); font-size:.88em; background:var(--code); padding:1px 5px; border-radius:5px; }
+pre { background:var(--code); padding:12px 14px; border-radius:10px; overflow-x:auto; }
+pre code { background:none; padding:0; }
+li.task { list-style:none; margin-left:-1.2em; }
+li.task input { width:16px; height:16px; margin-right:6px; vertical-align:-2px; accent-color:var(--accent); }
+.toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:10px; font-size:.9rem; opacity:0; transition:opacity .2s; pointer-events:none; }
+.toast.show { opacity:1; }
+.cards { display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); margin-top:14px; }
+.card { display:block; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:16px 18px; text-decoration:none; color:var(--ink); }
+.card:hover { border-color:var(--accent); }
+.card .tag { font-size:.75rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em; }
+.card h3 { margin:4px 0 6px; font-size:1.05rem; }
+.card p { margin:0; color:var(--muted); font-size:.92rem; }
+.bar { display:flex; gap:2px; margin-top:10px; }
+.bar i { flex:1; height:8px; border-radius:2px; background:var(--line); }
+.bar i.on { background:var(--accent); }
+@media (max-width:900px) {
+  .layout { grid-template-columns:1fr; }
+  nav.side { position:static; height:auto; border-right:0; border-bottom:1px solid var(--line); padding:14px 16px; }
+  nav.side ol { display:none; }
+  main { padding:16px; }
+  article { padding:18px 16px; }
+}
+@media print {
+  nav.side, .actions, .toast { display:none !important; }
+  .layout { display:block; }
+  main { padding:0; }
+  body { background:#fff; color:#000; }
+  article { border:0; padding:0; }
+  h2 { break-after:avoid; }
+  .table-wrap { overflow:visible; }
+}
+</style>
+</head>
+<body data-download="WORKFLOW.md">
+<div class="layout">
+  <nav class="side" aria-label="Sections">
+    <a class="home" href="../index.html">← All documents</a>
+    <div class="actions">
+      <button class="primary" id="copyMd">Copy Markdown</button>
+      <button id="dlMd">Download .md</button>
+      <button id="toggleGuides" aria-pressed="false">Hide guidance</button>
+      <button id="print">Print / PDF</button>
+    </div>
+    <h2>Sections</h2>
+    <ol><li><a href="#purpose">Purpose</a></li><li><a href="#working-principles">Working principles</a></li><li><a href="#end-to-end-stages">End-to-end stages</a></li><li><a href="#complexity-levels">Complexity levels</a></li><li><a href="#workflow-statuses">Workflow statuses</a></li><li><a href="#responsibility-boundaries">Responsibility boundaries</a></li><li><a href="#handoffs-and-decision-gates">Handoffs and decision gates</a></li><li><a href="#traceability">Traceability</a></li><li><a href="#exceptions">Exceptions</a></li></ol>
+  </nav>
+  <main><article id="doc"><h1 id="feature-request-to-delivery-workflow">Feature request-to-delivery workflow</h1>
+<h2 id="purpose">Purpose</h2>
+<p>Create one understandable path from a business request to an approved technical approach, an actionable delivery plan and tracked Jira work. The process should improve clarity without creating approval overhead for small changes.</p>
+<h2 id="working-principles">Working principles</h2>
+<ol>
+<li><strong>Business owns the problem and intended outcome.</strong> Product clarifies user needs and scope. Engineering owns technical options and implementation design.</li>
+<li><strong>Decisions are explicit.</strong> Record assumptions, unresolved questions, trade-offs and decision owners.</li>
+<li><strong>Right-size the process.</strong> Apply Lite, Standard or Full documentation based on impact and risk, not just estimated effort.</li>
+<li><strong>No silent commitments.</strong> A requested deadline, AI-generated estimate or draft Jira item is not a team commitment.</li>
+<li><strong>Keep one source of truth per concern.</strong> The RFC records approved requirements and technical decisions; the Delivery Plan records planned work; Jira records execution status.</li>
+<li><strong>Human review stays in the loop.</strong> Rovo may draft analysis and work items, but accountable people approve scope, estimates, owners and Jira creation.</li>
+</ol>
+<h2 id="end-to-end-stages">End-to-end stages</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Accountable roles</th>
+<th>Inputs</th>
+<th>Activities</th>
+<th>Exit / output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Request / Intake</td>
+<td>Requestor; Business sponsor</td>
+<td>Business need, evidence, desired outcome</td>
+<td>Complete Feature Request Brief; identify sponsor and urgency</td>
+<td>Submitted request with a unique Feature ID</td>
+</tr>
+<tr>
+<td>2. Initial triage</td>
+<td>Product owner; Engineering lead</td>
+<td>Intake brief</td>
+<td>Check value, duplication, fit, urgency, affected products and likely complexity</td>
+<td>Accept for discovery, reject, defer, duplicate or request information</td>
+</tr>
+<tr>
+<td>3. Discovery and refinement</td>
+<td>Product; Tech lead; Design; QA; relevant SMEs</td>
+<td>Accepted brief</td>
+<td>Clarify users, workflows, functional requirements, acceptance criteria, constraints and success measures</td>
+<td>Agreed scope, non-goals and testable requirements</td>
+</tr>
+<tr>
+<td>4. Technical RFC</td>
+<td>Tech lead; relevant engineering owners</td>
+<td>Refined requirements</td>
+<td>Evaluate options, architecture, interfaces, data, security, operations, risks and rollout</td>
+<td>Reviewed technical proposal with decisions and open questions</td>
+</tr>
+<tr>
+<td>5. Work breakdown and estimation</td>
+<td>Tech lead; delivery teams; QA</td>
+<td>Approved scope and technical approach</td>
+<td>Identify workstreams, independently testable stories/tasks, dependencies, sequencing and team estimates</td>
+<td>Reviewed Delivery Plan and readiness assessment</td>
+</tr>
+<tr>
+<td>6. Jira handoff and planning</td>
+<td>Product owner; Tech lead; team representatives</td>
+<td>Approved Delivery Plan</td>
+<td>Use Rovo or manual entry to draft Jira items; validate hierarchy, fields and dependencies; create and link issues</td>
+<td>Jira Epic and agreed work items, ready for team planning</td>
+</tr>
+<tr>
+<td>7. Delivery and outcome review</td>
+<td>Delivery teams; Product; Engineering lead</td>
+<td>Jira plan and approved RFC</td>
+<td>Implement, verify, release, monitor and measure outcomes</td>
+<td>Released feature, actual results, follow-up actions and closed documentation</td>
+</tr>
+</tbody>
+</table>
+<h2 id="complexity-levels">Complexity levels</h2>
+<p>Choose the lightest level that safely covers the change. Escalate when risk, impact or uncertainty warrants it.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Use when</th>
+<th>Minimum artifacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lite</td>
+<td>Small, low-risk change contained within one team; no material architecture, data, security or operational impact</td>
+<td>Short request/context, scope, acceptance criteria, test notes and Jira items</td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>Meaningful feature or service change needing technical refinement, multiple work items or coordination within a product area</td>
+<td>Feature Request Brief, relevant RFC sections, Delivery Plan, Definition of Ready and Jira links</td>
+</tr>
+<tr>
+<td>Full</td>
+<td>Cross-team or cross-product change; material architecture, data migration, security/privacy, compliance, reliability, cost or operational risk</td>
+<td>Complete Feature Request Brief, RFC, Delivery Plan, review matrix, rollout/rollback and outcome review</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Risk overrides size:</strong> a small authentication, payment, personal-data or production-migration change may require Full review.</p>
+<h2 id="workflow-statuses">Workflow statuses</h2>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Submitted</td>
+<td>Request received; no commitment made</td>
+</tr>
+<tr>
+<td>Triage</td>
+<td>Product and Engineering are assessing value, fit and next action</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Requirements and scope are being clarified</td>
+</tr>
+<tr>
+<td>RFC In Progress</td>
+<td>Technical proposal is being prepared</td>
+</tr>
+<tr>
+<td>In Review</td>
+<td>Relevant stakeholders are reviewing the proposal</td>
+</tr>
+<tr>
+<td>Approved for Breakdown</td>
+<td>Scope and proposed solution are agreed; work decomposition can proceed</td>
+</tr>
+<tr>
+<td>Ready for Development</td>
+<td>Definition of Ready met; work items reviewed and estimable</td>
+</tr>
+<tr>
+<td>In Delivery</td>
+<td>Work is being implemented through normal team planning</td>
+</tr>
+<tr>
+<td>Released</td>
+<td>Change is deployed to the intended audience</td>
+</tr>
+<tr>
+<td>Outcome Review</td>
+<td>Actual results and guardrails are being assessed</td>
+</tr>
+<tr>
+<td>Closed</td>
+<td>Outcome review is complete and follow-ups are recorded</td>
+</tr>
+<tr>
+<td>On Hold</td>
+<td>Temporarily paused with a reason, owner and review date</td>
+</tr>
+<tr>
+<td>Rejected / Duplicate / Deferred</td>
+<td>Terminal or parked triage decision with rationale</td>
+</tr>
+</tbody>
+</table>
+<p>A feature can move backwards when new evidence invalidates assumptions or scope. Record why; do not hide the change.</p>
+<h2 id="responsibility-boundaries">Responsibility boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Owns</th>
+<th>Does not unilaterally decide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Requestor</td>
+<td>Problem context, evidence and stakeholder needs</td>
+<td>Technical design or team estimates</td>
+</tr>
+<tr>
+<td>Business sponsor</td>
+<td>Business value, business priority and business trade-offs</td>
+<td>Engineering capacity or technical feasibility</td>
+</tr>
+<tr>
+<td>Product owner</td>
+<td>User needs, product scope, priority and acceptance intent</td>
+<td>Detailed implementation choices</td>
+</tr>
+<tr>
+<td>Tech lead / Engineering lead</td>
+<td>Technical approach, engineering risks, work decomposition and engineering review</td>
+<td>Business value or unapproved scope changes</td>
+</tr>
+<tr>
+<td>Developers</td>
+<td>Technical discovery, implementation details, estimates and delivery risks</td>
+<td>Product policy without Product agreement</td>
+</tr>
+<tr>
+<td>Design</td>
+<td>Interaction model, usability and design specifications</td>
+<td>Backend architecture</td>
+</tr>
+<tr>
+<td>QA</td>
+<td>Testability, coverage, quality risks and validation strategy</td>
+<td>Acceptance of product scope on behalf of Product</td>
+</tr>
+<tr>
+<td>Platform / Security / Data / Localization</td>
+<td>Specialist review within their domain</td>
+<td>Unrelated product or delivery decisions</td>
+</tr>
+</tbody>
+</table>
+<h2 id="handoffs-and-decision-gates">Handoffs and decision gates</h2>
+<ul>
+<li><strong>Intake to discovery:</strong> a requestor and business sponsor are identified; the problem and desired outcome are understandable.</li>
+<li><strong>Discovery to RFC:</strong> scope, non-goals, users and acceptance criteria are sufficiently clear; unknowns have owners.</li>
+<li><strong>RFC to breakdown:</strong> relevant technical reviewers have reviewed the approach; major risks and decisions are visible.</li>
+<li><strong>Breakdown to Jira:</strong> each work item has an outcome, acceptance criteria, owning team, dependencies and estimate or an explicit reason why it is not estimated yet.</li>
+<li><strong>Jira to development:</strong> feature-level and story-level Definition of Ready checks are satisfied; team capacity and sprint selection remain team decisions.</li>
+<li><strong>Release to closure:</strong> release checks are complete and outcome review has an owner and date.</li>
+</ul>
+<h2 id="traceability">Traceability</h2>
+<p>Use one Feature ID across the Feature Request Brief, RFC, Delivery Plan and Jira Epic. Link each Jira work item to the Epic and reference the RFC / Delivery Plan. Update links when documents move; do not copy entire documents into Jira descriptions.</p>
+<h2 id="exceptions">Exceptions</h2>
+<p>An urgent incident or regulatory deadline may need an expedited path. Record the reason, accountable decision-maker, minimum safety checks, and any deferred review with an owner and due date. An exception is not a reason to omit security, privacy or data-integrity controls.</p></article></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script id="md-source" type="application/json">"# Feature request-to-delivery workflow\n\n## Purpose\n\nCreate one understandable path from a business request to an approved technical approach, an actionable delivery plan and tracked Jira work. The process should improve clarity without creating approval overhead for small changes.\n\n## Working principles\n\n1. **Business owns the problem and intended outcome.** Product clarifies user needs and scope. Engineering owns technical options and implementation design.\n2. **Decisions are explicit.** Record assumptions, unresolved questions, trade-offs and decision owners.\n3. **Right-size the process.** Apply Lite, Standard or Full documentation based on impact and risk, not just estimated effort.\n4. **No silent commitments.** A requested deadline, AI-generated estimate or draft Jira item is not a team commitment.\n5. **Keep one source of truth per concern.** The RFC records approved requirements and technical decisions; the Delivery Plan records planned work; Jira records execution status.\n6. **Human review stays in the loop.** Rovo may draft analysis and work items, but accountable people approve scope, estimates, owners and Jira creation.\n\n## End-to-end stages\n\n| Stage | Accountable roles | Inputs | Activities | Exit / output |\n|---|---|---|---|---|\n| 1. Request / Intake | Requestor; Business sponsor | Business need, evidence, desired outcome | Complete Feature Request Brief; identify sponsor and urgency | Submitted request with a unique Feature ID |\n| 2. Initial triage | Product owner; Engineering lead | Intake brief | Check value, duplication, fit, urgency, affected products and likely complexity | Accept for discovery, reject, defer, duplicate or request information |\n| 3. Discovery and refinement | Product; Tech lead; Design; QA; relevant SMEs | Accepted brief | Clarify users, workflows, functional requirements, acceptance criteria, constraints and success measures | Agreed scope, non-goals and testable requirements |\n| 4. Technical RFC | Tech lead; relevant engineering owners | Refined requirements | Evaluate options, architecture, interfaces, data, security, operations, risks and rollout | Reviewed technical proposal with decisions and open questions |\n| 5. Work breakdown and estimation | Tech lead; delivery teams; QA | Approved scope and technical approach | Identify workstreams, independently testable stories/tasks, dependencies, sequencing and team estimates | Reviewed Delivery Plan and readiness assessment |\n| 6. Jira handoff and planning | Product owner; Tech lead; team representatives | Approved Delivery Plan | Use Rovo or manual entry to draft Jira items; validate hierarchy, fields and dependencies; create and link issues | Jira Epic and agreed work items, ready for team planning |\n| 7. Delivery and outcome review | Delivery teams; Product; Engineering lead | Jira plan and approved RFC | Implement, verify, release, monitor and measure outcomes | Released feature, actual results, follow-up actions and closed documentation |\n\n## Complexity levels\n\nChoose the lightest level that safely covers the change. Escalate when risk, impact or uncertainty warrants it.\n\n| Level | Use when | Minimum artifacts |\n|---|---|---|\n| Lite | Small, low-risk change contained within one team; no material architecture, data, security or operational impact | Short request/context, scope, acceptance criteria, test notes and Jira items |\n| Standard | Meaningful feature or service change needing technical refinement, multiple work items or coordination within a product area | Feature Request Brief, relevant RFC sections, Delivery Plan, Definition of Ready and Jira links |\n| Full | Cross-team or cross-product change; material architecture, data migration, security/privacy, compliance, reliability, cost or operational risk | Complete Feature Request Brief, RFC, Delivery Plan, review matrix, rollout/rollback and outcome review |\n\n**Risk overrides size:** a small authentication, payment, personal-data or production-migration change may require Full review.\n\n## Workflow statuses\n\n| Status | Meaning |\n|---|---|\n| Submitted | Request received; no commitment made |\n| Triage | Product and Engineering are assessing value, fit and next action |\n| Discovery | Requirements and scope are being clarified |\n| RFC In Progress | Technical proposal is being prepared |\n| In Review | Relevant stakeholders are reviewing the proposal |\n| Approved for Breakdown | Scope and proposed solution are agreed; work decomposition can proceed |\n| Ready for Development | Definition of Ready met; work items reviewed and estimable |\n| In Delivery | Work is being implemented through normal team planning |\n| Released | Change is deployed to the intended audience |\n| Outcome Review | Actual results and guardrails are being assessed |\n| Closed | Outcome review is complete and follow-ups are recorded |\n| On Hold | Temporarily paused with a reason, owner and review date |\n| Rejected / Duplicate / Deferred | Terminal or parked triage decision with rationale |\n\nA feature can move backwards when new evidence invalidates assumptions or scope. Record why; do not hide the change.\n\n## Responsibility boundaries\n\n| Role | Owns | Does not unilaterally decide |\n|---|---|---|\n| Requestor | Problem context, evidence and stakeholder needs | Technical design or team estimates |\n| Business sponsor | Business value, business priority and business trade-offs | Engineering capacity or technical feasibility |\n| Product owner | User needs, product scope, priority and acceptance intent | Detailed implementation choices |\n| Tech lead / Engineering lead | Technical approach, engineering risks, work decomposition and engineering review | Business value or unapproved scope changes |\n| Developers | Technical discovery, implementation details, estimates and delivery risks | Product policy without Product agreement |\n| Design | Interaction model, usability and design specifications | Backend architecture |\n| QA | Testability, coverage, quality risks and validation strategy | Acceptance of product scope on behalf of Product |\n| Platform / Security / Data / Localization | Specialist review within their domain | Unrelated product or delivery decisions |\n\n## Handoffs and decision gates\n\n- **Intake to discovery:** a requestor and business sponsor are identified; the problem and desired outcome are understandable.\n- **Discovery to RFC:** scope, non-goals, users and acceptance criteria are sufficiently clear; unknowns have owners.\n- **RFC to breakdown:** relevant technical reviewers have reviewed the approach; major risks and decisions are visible.\n- **Breakdown to Jira:** each work item has an outcome, acceptance criteria, owning team, dependencies and estimate or an explicit reason why it is not estimated yet.\n- **Jira to development:** feature-level and story-level Definition of Ready checks are satisfied; team capacity and sprint selection remain team decisions.\n- **Release to closure:** release checks are complete and outcome review has an owner and date.\n\n## Traceability\n\nUse one Feature ID across the Feature Request Brief, RFC, Delivery Plan and Jira Epic. Link each Jira work item to the Epic and reference the RFC / Delivery Plan. Update links when documents move; do not copy entire documents into Jira descriptions.\n\n## Exceptions\n\nAn urgent incident or regulatory deadline may need an expedited path. Record the reason, accountable decision-maker, minimum safety checks, and any deferred review with an owner and due date. An exception is not a reason to omit security, privacy or data-integrity controls.\n"</script>
+<script>
+(() => {
+  const md = JSON.parse(document.getElementById('md-source').textContent);
+  const name = document.body.dataset.download;
+  const toast = (message) => {
+    const element = document.getElementById('toast');
+    element.textContent = message;
+    element.classList.add('show');
+    setTimeout(() => element.classList.remove('show'), 1800);
+  };
+  document.querySelectorAll('#doc table').forEach((table) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'table-wrap';
+    table.replaceWith(wrapper);
+    wrapper.appendChild(table);
+  });
+  document.getElementById('copyMd').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(md);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = md;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+    toast('Markdown copied');
+  });
+  document.getElementById('dlMd').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([md], { type: 'text/markdown' }));
+    link.download = name;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  });
+  const toggle = document.getElementById('toggleGuides');
+  if (toggle) toggle.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('hide-guides');
+    toggle.setAttribute('aria-pressed', String(hidden));
+    toggle.textContent = hidden ? 'Show guidance' : 'Hide guidance';
+  });
+  document.getElementById('print').addEventListener('click', () => window.print());
+  const links = [...document.querySelectorAll('nav.side ol a')];
+  const byId = new Map(links.map((link) => [link.getAttribute('href').slice(1), link]));
+  const observer = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    links.forEach((link) => link.classList.remove('on'));
+    byId.get(entry.target.id)?.classList.add('on');
+  }), { rootMargin: '0px 0px -75% 0px' });
+  document.querySelectorAll('#doc h2[id]').forEach((heading) => observer.observe(heading));
+})();
+</script>
+</body>
+</html>

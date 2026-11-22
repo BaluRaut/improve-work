@@ -2,7 +2,7 @@
 
 > **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.
 >
-> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. Product and Engineering then refine the request and prepare this RFC. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages. The Jira and Rovo steps apply if your team uses them; the rest works with any tracker.
+> **Start with a Feature Request Brief.** Business requestors should describe the problem and desired outcome in `intake/FEATURE_REQUEST_TEMPLATE.md`; they do not need to design the technical solution. The feature owner, the engineer leading the feature, writes this RFC: the product owner writes sections 1–5, and the tech lead coaches and approves. Use `guides/WORKFLOW.md` to follow the request-to-delivery stages. The Jira and Rovo steps apply if your team uses them; the rest works with any tracker.
 >
 > **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the "Sections not included" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.
 
@@ -36,7 +36,7 @@
 | Requestor | {Name, role, team} |
 | Business sponsor / decision owner | {Name, role} |
 | Product owner | {Name, team} |
-| Feature owner | {Engineering owner, team} |
+| Feature owner | {Engineer who leads the feature and writes this RFC, team} |
 | Other authors | {Names} |
 | Impacted teams | {Teams} |
 | Complexity | Lite / Standard / Full |
@@ -448,7 +448,7 @@
 |---|---|---|---|---|---|
 | Business outcome / sponsor | | Approver | Approve / Changes requested / N/A | | |
 | Product scope | | Approver | Approve / Changes requested / N/A | | |
-| Engineering approach | | Approver | Approve / Changes requested / N/A | | |
+| Engineering approach | | Approver (tech lead) | Approve / Changes requested / N/A | | |
 | Design | | Consulted / Approver where applicable | Reviewed / Changes requested / N/A | | |
 | QA | | Consulted | Reviewed / Changes requested / N/A | | |
 | SRE / Platform | | Approver where infrastructure / operations affected | Approve / Changes requested / N/A | | |

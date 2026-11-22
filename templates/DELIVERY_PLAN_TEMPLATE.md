@@ -11,6 +11,7 @@
 | Business owner | {Name} |
 | Product owner | {Name} |
 | Engineering lead | {Name} |
+| Feature owner | {Engineer who leads the feature and writes this plan} |
 | Participating teams | {Teams} |
 | Complexity | Lite / Standard / Full |
 | Feature Request Brief | {URL} |

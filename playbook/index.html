@@ -146,7 +146,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   <p class="lede">One path for every new feature: who does what at each stage, which document they write, and how to keep it all in Confluence. Small changes take the short route.</p>
   <div class="answer">
     <div><b>Where do I start?</b>With the next feature in your backlog. Its requestor fills in a one-page brief.</div>
-    <div><b>Who writes the technical doc?</b>The tech lead writes the RFC. The product owner writes its requirements part.</div>
+    <div><b>Who writes the technical doc?</b>The feature owner, the engineer leading the feature. The tech lead coaches and approves.</div>
     <div><b>One Confluence page or many?</b>One parent page per feature, with each document as a child page under it.</div>
   </div>
 </header>
@@ -181,21 +181,30 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 
       <div class="role">Product owner</div>
       <div>Gives the request a Feature ID and creates its Confluence page.</div>
-      <div class="lead"><strong>Decides with the eng lead:</strong> accept, defer, reject or duplicate. Picks the size: Lite, Standard or Full.</div>
+      <div class="lead"><strong>Decides with the tech lead:</strong> accept, defer, reject or duplicate. Picks the size: Lite, Standard or Full.</div>
       <div class="lead"><strong>Leads discovery:</strong> users, scope, non-goals, acceptance criteria. Writes RFC sections 1–5.<span class="doc rfc">RFC §1–5</span></div>
       <div>Reviews the RFC and approves the scope.</div>
       <div>Checks that the plan matches the approved scope.</div>
-      <div class="lead"><strong>Creates the Jira epic and stories</strong> with the tech lead, and orders the backlog.<span class="doc jira">Jira</span></div>
+      <div class="lead"><strong>Creates the Jira epic and stories</strong> with the feature owner, and orders the backlog.<span class="doc jira">Jira</span></div>
       <div>Runs the outcome review and closes the feature.</div>
 
-      <div class="role">Tech lead<br><small>feature owner</small></div>
+      <div class="role">Feature owner<br><small>the engineer leading this feature</small></div>
       <div class="empty">—</div>
-      <div>Gives a rough size and flags risks.</div>
-      <div>Raises technical limits and unknowns early.</div>
-      <div class="lead"><strong>Writes the RFC:</strong> the solution plus the sections that apply (6–24). Picks reviewers by impact.<span class="doc rfc">RFC §6–25</span></div>
-      <div class="lead"><strong>Writes the Delivery Plan:</strong> workstreams, stories, dependencies and order.<span class="doc plan">Plan</span></div>
+      <div>Named at triage.</div>
+      <div>Joins discovery. Raises technical limits and unknowns early.</div>
+      <div class="lead"><strong>Writes the RFC:</strong> the solution plus the sections that apply (6–24). Picks reviewers by impact.<span class="doc rfc">RFC §6–24</span></div>
+      <div class="lead"><strong>Writes the Delivery Plan</strong> with each team: workstreams, stories, dependencies and order.<span class="doc plan">Plan</span></div>
       <div>Checks the Jira structure, links and dependencies. Rovo can draft them; a person approves.</div>
       <div>Owns the rollout, monitors and rollback.</div>
+
+      <div class="role">Tech lead<br><small>coach and approver</small></div>
+      <div class="empty">—</div>
+      <div>Gives a rough size, flags risks and <strong>names the feature owner.</strong></div>
+      <div>Points the owner to the constraints and the people to talk to.</div>
+      <div><strong>Coaches and approves:</strong> a 30-minute kickoff, an early review of section 6, comments instead of rewrites. Signs off in section 25.</div>
+      <div>Approves the Delivery Plan.</div>
+      <div>Approves the Jira set before it is created.</div>
+      <div>Steps in on high-risk calls and incidents.</div>
 
       <div class="role">Developers<br><small>and QA</small></div>
       <div class="empty">—</div>
@@ -217,10 +226,10 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 
       <div class="role gaterow"><span class="gate-tag"><i class="dia"></i>Gate</span></div>
       <div class="gaterow"><strong>Product owner:</strong> the problem is clear and a sponsor is named.</div>
-      <div class="gaterow"><strong>Product owner + eng lead:</strong> accepted into discovery.</div>
+      <div class="gaterow"><strong>Product owner + tech lead:</strong> accepted into discovery, feature owner named.</div>
       <div class="gaterow"><strong>Product owner:</strong> scope and acceptance criteria are agreed.</div>
-      <div class="gaterow"><strong>Required reviewers</strong> sign off in RFC section 25.</div>
-      <div class="gaterow"><strong>Teams</strong> agree their estimates. Definition of Ready met.</div>
+      <div class="gaterow"><strong>Tech lead and required reviewers</strong> sign off in RFC section 25.</div>
+      <div class="gaterow"><strong>Tech lead</strong> approves the plan; teams agree estimates. Definition of Ready met.</div>
       <div class="gaterow"><strong>The team</strong> picks the stories in sprint planning.</div>
       <div class="gaterow"><strong>Product owner</strong> closes the feature after the outcome review.</div>
     </div>
@@ -242,19 +251,19 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     <div class="card">
       <span class="doc rfc">RFC</span>
       <p class="q">What exactly, and how do we build it?</p>
-      <dl><dt>Written by</dt><dd>Product owner (§1–5), tech lead (the rest)</dd><dt>Stage</dt><dd>3 and 4</dd><dt>Required</dt><dd>Sections 1, 2, 3, 6, 17, 18, 21, 25. Skip the rest when they don't apply.</dd></dl>
+      <dl><dt>Written by</dt><dd>Feature owner; product owner writes §1–5</dd><dt>Approved by</dt><dd>Tech lead, plus reviewers by impact</dd><dt>Stage</dt><dd>3 and 4</dd><dt>Required</dt><dd>Sections 1, 2, 3, 6, 17, 18, 21, 25. Skip the rest when they don't apply.</dd></dl>
       <a href="../rfc-template.html">Open the template</a>
     </div>
     <div class="card">
       <span class="doc plan">Delivery Plan</span>
       <p class="q">Which pieces, which team, in what order?</p>
-      <dl><dt>Written by</dt><dd>Tech lead, with each team</dd><dt>Stage</dt><dd>5, Breakdown</dd><dt>Holds</dt><dd>Work items, estimates, dependencies, forecast</dd></dl>
+      <dl><dt>Written by</dt><dd>Feature owner, with each team</dd><dt>Approved by</dt><dd>Tech lead and product owner</dd><dt>Stage</dt><dd>5, Breakdown</dd><dt>Holds</dt><dd>Work items, estimates, dependencies, forecast</dd></dl>
       <a href="../templates/DELIVERY_PLAN_TEMPLATE.html">Open the template</a>
     </div>
     <div class="card">
       <span class="doc jira">Jira epic and stories</span>
       <p class="q">Where is the work right now?</p>
-      <dl><dt>Created by</dt><dd>Product owner and tech lead</dd><dt>Stage</dt><dd>6 onward</dd><dt>Holds</dt><dd>Status of each story, with a link back to the RFC</dd></dl>
+      <dl><dt>Created by</dt><dd>Product owner and feature owner</dd><dt>Stage</dt><dd>6 onward</dd><dt>Holds</dt><dd>Status of each story, with a link back to the RFC</dd></dl>
       <a href="../templates/JIRA_STORY_TEMPLATE.html">Open the story template</a>
     </div>
   </div>
@@ -323,7 +332,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     <div class="why">
       <h3>Why child pages, not one big page</h3>
       <ol>
-        <li><strong>Different people write them at different times.</strong> The requestor writes the brief in week one; the tech lead writes the RFC weeks later. Separate pages keep separate history and comments.</li>
+        <li><strong>Different people write them at different times.</strong> The requestor writes the brief in week one; the feature owner writes the RFC weeks later. Separate pages keep separate history and comments.</li>
         <li><strong>Each document is approved on its own.</strong> On one page it is unclear whether the RFC or the plan was approved.</li>
         <li><strong>Different readers.</strong> Business people read the hub and the brief. Engineers read the RFC and the plan.</li>
         <li><strong>An RFC alone can run to ten pages.</strong> Add the brief and the plan and nobody finishes reading.</li>
@@ -331,7 +340,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       <div class="hubbox">
         <h3>What goes on the feature hub page</h3>
         <ul>
-          <li>A <strong>Page Properties</strong> table: Feature ID, size, status, product owner, tech lead, target release.</li>
+          <li>A <strong>Page Properties</strong> table: Feature ID, size, status, product owner, feature owner, tech lead, target release.</li>
           <li>A <strong>Jira Issues</strong> macro showing the epic's stories with their live status.</li>
           <li>A <strong>Children Display</strong> macro listing the brief, RFC and plan.</li>
           <li>A short decision log: date, decision, who decided.</li>
@@ -358,7 +367,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     <li><span class="when">This week · about half a day</span><h3>Set up Confluence</h3>
       <ul><li>Create the space, or a section in an existing one.</li><li>Add the four templates.</li><li>Copy the five guides into <em>How we deliver</em>.</li><li>Create the Features index page.</li></ul></li>
     <li><span class="when">Next week · 30 minutes</span><h3>Walk the leads through it</h3>
-      <ul><li>Invite product owners and tech leads.</li><li>Go through this page together.</li><li>Agree who is the product owner and tech lead for each area.</li></ul></li>
+      <ul><li>Invite product owners, tech leads and the engineers who will own features.</li><li>Go through this page together.</li><li>Agree who is the product owner and tech lead for each area.</li><li>Explain the feature owner role and agree how it rotates.</li></ul></li>
     <li><span class="when">Following month</span><h3>Pilot two features</h3>
       <ul><li>Pick one Standard and one Lite feature from the upcoming backlog.</li><li>Run them through every stage.</li><li>Leave work that's already in progress as it is.</li></ul></li>
     <li><span class="when">After the pilot</span><h3>Trim, then make it the default</h3>
@@ -366,7 +375,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   </ol>
   <div class="tomorrow">
     <span class="eyebrow" style="color:inherit;opacity:.7">Tomorrow morning</span>
-    <p>Pick the next feature in your backlog. Create its hub page and send the brief template to its requestor. That is stage 1 done.</p>
+    <p>Pick the next feature in your backlog. Create its hub page, send the brief template to its requestor, and decide which engineer will own it. That is stage 1 done.</p>
   </div>
 </section>
 
@@ -375,7 +384,8 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   <h2>What people will ask</h2>
   <div class="faq">
     <div><h3>Do I need an RFC for every change?</h3><p>No. Lite changes skip it and go straight to a Jira story with acceptance criteria.</p></div>
-    <div><h3>Who fills RFC sections 7 to 15?</h3><p>The engineers who own those areas. The tech lead assembles the RFC and makes sure it reads as one proposal.</p></div>
+    <div><h3>Why doesn't the tech lead write the RFC?</h3><p>So the engineers who build features learn to design them, and the tech lead isn't a bottleneck. The tech lead coaches, reviews section 6 early and approves.</p></div>
+    <div><h3>Who fills RFC sections 7 to 15?</h3><p>The engineers who own those areas. The feature owner assembles the RFC and makes sure it reads as one proposal.</p></div>
     <div><h3>Is a Rovo or AI estimate a commitment?</h3><p>No. Only estimates the team gives itself count, and a requested deadline is not a commitment either.</p></div>
     <div><h3>What if scope changes halfway?</h3><p>Update the RFC, record the decision in section 22, and move the feature back a stage if needed.</p></div>
     <div><h3>Where do I check status?</h3><p>The stage of the feature is on its hub page. The progress of each story is in Jira.</p></div>

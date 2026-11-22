@@ -1,23 +1,87 @@
 # improve-work
 
-An RFC template for full-stack features, plus five worked examples.
+A practical feature request-to-delivery toolkit for Product, Business and Engineering teams.
 
-**Browse it online:** https://baluraut.github.io/improve-work/
- Fill in an RFC before work starts so frontend, backend, infrastructure, security, analytics, translations and monitoring are all thought through up front.
+**Browse the current published site:** https://baluraut.github.io/improve-work/
 
-**Not every RFC needs every section.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required. Include the others only when the change needs them, and list what you left out in the "Sections not included" row with a reason.
+The workflow connects a business request to refined requirements, an engineering RFC, a team-reviewed delivery plan and Jira work items. It is designed to create shared clarity without requiring every feature to complete every specialist review.
 
-| File | What it is |
-|---|---|
-| [RFC_TEMPLATE.md](RFC_TEMPLATE.md) | The template (source of truth). Copy it per feature as `rfc-{number}-{short-name}.md`. |
-| [examples/](examples/) | Five example RFCs, each using a different set of sections (full stack, backend and infra, frontend only, infra only, translations). |
-| `index.html`, `rfc-template.html`, `examples/*.html` | The same documents as styled pages with a section sidebar, copy and download buttons, and print to PDF. Open `index.html` in a browser. |
-| `build.py` | Regenerates every HTML page from the Markdown and checks each example follows the section rules. |
+## Recommended workflow
 
-After editing any Markdown file, rebuild:
+1. **Request / Intake** – a business requestor explains the problem, evidence and intended outcome.
+2. **Triage** – Product and Engineering assess value, fit, impact and complexity.
+3. **Discovery** – clarify users, scope, requirements and acceptance criteria.
+4. **Technical RFC** – document the proposed solution, decisions, risks and operational impact.
+5. **Work breakdown** – engineering teams decompose and estimate independently testable work.
+6. **Jira handoff** – draft work items (optionally with Rovo), review them and create approved items in your tracker.
+7. **Delivery and outcome review** – implement, release and measure the result.
+
+See [guides/WORKFLOW.md](guides/WORKFLOW.md) for roles, statuses, gates and complexity levels.
+
+## Start here
+
+| Audience | Start with | Purpose |
+|---|---|---|
+| Business requestor | [Feature Request Brief](intake/FEATURE_REQUEST_TEMPLATE.md) | Describe the problem and desired outcome without prescribing the technical solution |
+| Product / Engineering | [Technical RFC](RFC_TEMPLATE.md) | Refine requirements and document the proposed technical approach |
+| Tech lead / delivery teams | [Delivery Plan](templates/DELIVERY_PLAN_TEMPLATE.md) | Break scope into workstreams, deliverables, dependencies and team estimates |
+| Product / Engineering | [Definition of Ready](guides/DEFINITION_OF_READY.md) | Decide whether the feature and its stories are ready for development |
+| Delivery teams | [Jira Story Template](templates/JIRA_STORY_TEMPLATE.md) | Keep individual Jira work items consistent |
+| Rovo users | [Rovo Work Breakdown Prompt](templates/ROVO_WORK_BREAKDOWN_PROMPT.md) | Draft a reviewed Epic / Story / Task hierarchy from approved documents |
+
+## Templates and guides
+
+### Templates
+- [Feature Request Brief](intake/FEATURE_REQUEST_TEMPLATE.md)
+- [Technical RFC](RFC_TEMPLATE.md)
+- [Delivery Plan](templates/DELIVERY_PLAN_TEMPLATE.md)
+- [Jira Story / Task](templates/JIRA_STORY_TEMPLATE.md)
+- [Rovo Work Breakdown Prompt](templates/ROVO_WORK_BREAKDOWN_PROMPT.md)
+
+### Guides
+- [End-to-end workflow](guides/WORKFLOW.md)
+- [Definition of Ready](guides/DEFINITION_OF_READY.md)
+- [Definition of Done](guides/DEFINITION_OF_DONE.md)
+- [Review and approval matrix](guides/REVIEW_AND_APPROVAL.md)
+- [Estimation guidelines](guides/ESTIMATION_GUIDELINES.md)
+
+## Complexity levels
+
+| Level | Typical use | Minimum documentation |
+|---|---|---|
+| Lite | Small, low-risk change contained within one team | Brief context, scope, acceptance criteria, test notes and Jira work |
+| Standard | Normal feature needing technical refinement or coordination | Brief, relevant RFC sections, Delivery Plan and readiness checks |
+| Full | Cross-team, architecture, security, data, compliance or operationally high-risk change | Complete brief, RFC, Delivery Plan, relevant specialist reviews and release / rollback plan |
+
+Risk overrides size. A small authentication or production data migration change may still need Full review.
+
+## Examples
+
+Existing RFC examples demonstrate different technical change shapes. [Browse the examples](examples/README.md).
+
+A new [cross-team Peer Field Intelligence delivery example](examples/CROSS_TEAM_DELIVERY_PLAN.md) demonstrates decomposition across Product, Frontend, Backend, Data/GIS, Platform, QA and Analytics.
+
+## Source of truth
+
+- **Feature Request Brief:** business problem, expected outcome and request context.
+- **Technical RFC:** approved requirements, architecture, risks and technical decisions.
+- **Delivery Plan:** reviewed work breakdown, dependencies, estimates and Jira mapping.
+- **Jira:** execution status, team ownership, sprint allocation and delivery progress.
+
+Use one Feature ID across all artifacts. Link rather than copy large sections between documents.
+
+## Rovo and Jira (optional)
+
+If your team uses Jira and Rovo, Rovo can help draft a work breakdown, but it must not silently decide product scope, architecture, estimates, owners, sprint allocation or delivery dates. Review the proposed hierarchy and each work item's acceptance criteria before creating Jira issues. Follow your organization's Jira issue types, fields, permissions and workflow.
+
+## Validation and generated site
+
+Markdown files are the source of truth. `build.py` generates the styled HTML pages and validates the example RFCs: required sections are present, every omitted section is explained, and section titles match the template.
+
+To view the pages locally, build them and open `index.html`:
 
 ```sh
 uv run --with markdown python build.py
 ```
 
-The build fails if an example is missing a required section, or leaves a section out without listing it under "Sections not included".
+Generated HTML is not committed. GitHub Actions builds and validates every pull request, and publishes the site to GitHub Pages when changes reach `main`.

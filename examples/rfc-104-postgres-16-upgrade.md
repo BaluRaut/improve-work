@@ -163,13 +163,13 @@ These are temporary monitors for the migration, plus checks that existing ones s
 | Table without primary key breaks replication | Known | High | Fix the two tables before creating blue/green | Tejas |
 | CDC pipeline misses events at switchover | Low | Medium | Pause consumers during switchover; replay from Kafka offsets | Rohan |
 
-## 22. Open questions
+## 22. Open questions, assumptions and decisions
 
 | Question | Owner | Due | Answer |
 |---|---|---|---|
 | 16 or 17? | SRE | 2026-09-25 | 16: longest track record on RDS for our extensions; revisit 17 next year |
 
-## 23. Timeline and estimates
+## 23. Milestones and delivery plan
 
 | Milestone | Target date |
 |---|---|

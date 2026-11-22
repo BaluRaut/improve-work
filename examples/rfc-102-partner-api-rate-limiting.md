@@ -13,7 +13,7 @@
 | Last updated | 2026-10-21 |
 | Target release | 2026-11-17 (enforcement) |
 | Links | Incident: INC-2291 · Ticket: PLAT-640 |
-| Sections not included | 5 Users: partners only, covered in 2 and 3 · 7 Frontend: no UI · 12 Event tracking: no product analytics; usage is in Datadog metrics (14) · 13 Translations: API errors stay in English, as documented · 20 Alternatives: covered briefly in 3 · 23 Timeline: single sprint · 24 Launch checklist: covered by the rollout gates in 17 |
+| Sections not included | 5 Users: partners only, covered in 2 and 3 · 7 Frontend: no UI · 12 Event tracking: no product analytics; usage is in Datadog metrics (14) · 13 Translations: API errors stay in English, as documented · 20 Alternatives: covered briefly in 3 · 23 Milestones: single sprint · 24 Launch checklist: covered by the rollout gates in 17 |
 
 ---
 
@@ -188,7 +188,7 @@ New middleware in `api-gateway`. The tier comes from the partner record, cached 
 | Redis outage | Low | Medium | Fail open, alert, Multi-AZ replica | Karthik |
 | Clock or refill bug limits everyone | Low | High | Shadow mode first; kill switch in 30 s | Karthik |
 
-## 22. Open questions
+## 22. Open questions, assumptions and decisions
 
 | Question | Owner | Due | Answer |
 |---|---|---|---|

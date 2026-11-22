@@ -13,7 +13,7 @@
 | Last updated | 2026-10-08 |
 | Target release | App 7.13, web 2026-10-27 |
 | Links | Ticket: DS-301 · Designs: Figma "Theme tokens v2" |
-| Sections not included | 8 Backend: preference is stored on the device only · 9 Data model: nothing stored on the server · 10 Infrastructure: none · 11 Security: no personal data or permissions involved · 14 Observability: no new server paths; existing RUM error tracking covers the UI · 15 Performance: CSS variables add no runtime cost; bundle impact noted in 7 · 19 Dependencies: none outside the frontend teams · 20 Alternatives: none seriously considered; tokens are the standard approach · 22 Open questions: none left · 23 Timeline: fits in the current sprint · 24 Launch checklist: in the release ticket |
+| Sections not included | 8 Backend: preference is stored on the device only · 9 Data model: nothing stored on the server · 10 Infrastructure: none · 11 Security: no personal data or permissions involved · 14 Observability: no new server paths; existing RUM error tracking covers the UI · 15 Performance: CSS variables add no runtime cost; bundle impact noted in 7 · 19 Dependencies: none outside the frontend teams · 20 Alternatives: none seriously considered; tokens are the standard approach · 22 Open questions: none left · 23 Milestones: fits in the current sprint · 24 Launch checklist: in the release ticket |
 
 ---
 
@@ -51,7 +51,7 @@ Add a dark theme to the web app and the Android and iOS apps, with a Settings ch
 
 **Guardrail metrics:** zero new accessibility contrast violations; no change in checkout conversion.
 
-## 5. Users and use cases
+## 5. Users, requirements and use cases
 
 - As a customer shopping late at night, I want a dark screen so that it does not hurt my eyes.
 - As a customer whose phone is already in dark mode, I want the app to follow it automatically.

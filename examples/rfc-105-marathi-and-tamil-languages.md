@@ -55,7 +55,7 @@ Alternative considered: machine translation at runtime. Rejected for the interfa
 
 **Guardrail metrics:** crash rate unchanged; no increase in payment errors.
 
-## 5. Users and use cases
+## 5. Users, requirements and use cases
 
 - As a customer more comfortable in Marathi, I want the whole app in Marathi so that I understand prices, offers and order status.
 - As a Tamil-speaking customer, I want delivery notifications in Tamil so that I know when my order arrives.
@@ -173,13 +173,13 @@ Example keys:
 | Long Tamil text breaks layouts | High | Medium | Pseudo-localization early; buttons wrap instead of truncating | Arjun |
 | SMS template approval delays launch | Medium | Medium | Submit templates in week 1; push and email can launch first | Deepak |
 
-## 22. Open questions
+## 22. Open questions, assumptions and decisions
 
 | Question | Owner | Due | Answer |
 |---|---|---|---|
 | Latin digits (1, 2, 3) or native digits (१, २, ३ / ௧, ௨, ௩)? | Design and Localization | 2026-11-05 | Survey suggests Latin for prices; decide after volunteer test |
 
-## 23. Timeline and estimates
+## 23. Milestones and delivery plan
 
 | Milestone | Estimate | Target date |
 |---|---|---|

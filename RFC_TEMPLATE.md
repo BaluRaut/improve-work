@@ -1,6 +1,26 @@
 # RFC: {Feature name}
 
-> **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md`, fill in every section, and delete the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one. If a section does not apply, keep the heading and write **"Not applicable"** with one sentence saying why; reviewers should never have to guess whether something was forgotten. Keep it short where you can; a clear table beats a long paragraph.
+> **How to use this template.** Copy this file to `rfc-{number}-{short-name}.md` and fill it in, deleting the guidance lines (the quoted text) as you go. Placeholders look like `{this}`; replace each one.
+>
+> **Include only the sections your change needs.** Sections 1, 2, 3, 6, 17, 18, 21 and 25 are required in every RFC. Remove any other section that does not apply, keep the original section numbers for the rest, and list what you removed in the "Sections not included" row below with a one-line reason each. That way reviewers know an omission was deliberate. See `examples/` for five RFCs that each use a different subset.
+
+**When to include each section**
+
+| Section | Include when the change… |
+|---|---|
+| 4 Success metrics | is meant to move a product, business or reliability number |
+| 5 Users and use cases | changes what users see or do |
+| 7 Frontend | touches web or mobile UI |
+| 8 Backend | adds or changes services, APIs, jobs or integrations |
+| 9 Data model | changes schemas, migrations, retention or stored personal data |
+| 10 Infrastructure | adds or changes cloud resources, config, secrets, scaling or cost |
+| 11 Security and privacy | touches auth, personal data, money, external input or permissions |
+| 12 Event tracking | adds or changes analytics events, funnels or dashboards |
+| 13 Translations | adds or changes any user-facing text |
+| 14 Observability | adds or changes anything that runs in production and can fail |
+| 15 Performance | can change latency, throughput, load or bundle size |
+| 16 Testing | always recommended; keep it short for small changes |
+| 19 to 24 | whenever they have content; 24 Launch checklist is recommended for user-facing changes |
 
 | Field | Value |
 |---|---|
@@ -14,6 +34,7 @@
 | Last updated | {YYYY-MM-DD} |
 | Target release | {Version or date} |
 | Links | Ticket: {link} · PRD: {link} · Designs: {link} · Prior RFCs: {link} |
+| Sections not included | {e.g. 7 Frontend: no UI change; 13 Translations: no user-facing text} |
 
 ---
 

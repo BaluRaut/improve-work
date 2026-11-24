@@ -7,6 +7,7 @@ Markdown is the source of truth. The builder creates the RFC page, example pages
 supporting workflow pages and the landing page, then validates the RFC examples.
 """
 import html
+import os
 import json
 import re
 import sys
@@ -24,6 +25,7 @@ SUPPORT_DOCS = [
     ("guides/DEFINITION_OF_READY.md", "Definition of Ready", "Feature and story readiness checks"),
     ("guides/DEFINITION_OF_DONE.md", "Definition of Done", "Shared completion and release checks"),
     ("guides/REVIEW_AND_APPROVAL.md", "Review and approval", "Impact-based review and approval matrix"),
+    ("guides/SPLITTING_WORK.md", "Splitting work", "Factors and patterns for breaking a feature into work items"),
     ("guides/ESTIMATION_GUIDELINES.md", "Estimation guidelines", "Team estimates, confidence and planning"),
     ("templates/DELIVERY_PLAN_TEMPLATE.md", "Delivery plan", "Workstreams, deliverables and dependencies"),
     ("templates/JIRA_STORY_TEMPLATE.md", "Jira story template", "Consistent Story and Task descriptions"),
@@ -186,6 +188,31 @@ def render(source, *, highlight_placeholders):
     return body, sections
 
 
+def published_html(md_path):
+    """The HTML page built from a markdown file, or None if it isn't published."""
+    md_path = md_path.resolve()
+    if md_path == (HERE / "RFC_TEMPLATE.md").resolve():
+        return HERE / "rfc-template.html"
+    published = {(HERE / doc).resolve() for doc, _, _ in SUPPORT_DOCS}
+    published |= {p.resolve() for p in (HERE / "examples").glob("rfc-*.md")}
+    return md_path.with_suffix(".html") if md_path in published else None
+
+
+def link_pages(body, source_path, errors):
+    """Point relative .md links at the published .html pages; report broken ones."""
+    def fix(match):
+        target, fragment = match.group(1), match.group(2) or ""
+        resolved = (source_path.parent / target).resolve()
+        if not resolved.exists():
+            errors.append(f"{source_path.relative_to(HERE)}: broken link to {target}")
+            return match.group(0)
+        built = published_html(resolved)
+        if built is None:
+            return match.group(0)
+        return f'href="{os.path.relpath(built, source_path.parent)}{fragment}"'
+    return re.sub(r'href="(?![a-z]+:|#)([^"#]+\.md)(#[^"]*)?"', fix, body)
+
+
 def page(*, title, source, body, sections, download, home_href, guides_button):
     toc = "".join(
         f'<li><a href="#{section["id"]}">{html.escape(section["name"])}</a></li>'
@@ -268,6 +295,7 @@ def main():
     # Technical RFC template
     source = (HERE / "RFC_TEMPLATE.md").read_text(encoding="utf-8")
     body, sections = render(source, highlight_placeholders=True)
+    body = link_pages(body, HERE / "RFC_TEMPLATE.md", errors)
     (HERE / "rfc-template.html").write_text(
         page(
             title="Technical RFC template", source=source, body=body, sections=sections,
@@ -285,6 +313,7 @@ def main():
         errors.extend(f"{path.name}: {problem}" for problem in problems)
 
         body, sections = render(source, highlight_placeholders=False)
+        body = link_pages(body, path, errors)
         output = path.with_suffix(".html")
         title_match = re.search(r"^# (.+)$", source, re.M)
         if not title_match:
@@ -318,6 +347,7 @@ def main():
             continue
         source = path.read_text(encoding="utf-8")
         body, sections = render(source, highlight_placeholders=True)
+        body = link_pages(body, path, errors)
         output = path.with_suffix(".html")
         title_match = re.search(r"^# (.+)$", source, re.M)
         title = title_match.group(1) if title_match else label

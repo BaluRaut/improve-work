@@ -44,6 +44,7 @@ See [guides/WORKFLOW.md](guides/WORKFLOW.md) for roles, statuses, gates and comp
 - [Definition of Ready](guides/DEFINITION_OF_READY.md)
 - [Definition of Done](guides/DEFINITION_OF_DONE.md)
 - [Review and approval matrix](guides/REVIEW_AND_APPROVAL.md)
+- [Splitting work](guides/SPLITTING_WORK.md)
 - [Estimation guidelines](guides/ESTIMATION_GUIDELINES.md)
 
 ## Complexity levels

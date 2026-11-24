@@ -126,7 +126,7 @@ The tech lead stays accountable for the engineering approval in RFC section 25.
 - **Intake to discovery:** a requestor and business sponsor are identified; the problem and desired outcome are understandable.
 - **Discovery to RFC:** scope, non-goals, users and acceptance criteria are sufficiently clear; unknowns have owners.
 - **RFC to breakdown:** relevant technical reviewers have reviewed the approach; major risks and decisions are visible.
-- **Breakdown to Jira:** each work item has an outcome, acceptance criteria, owning team, dependencies and estimate or an explicit reason why it is not estimated yet.
+- **Breakdown to Jira:** each work item has an outcome, acceptance criteria, owning team, dependencies and estimate or an explicit reason why it is not estimated yet. See [Splitting work](SPLITTING_WORK.md).
 - **Jira to development:** feature-level and story-level Definition of Ready checks are satisfied; team capacity and sprint selection remain team decisions.
 - **Release to closure:** release checks are complete and outcome review has an owner and date.
 

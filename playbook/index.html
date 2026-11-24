@@ -126,6 +126,11 @@ td.size{font-weight:600}
 .split-tbl td:first-child{font-family:var(--mono);font-size:12.5px;font-weight:500}
 .split-tbl table{min-width:640px}
 
+/* diagrams */
+.diagram{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;display:flex;flex-direction:column;gap:8px}
+.diagram img{display:block;max-width:100%;height:auto;margin:0 auto;border-radius:8px}
+.diagram .cap{font-size:13px;color:var(--muted)}
+
 /* story points */
 .two-col table{min-width:0}
 .two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;align-items:start}
@@ -328,6 +333,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     <li>Does it need a technical choice, a new API, table or piece of infrastructure, or more than a few stories? <strong>Standard.</strong></li>
     <li>None of the above? <strong>Lite.</strong></li>
   </ol>
+  <div class="flow" data-flow="sizing"></div>
 
   <h3>Examples</h3>
   <div class="sizes">
@@ -381,6 +387,8 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   <h2>How to split a feature into work items</h2>
   <p>In stage 5 the feature owner drafts the split with the teams, and each team estimates its own items. Every item should deliver one outcome someone can see or check, fit within a sprint, have one owning team, and be safe to release on its own behind a flag.</p>
 
+  <div class="diagram"><img src="../diagrams/slicing.svg" alt="Split by layer: three items, one per layer, nothing works until all are done. Split by outcome: each item cuts through UI, API and database and works end to end." width="760" height="300"></div>
+
   <h3>Factors to consider</h3>
   <div class="factors">
     <div><b>User value</b><span>Slice through UI, API and data so each item works end to end, not "backend" and "frontend" halves.</span></div>
@@ -427,6 +435,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
       </div>
     </div>
   </div>
+  <div class="flow" data-flow="deps"></div>
   <p>Splitting patterns, things to avoid and the full example with reasons for each item: <a href="../guides/SPLITTING_WORK.html">Splitting work guide</a>.</p>
 </section>
 
@@ -435,14 +444,8 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
   <h2>How story points are decided</h2>
   <p>A story point compares one item with another. It combines <strong>effort</strong> (how much work), <strong>complexity</strong> (how hard to get right) and <strong>uncertainty</strong> (how much is unknown). Points are not hours. The people who build and test the item vote; the product owner answers questions.</p>
 
-  <div class="scale" aria-label="Story point scale">
-    <span><b>1</b>Tiny, well understood</span>
-    <span><b>2 · 3</b>Small, a familiar pattern</span>
-    <span><b>5</b>Several parts or some unknowns</span>
-    <span><b>8</b>Large or risky; consider splitting</span>
-    <span class="stop"><b>13</b>Too big: split it or spike first</span>
-    <span class="stop"><b>?</b>Missing information: back to refinement</span>
-  </div>
+  <div class="flow" data-flow="ingredients"></div>
+  <div class="diagram"><img src="../diagrams/point-scale.svg" alt="The scale drawn to scale: 1, 2 and 3 are close together and small; 5 is medium; 8 is large and worth splitting; 13 means split it or spike first." width="760" height="230"></div>
 
   <div class="two-col">
     <div class="card">
@@ -470,6 +473,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
         <li>Vote again. Still apart? Take the higher number or split the item.</li>
         <li>Record points, confidence and assumptions.</li>
       </ol>
+      <div class="flow" data-flow="poker"></div>
     </div>
   </div>
 
@@ -496,6 +500,7 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     <div><b>~14</b><span>Points a sprint for this feature, after support and other work (60%)</span></div>
     <div><b>2–3 sprints</b><span>Forecast, medium confidence; a range, not a date</span></div>
   </div>
+  <div class="flow" data-flow="forecast"></div>
   <p class="note">Points belong to the team: never compare people or teams with them, never convert them to hours, and never add one team's points to another's. Unfinished items count zero until they are done.</p>
   <p>Scale, rules and the full example: <a href="../guides/ESTIMATION_GUIDELINES.html#how-story-points-are-decided">Estimation guidelines</a>.</p>
 </section>
@@ -611,5 +616,16 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 
 </div>
 
+<script type="importmap">{
+ "imports": {
+  "react": "https://esm.sh/react@19.3.1",
+  "react/jsx-runtime": "https://esm.sh/react@19.3.1/jsx-runtime",
+  "react-dom": "https://esm.sh/react-dom@19.3.1?external=react",
+  "react-dom/client": "https://esm.sh/react-dom@19.3.1/client?external=react",
+  "@xyflow/react": "https://esm.sh/@xyflow/react@13.0.3?external=react,react-dom",
+  "@dagrejs/dagre": "https://esm.sh/@dagrejs/dagre@3.1.3"
+ }
+}</script>
+<script type="module" src="../diagrams/flow-diagrams.js"></script>
 </body>
 </html>

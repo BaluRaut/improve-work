@@ -13,6 +13,8 @@ How to turn an approved RFC into work items that teams can build, test and relea
 
 These match the story-level checks in the [Definition of Ready](DEFINITION_OF_READY.md).
 
+![Split by layer: three items, one per layer, nothing works until all are done. Split by outcome: each item cuts through UI, API and database and works end to end.](../diagrams/slicing.svg)
+
 ## Factors to consider
 
 Go through each factor when you draft the breakdown. Not every factor changes every split.
@@ -33,7 +35,44 @@ Go through each factor when you draft the breakdown. Not every factor changes ev
 
 ## Splitting patterns
 
-When an item is too big, try these patterns. The examples split [RFC-101, customers cancel their own orders](../examples/rfc-101-customer-order-cancellation.md).
+When an item is too big, walk through these questions, then use the matching pattern from the table. Check each new item the same way.
+
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart TD
+  %% flow: split
+  A["Draft work item"]
+  B{"Fits in a sprint<br>and testable alone?"}
+  OK["Keep it"]
+  C{"Big unknown?"}
+  SP["Spike first,<br>then split"]
+  D{"Several steps in<br>the user journey?"}
+  W["Split by workflow step"]
+  E{"Main case plus<br>many edge cases?"}
+  H["Happy path first,<br>edge cases next"]
+  F{"Several rules, types<br>or platforms?"}
+  V["One item per rule,<br>type or platform"]
+  G["Simple version first,<br>richer version later"]
+  A --> B
+  B -->|Yes| OK
+  B -->|No| C
+  C -->|Yes| SP
+  C -->|No| D
+  D -->|Yes| W
+  D -->|No| E
+  E -->|Yes| H
+  E -->|No| F
+  F -->|Yes| V
+  F -->|No| G
+  classDef good fill:#d1fadf,stroke:#039855,color:#054f31
+  class OK,SP,W,H,V,G good
+```
+
+The patterns in detail. The examples split [RFC-101, customers cancel their own orders](../examples/rfc-101-customer-order-cancellation.md).
 
 | Pattern | Split by | Example |
 |---|---|---|
@@ -75,6 +114,69 @@ When an item is too big, try these patterns. The examples split [RFC-101, custom
 | WB-11 | Hindi and Marathi review of the new strings | Task | Localization | WB-04, WB-08 | Vendor lead time; strings are added in each story |
 | WB-12 | End-to-end regression on web and app, and refund reconciliation in staging | Task | QA | WB-06 to WB-11 | Spans several items; the go/no-go check for phase 0 |
 | WB-13 | Remove the `order_self_cancel` flag and old code paths | Task | Orders | 100% rollout | Clean-up, planned now so it isn't forgotten |
+
+The arrows show what each item waits for. Colours show the owning team: blue Orders, amber Payments, purple Warehouse, pink Support, green Localization, grey QA.
+
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart LR
+  %% flow: deps
+  WB01["WB-01 Order columns<br>and refunds table"]
+  WB02["WB-02 Queue, DLQ<br>and flag"]
+  WB03["WB-03 Refund scope<br>on provider key"]
+  CT(["API and event<br>contract agreed"])
+  WB04["WB-04 Cancel COD<br>order on web"]
+  WB05["WB-05 Warehouse<br>stops picking"]
+  WB06["WB-06 Prepaid<br>refunds"]
+  WB07["WB-07 Error messages,<br>safe retry"]
+  WB08["WB-08 Android<br>and iOS"]
+  WB09["WB-09 Reconciler<br>and monitors"]
+  WB10["WB-10 Support<br>macro"]
+  WB11["WB-11 String<br>review"]
+  WB12["WB-12 End-to-end<br>regression"]
+  P0(["Phase 0:<br>staff testing"])
+  P100(["100% rollout"])
+  WB13["WB-13 Remove flag<br>and old code"]
+  WB01 --> WB04
+  WB02 --> WB04
+  CT --> WB04
+  CT --> WB05
+  WB02 --> WB06
+  WB03 --> WB06
+  WB04 --> WB07
+  WB04 --> WB08
+  WB04 --> WB10
+  WB08 --> WB11
+  WB06 --> WB09
+  WB05 --> WB12
+  WB07 --> WB12
+  WB09 --> WB12
+  WB10 --> WB12
+  WB11 --> WB12
+  WB12 --> P0
+  P0 --> P100
+  P100 --> WB13
+  classDef contract fill:#ffffff,stroke:#344054,color:#1d2939,stroke-dasharray:4 3
+  classDef gate fill:#1d2939,stroke:#1d2939,color:#ffffff
+  classDef l10n fill:#d1fadf,stroke:#039855,color:#054f31
+  classDef orders fill:#d1e9ff,stroke:#2e90fa,color:#194185
+  classDef payments fill:#fef0c7,stroke:#dc6803,color:#93370d
+  classDef qa fill:#f2f4f7,stroke:#667085,color:#1d2939
+  classDef support fill:#fce7f6,stroke:#dd2590,color:#851651
+  classDef warehouse fill:#ebe9fe,stroke:#7a5af8,color:#3e1c96
+  class CT contract
+  class P0,P100 gate
+  class WB11 l10n
+  class WB01,WB02,WB04,WB06,WB07,WB08,WB09,WB13 orders
+  class WB03 payments
+  class WB12 qa
+  class WB10 support
+  class WB05 warehouse
+```
 
 **Order:** WB-01, WB-02 and WB-03 start together on day one, and the API and event contract is agreed in the same week. WB-04 and WB-05 then run in parallel. WB-06 follows once the payment key is ready, and WB-07 and WB-08 build on WB-04. WB-09 to WB-12 must finish before staff testing (phase 0). WB-13 waits for 100% rollout.
 

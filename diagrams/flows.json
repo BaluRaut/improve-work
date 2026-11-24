@@ -1,0 +1,746 @@
+{
+  "stages": {
+    "title": "The seven stages. Each arrow is a gate: its label says what must be true to move on.",
+    "layout": "manual",
+    "frames": [
+      {
+        "id": "DEFINE",
+        "label": "Define the work",
+        "members": [
+          "S1",
+          "S2",
+          "S3",
+          "S4"
+        ],
+        "x": -24,
+        "y": -48,
+        "w": 1150,
+        "h": 136
+      },
+      {
+        "id": "DELIVER",
+        "label": "Deliver the work",
+        "members": [
+          "S5",
+          "S6",
+          "S7"
+        ],
+        "x": 126,
+        "y": 132,
+        "w": 850,
+        "h": 136
+      }
+    ],
+    "nodes": [
+      {
+        "id": "S1",
+        "label": "1 Request\nFeature Request Brief",
+        "kind": "step",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "id": "S2",
+        "label": "2 Triage\nsize and owner",
+        "kind": "step",
+        "x": 300,
+        "y": 0
+      },
+      {
+        "id": "S3",
+        "label": "3 Discovery\nRFC sections 1-5",
+        "kind": "step",
+        "x": 600,
+        "y": 0
+      },
+      {
+        "id": "S4",
+        "label": "4 Technical RFC\nRFC sections 6-24",
+        "kind": "step",
+        "x": 900,
+        "y": 0
+      },
+      {
+        "id": "S5",
+        "label": "5 Breakdown\nDelivery Plan",
+        "kind": "step",
+        "x": 150,
+        "y": 180
+      },
+      {
+        "id": "S6",
+        "label": "6 Jira handoff\nepic and stories",
+        "kind": "step",
+        "x": 450,
+        "y": 180
+      },
+      {
+        "id": "S7",
+        "label": "7 Deliver\nrelease and review",
+        "kind": "step",
+        "tone": "gate",
+        "x": 750,
+        "y": 180
+      }
+    ],
+    "edges": [
+      {
+        "from": "S1",
+        "to": "S2",
+        "label": "problem clear"
+      },
+      {
+        "from": "S2",
+        "to": "S3",
+        "label": "accepted"
+      },
+      {
+        "from": "S3",
+        "to": "S4",
+        "label": "scope agreed"
+      },
+      {
+        "from": "S4",
+        "to": "S5",
+        "label": "RFC approved",
+        "handles": [
+          "s-bottom",
+          "t-top"
+        ]
+      },
+      {
+        "from": "S5",
+        "to": "S6",
+        "label": "Definition of Ready"
+      },
+      {
+        "from": "S6",
+        "to": "S7",
+        "label": "picked in planning"
+      }
+    ]
+  },
+  "sizing": {
+    "title": "Pick the size: ask in order and stop at the first yes.",
+    "direction": "TB",
+    "nodes": [
+      {
+        "id": "Q1",
+        "label": "1. Touches login, permissions, money,\npersonal data or a production data migration?",
+        "kind": "decision"
+      },
+      {
+        "id": "Q2",
+        "label": "2. Can it only ship if several teams deliver\nwork that depends on each other?",
+        "kind": "decision"
+      },
+      {
+        "id": "Q3",
+        "label": "3. Needs a technical choice, a new API, table\nor infrastructure, or more than a few stories?",
+        "kind": "decision"
+      },
+      {
+        "id": "FULL",
+        "label": "Full",
+        "kind": "result",
+        "tone": "full"
+      },
+      {
+        "id": "STD",
+        "label": "Standard",
+        "kind": "result",
+        "tone": "std"
+      },
+      {
+        "id": "LITE",
+        "label": "Lite",
+        "kind": "result",
+        "tone": "lite"
+      }
+    ],
+    "edges": [
+      {
+        "from": "Q1",
+        "to": "FULL",
+        "label": "Yes"
+      },
+      {
+        "from": "Q1",
+        "to": "Q2",
+        "label": "No"
+      },
+      {
+        "from": "Q2",
+        "to": "FULL",
+        "label": "Yes"
+      },
+      {
+        "from": "Q2",
+        "to": "Q3",
+        "label": "No"
+      },
+      {
+        "from": "Q3",
+        "to": "STD",
+        "label": "Yes"
+      },
+      {
+        "from": "Q3",
+        "to": "LITE",
+        "label": "No"
+      }
+    ]
+  },
+  "split": {
+    "title": "Is the item too big? Walk the questions, then check each new item the same way.",
+    "direction": "TB",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Draft work item",
+        "kind": "step"
+      },
+      {
+        "id": "B",
+        "label": "Fits in a sprint\nand testable alone?",
+        "kind": "decision"
+      },
+      {
+        "id": "OK",
+        "label": "Keep it",
+        "kind": "result",
+        "tone": "good"
+      },
+      {
+        "id": "C",
+        "label": "Big unknown?",
+        "kind": "decision"
+      },
+      {
+        "id": "SP",
+        "label": "Spike first,\nthen split",
+        "kind": "result",
+        "tone": "good"
+      },
+      {
+        "id": "D",
+        "label": "Several steps in\nthe user journey?",
+        "kind": "decision"
+      },
+      {
+        "id": "W",
+        "label": "Split by workflow step",
+        "kind": "result",
+        "tone": "good"
+      },
+      {
+        "id": "E",
+        "label": "Main case plus\nmany edge cases?",
+        "kind": "decision"
+      },
+      {
+        "id": "H",
+        "label": "Happy path first,\nedge cases next",
+        "kind": "result",
+        "tone": "good"
+      },
+      {
+        "id": "F",
+        "label": "Several rules, types\nor platforms?",
+        "kind": "decision"
+      },
+      {
+        "id": "V",
+        "label": "One item per rule,\ntype or platform",
+        "kind": "result",
+        "tone": "good"
+      },
+      {
+        "id": "G",
+        "label": "Simple version first,\nricher version later",
+        "kind": "result",
+        "tone": "good"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B"
+      },
+      {
+        "from": "B",
+        "to": "OK",
+        "label": "Yes"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "No"
+      },
+      {
+        "from": "C",
+        "to": "SP",
+        "label": "Yes"
+      },
+      {
+        "from": "C",
+        "to": "D",
+        "label": "No"
+      },
+      {
+        "from": "D",
+        "to": "W",
+        "label": "Yes"
+      },
+      {
+        "from": "D",
+        "to": "E",
+        "label": "No"
+      },
+      {
+        "from": "E",
+        "to": "H",
+        "label": "Yes"
+      },
+      {
+        "from": "E",
+        "to": "F",
+        "label": "No"
+      },
+      {
+        "from": "F",
+        "to": "V",
+        "label": "Yes"
+      },
+      {
+        "from": "F",
+        "to": "G",
+        "label": "No"
+      }
+    ]
+  },
+  "deps": {
+    "title": "Order cancellation: what each item waits for. Colours show the owning team.",
+    "direction": "LR",
+    "legend": [
+      [
+        "orders",
+        "Orders"
+      ],
+      [
+        "payments",
+        "Payments"
+      ],
+      [
+        "warehouse",
+        "Warehouse"
+      ],
+      [
+        "support",
+        "Support"
+      ],
+      [
+        "l10n",
+        "Localization"
+      ],
+      [
+        "qa",
+        "QA"
+      ]
+    ],
+    "nodes": [
+      {
+        "id": "WB01",
+        "label": "WB-01 Order columns\nand refunds table",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB02",
+        "label": "WB-02 Queue, DLQ\nand flag",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB03",
+        "label": "WB-03 Refund scope\non provider key",
+        "kind": "step",
+        "tone": "payments"
+      },
+      {
+        "id": "CT",
+        "label": "API and event\ncontract agreed",
+        "kind": "pill",
+        "tone": "contract"
+      },
+      {
+        "id": "WB04",
+        "label": "WB-04 Cancel COD\norder on web",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB05",
+        "label": "WB-05 Warehouse\nstops picking",
+        "kind": "step",
+        "tone": "warehouse"
+      },
+      {
+        "id": "WB06",
+        "label": "WB-06 Prepaid\nrefunds",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB07",
+        "label": "WB-07 Error messages,\nsafe retry",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB08",
+        "label": "WB-08 Android\nand iOS",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB09",
+        "label": "WB-09 Reconciler\nand monitors",
+        "kind": "step",
+        "tone": "orders"
+      },
+      {
+        "id": "WB10",
+        "label": "WB-10 Support\nmacro",
+        "kind": "step",
+        "tone": "support"
+      },
+      {
+        "id": "WB11",
+        "label": "WB-11 String\nreview",
+        "kind": "step",
+        "tone": "l10n"
+      },
+      {
+        "id": "WB12",
+        "label": "WB-12 End-to-end\nregression",
+        "kind": "step",
+        "tone": "qa"
+      },
+      {
+        "id": "P0",
+        "label": "Phase 0:\nstaff testing",
+        "kind": "pill",
+        "tone": "gate"
+      },
+      {
+        "id": "P100",
+        "label": "100% rollout",
+        "kind": "pill",
+        "tone": "gate"
+      },
+      {
+        "id": "WB13",
+        "label": "WB-13 Remove flag\nand old code",
+        "kind": "step",
+        "tone": "orders"
+      }
+    ],
+    "edges": [
+      {
+        "from": "WB01",
+        "to": "WB04"
+      },
+      {
+        "from": "WB02",
+        "to": "WB04"
+      },
+      {
+        "from": "CT",
+        "to": "WB04"
+      },
+      {
+        "from": "CT",
+        "to": "WB05"
+      },
+      {
+        "from": "WB02",
+        "to": "WB06"
+      },
+      {
+        "from": "WB03",
+        "to": "WB06"
+      },
+      {
+        "from": "WB04",
+        "to": "WB07"
+      },
+      {
+        "from": "WB04",
+        "to": "WB08"
+      },
+      {
+        "from": "WB04",
+        "to": "WB10"
+      },
+      {
+        "from": "WB08",
+        "to": "WB11"
+      },
+      {
+        "from": "WB06",
+        "to": "WB09"
+      },
+      {
+        "from": "WB05",
+        "to": "WB12"
+      },
+      {
+        "from": "WB07",
+        "to": "WB12"
+      },
+      {
+        "from": "WB09",
+        "to": "WB12"
+      },
+      {
+        "from": "WB10",
+        "to": "WB12"
+      },
+      {
+        "from": "WB11",
+        "to": "WB12"
+      },
+      {
+        "from": "WB12",
+        "to": "P0"
+      },
+      {
+        "from": "P0",
+        "to": "P100"
+      },
+      {
+        "from": "P100",
+        "to": "WB13"
+      }
+    ]
+  },
+  "ingredients": {
+    "title": "A story point combines three things, then you compare with reference stories.",
+    "direction": "LR",
+    "nodes": [
+      {
+        "id": "EF",
+        "label": "Effort\nhow much work",
+        "kind": "step"
+      },
+      {
+        "id": "CX",
+        "label": "Complexity\nhow hard to get right",
+        "kind": "step"
+      },
+      {
+        "id": "UN",
+        "label": "Uncertainty\nhow much is unknown",
+        "kind": "step"
+      },
+      {
+        "id": "PT",
+        "label": "Story\npoints",
+        "kind": "circle",
+        "tone": "std"
+      },
+      {
+        "id": "RF",
+        "label": "Compare with\nreference stories",
+        "kind": "step"
+      }
+    ],
+    "edges": [
+      {
+        "from": "EF",
+        "to": "PT"
+      },
+      {
+        "from": "CX",
+        "to": "PT"
+      },
+      {
+        "from": "UN",
+        "to": "PT"
+      },
+      {
+        "from": "PT",
+        "to": "RF"
+      }
+    ]
+  },
+  "poker": {
+    "title": "Planning poker: reveal together, talk about the gaps, vote again.",
+    "direction": "TB",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Feature owner reads the item\nand acceptance criteria",
+        "kind": "step"
+      },
+      {
+        "id": "B",
+        "label": "Questions first,\nno numbers yet",
+        "kind": "step"
+      },
+      {
+        "id": "C",
+        "label": "Everyone picks a card,\nall reveal together",
+        "kind": "step"
+      },
+      {
+        "id": "D",
+        "label": "Votes?",
+        "kind": "decision"
+      },
+      {
+        "id": "R",
+        "label": "Record points,\nconfidence, assumptions",
+        "kind": "result",
+        "tone": "lite"
+      },
+      {
+        "id": "E",
+        "label": "Highest and lowest\nvoters explain why",
+        "kind": "step"
+      },
+      {
+        "id": "S",
+        "label": "Split it, spike first,\nor back to refinement",
+        "kind": "result",
+        "tone": "full"
+      },
+      {
+        "id": "F",
+        "label": "Vote again",
+        "kind": "step"
+      },
+      {
+        "id": "G",
+        "label": "Agree now?",
+        "kind": "decision"
+      },
+      {
+        "id": "H",
+        "label": "Take the higher number\nor split the item",
+        "kind": "step"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B"
+      },
+      {
+        "from": "B",
+        "to": "C"
+      },
+      {
+        "from": "C",
+        "to": "D"
+      },
+      {
+        "from": "D",
+        "to": "R",
+        "label": "All the same"
+      },
+      {
+        "from": "D",
+        "to": "E",
+        "label": "Different"
+      },
+      {
+        "from": "D",
+        "to": "S",
+        "label": "13 or ?"
+      },
+      {
+        "from": "E",
+        "to": "F"
+      },
+      {
+        "from": "F",
+        "to": "G"
+      },
+      {
+        "from": "G",
+        "to": "R",
+        "label": "Yes"
+      },
+      {
+        "from": "G",
+        "to": "H",
+        "label": "No"
+      },
+      {
+        "from": "H",
+        "to": "R"
+      }
+    ]
+  },
+  "forecast": {
+    "title": "From points to a forecast: a range with a confidence level, not a date.",
+    "direction": "LR",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "29 points\nOrders team items",
+        "kind": "step"
+      },
+      {
+        "id": "B",
+        "label": "Velocity 21, 26, 23\nabout 23 a sprint",
+        "kind": "step"
+      },
+      {
+        "id": "C",
+        "label": "60% for this feature\nabout 14 a sprint",
+        "kind": "step"
+      },
+      {
+        "id": "D",
+        "label": "29 / 13 to 16\nabout 2 sprints",
+        "kind": "step"
+      },
+      {
+        "id": "E",
+        "label": "Add the spike, Warehouse\ndependency, staged rollout",
+        "kind": "step"
+      },
+      {
+        "id": "F",
+        "label": "Forecast: 2 to 3 sprints,\nmedium confidence",
+        "kind": "pill",
+        "tone": "gate"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "D"
+      },
+      {
+        "from": "B",
+        "to": "C"
+      },
+      {
+        "from": "C",
+        "to": "D"
+      },
+      {
+        "from": "D",
+        "to": "E"
+      },
+      {
+        "from": "E",
+        "to": "F"
+      }
+    ]
+  }
+}

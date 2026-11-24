@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 230" width="760" height="230" role="img" aria-labelledby="t d">
+  <title id="t">The story point scale drawn to scale</title>
+  <desc id="d">Points 1, 2, 3, 5, 8 and 13 on a line. The gaps grow because bigger items are less certain. 1 to 3 is small, 5 is medium, 8 is large and worth splitting, 13 means split it or run a spike first. Reference stories: 1 button text, 3 checkout field, 5 delivery SMS, 8 partial refund.</desc>
+  <style>
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #1f2430; }
+    .n { font-size: 20px; font-weight: 700; font-family: ui-monospace, Menlo, Consolas, monospace; }
+    .r { font-size: 12px; fill: #5d6475; }
+    .z { font-size: 12.5px; font-weight: 600; }
+  </style>
+  <rect x="0.5" y="0.5" width="759" height="229" rx="12" fill="#ffffff" stroke="#e3e6ec"/>
+
+  <!-- reference stories above the line -->
+  <text x="92" y="38" class="r" text-anchor="middle">"Track order"</text>
+  <text x="92" y="53" class="r" text-anchor="middle">button text</text>
+  <text x="197" y="38" class="r" text-anchor="middle">Checkout</text>
+  <text x="197" y="53" class="r" text-anchor="middle">field</text>
+  <text x="302" y="38" class="r" text-anchor="middle">Delivery</text>
+  <text x="302" y="53" class="r" text-anchor="middle">SMS</text>
+  <text x="458" y="38" class="r" text-anchor="middle">Refund one item</text>
+  <text x="458" y="53" class="r" text-anchor="middle">of an order</text>
+
+  <!-- the line, x = 40 + 52.3 × points -->
+  <line x1="40" y1="100" x2="730" y2="100" stroke="#98a2b3" stroke-width="2"/>
+  <g stroke="#ffffff" stroke-width="3">
+    <circle cx="92" cy="100" r="9" fill="#039855"/>
+    <circle cx="145" cy="100" r="9" fill="#039855"/>
+    <circle cx="197" cy="100" r="9" fill="#039855"/>
+    <circle cx="302" cy="100" r="9" fill="#2e90fa"/>
+    <circle cx="458" cy="100" r="9" fill="#dc6803"/>
+    <circle cx="720" cy="100" r="9" fill="#d92d20"/>
+  </g>
+  <text x="92" y="76" class="n" text-anchor="middle">1</text>
+  <text x="145" y="76" class="n" text-anchor="middle">2</text>
+  <text x="197" y="76" class="n" text-anchor="middle">3</text>
+  <text x="302" y="76" class="n" text-anchor="middle">5</text>
+  <text x="458" y="76" class="n" text-anchor="middle">8</text>
+  <text x="720" y="76" class="n" text-anchor="middle">13</text>
+
+  <!-- zones below the line -->
+  <rect x="70" y="124" width="150" height="34" rx="6" fill="#d1fadf"/>
+  <text x="145" y="146" class="z" text-anchor="middle" style="fill:#05603a">Small, familiar</text>
+  <rect x="246" y="124" width="112" height="34" rx="6" fill="#d1e9ff"/>
+  <text x="302" y="146" class="z" text-anchor="middle" style="fill:#1849a9">Medium</text>
+  <rect x="384" y="124" width="148" height="34" rx="6" fill="#fef0c7"/>
+  <text x="458" y="146" class="z" text-anchor="middle" style="fill:#93370d">Large: try to split</text>
+  <rect x="602" y="124" width="148" height="34" rx="6" fill="#fee4e2"/>
+  <text x="676" y="146" class="z" text-anchor="middle" style="fill:#912018">Split it, or spike first</text>
+
+  <text x="40" y="196" class="r">The gaps grow because bigger items are less certain. Compare each new item with a reference story:</text>
+  <text x="40" y="214" class="r">"Is this bigger or smaller than our 3?" A card showing "?" means information is missing.</text>
+</svg>

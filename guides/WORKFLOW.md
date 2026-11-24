@@ -16,6 +16,29 @@ Create one understandable path from a business request to an approved technical 
 
 ## End-to-end stages
 
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart TD
+  subgraph DEFINE["Define the work"]
+    direction LR
+    S1["1 Request<br>Feature Request Brief"] -->|problem clear| S2["2 Triage<br>size and owner"]
+    S2 -->|accepted| S3["3 Discovery<br>RFC sections 1-5"]
+    S3 -->|scope agreed| S4["4 Technical RFC<br>RFC sections 6-24"]
+  end
+  subgraph DELIVER["Deliver the work"]
+    direction LR
+    S5["5 Breakdown<br>Delivery Plan"] -->|Definition of Ready| S6["6 Jira handoff<br>epic and stories"]
+    S6 -->|picked in planning| S7["7 Deliver<br>release and review"]
+  end
+  S4 -->|RFC approved| S5
+```
+
+Each arrow is a gate: the label says what must be true to move on.
+
 | Stage | Accountable roles | Inputs | Activities | Exit / output |
 |---|---|---|---|---|
 | 1. Request / Intake | Requestor; Business sponsor | Business need, evidence, desired outcome | Complete Feature Request Brief; identify sponsor and urgency | Submitted request with a unique Feature ID |
@@ -41,6 +64,29 @@ Choose the lightest level that safely covers the change. Escalate when risk, imp
 ### Deciding the level
 
 The product owner picks the level at triage, with the tech lead. Ask these questions in order and stop at the first yes:
+
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart TD
+  Q1["1. Touches login, permissions, money,<br>personal data or a production data migration?"]
+  Q1 -->|Yes| FULL["Full"]
+  Q1 -->|No| Q2["2. Can it only ship if several teams deliver<br>work that depends on each other?"]
+  Q2 -->|Yes| FULL
+  Q2 -->|No| Q3["3. Needs a technical choice, a new API, table<br>or infrastructure, or more than a few stories?"]
+  Q3 -->|Yes| STD["Standard"]
+  Q3 -->|No| LITE["Lite"]
+  classDef full fill:#fee4e2,stroke:#d92d20,color:#7a271a
+  classDef std fill:#d1e9ff,stroke:#2e90fa,color:#194185
+  classDef lite fill:#d1fadf,stroke:#039855,color:#054f31
+  class FULL full
+  class STD std
+  class LITE lite
+```
+
 
 1. Does it touch login or permissions, money, personal data, or migrate production data? **Full.**
 2. Can it only ship if several teams deliver work that depends on each other? **Full.**

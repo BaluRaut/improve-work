@@ -25,11 +25,26 @@ A story point compares one item with another. It combines three things:
 - **Complexity:** how hard it is to get right, for example money, concurrency or many states.
 - **Uncertainty:** how much the team doesn't know yet, for example a new library or an unfamiliar vendor API.
 
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart LR
+  E["Effort<br>how much work"] --> P(("Story<br>points"))
+  C["Complexity<br>how hard to get right"] --> P
+  U["Uncertainty<br>how much is unknown"] --> P
+  P --> R["Compare with<br>reference stories"]
+```
+
 Points are not hours. A 5 is roughly twice the work and risk of a 2 or 3; it is not "five hours" or "five days".
 
 ### The scale
 
 A common scale is **1, 2, 3, 5, 8, 13**. The gaps grow because bigger items are less certain, and arguing over 6 versus 7 wastes time.
+
+![The scale drawn to scale: 1, 2 and 3 are close together and small; 5 is medium; 8 is large and worth splitting; 13 means split it or spike first.](../diagrams/point-scale.svg)
 
 | Points | Means |
 |---|---|
@@ -56,6 +71,26 @@ Pick three or four finished items the whole team remembers, and estimate new ite
 Review the reference stories every few months; as the codebase changes, a "3" can quietly become a "2".
 
 ### Planning poker, step by step
+
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart TD
+  A["Feature owner reads the item<br>and acceptance criteria"] --> B["Questions first,<br>no numbers yet"]
+  B --> C["Everyone picks a card,<br>all reveal together"]
+  C --> D{"Votes?"}
+  D -->|All the same| R["Record points,<br>confidence, assumptions"]
+  D -->|Different| E["Highest and lowest<br>voters explain why"]
+  D -->|13 or ?| S["Split it, spike first,<br>or back to refinement"]
+  E --> F["Vote again"]
+  F --> G{"Agree now?"}
+  G -->|Yes| R
+  G -->|No| H["Take the higher number<br>or split the item"]
+  H --> R
+```
 
 1. The feature owner reads the item and its acceptance criteria aloud.
 2. The team asks questions. Nobody says a number yet.
@@ -90,6 +125,20 @@ Velocity is the number of points a team finished in recent sprints, counting onl
 - The Orders team finished 21, 26 and 23 points in its last three two-week sprints: about 23 a sprint.
 - About 40% of each sprint goes to support work and another feature, so this feature gets around 60%: about 14 points a sprint.
 - 29 points at 13 to 16 points a sprint is about two sprints. Add the spike, the Warehouse dependency and the staged rollout, and the forecast is **two to three sprints, medium confidence**.
+
+```mermaid
+---
+config:
+  flowchart:
+    wrappingWidth: 400
+---
+flowchart LR
+  A["29 points<br>Orders team items"] --> D
+  B["Velocity 21, 26, 23<br>about 23 a sprint"] --> C["60% for this feature<br>about 14 a sprint"]
+  C --> D["29 / 13 to 16<br>about 2 sprints"]
+  D --> E["Add the spike, Warehouse<br>dependency, staged rollout"]
+  E --> F(["Forecast: 2 to 3 sprints,<br>medium confidence"])
+```
 
 Give the forecast as a range with a confidence level, not a single date. Update it after each sprint as real progress replaces the estimate.
 

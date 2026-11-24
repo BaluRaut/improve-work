@@ -76,6 +76,8 @@ blockquote.guide p { margin:4px 0; }
 code { font-family:var(--mono); font-size:.88em; background:var(--code); padding:1px 5px; border-radius:5px; }
 pre { background:var(--code); padding:12px 14px; border-radius:10px; overflow-x:auto; }
 pre code { background:none; padding:0; }
+pre.mermaid { background:none; padding:8px 0; text-align:center; }
+img.diagram, article p > img { display:block; max-width:100%; height:auto; margin:14px auto; border-radius:10px; }
 li.task { list-style:none; margin-left:-1.2em; }
 li.task input { width:16px; height:16px; margin-right:6px; vertical-align:-2px; accent-color:var(--accent); }
 .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:10px; font-size:.9rem; opacity:0; transition:opacity .2s; pointer-events:none; }
@@ -162,6 +164,19 @@ JS = """
 """
 
 
+MERMAID_JS = """<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@12.3.0/dist/mermaid.esm.min.mjs";
+const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "neutral", securityLevel: "strict" });
+// One at a time: mermaid.run() on several diagrams draws later ones into the wrong place.
+let n = 0;
+for (const el of document.querySelectorAll("pre.mermaid")) {
+  const { svg } = await mermaid.render(`diagram-${n++}`, el.textContent);
+  el.innerHTML = svg;
+}
+</script>"""
+
+
 def walk(tokens):
     for token in tokens:
         yield token
@@ -184,6 +199,9 @@ def render(source, *, highlight_placeholders):
             re.sub(r"\{([^{}\n]{1,160})\}", r'<span class="ph">{\1}</span>', part)
             for part in parts
         )
+    # ```mermaid blocks become diagrams; GitHub renders the same fences natively.
+    body = re.sub(r'<pre><code class="language-mermaid">(.*?)</code></pre>',
+                  r'<pre class="mermaid">\1</pre>', body, flags=re.S)
     sections = [token for token in walk(parser.toc_tokens) if token["level"] == 2]
     return body, sections
 
@@ -249,6 +267,7 @@ def page(*, title, source, body, sections, download, home_href, guides_button):
 <div class="toast" id="toast" role="status"></div>
 <script id="md-source" type="application/json">{source_json}</script>
 <script>{JS}</script>
+{MERMAID_JS if 'class="mermaid"' in body else ''}
 </body>
 </html>
 """

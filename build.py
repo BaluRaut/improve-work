@@ -76,7 +76,6 @@ blockquote.guide p { margin:4px 0; }
 code { font-family:var(--mono); font-size:.88em; background:var(--code); padding:1px 5px; border-radius:5px; }
 pre { background:var(--code); padding:12px 14px; border-radius:10px; overflow-x:auto; }
 pre code { background:none; padding:0; }
-pre.mermaid { background:none; padding:8px 0; text-align:center; }
 img.diagram, article p > img { display:block; max-width:100%; height:auto; margin:14px auto; border-radius:10px; }
 li.task { list-style:none; margin-left:-1.2em; }
 li.task input { width:16px; height:16px; margin-right:6px; vertical-align:-2px; accent-color:var(--accent); }
@@ -164,17 +163,82 @@ JS = """
 """
 
 
-MERMAID_JS = """<script type="module">
-import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@12.3.0/dist/mermaid.esm.min.mjs";
-const dark = matchMedia("(prefers-color-scheme: dark)").matches;
-mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "neutral", securityLevel: "strict" });
-// One at a time: mermaid.run() on several diagrams draws later ones into the wrong place.
-let n = 0;
-for (const el of document.querySelectorAll("pre.mermaid")) {
-  const { svg } = await mermaid.render(`diagram-${n++}`, el.textContent);
-  el.innerHTML = svg;
+# Diagrams: diagrams/flows.json is the single source. The site draws them with
+# React Flow (diagrams/flow-diagrams.js); each .md file carries a generated
+# Mermaid copy so GitHub shows the diagram too. `python build.py --sync`
+# rewrites those copies after flows.json changes.
+FLOWS = json.loads((HERE / "diagrams" / "flows.json").read_text(encoding="utf-8"))
+FLOW_IMPORTS = {
+    "react": "https://esm.sh/react@19.3.1",
+    "react/jsx-runtime": "https://esm.sh/react@19.3.1/jsx-runtime",
+    "react-dom": "https://esm.sh/react-dom@19.3.1?external=react",
+    "react-dom/client": "https://esm.sh/react-dom@19.3.1/client?external=react",
+    "@xyflow/react": "https://esm.sh/@xyflow/react@13.0.3?external=react,react-dom",
+    "@dagrejs/dagre": "https://esm.sh/@dagrejs/dagre@3.1.3",
 }
-</script>"""
+MERMAID_SHAPES = {"step": ('["', '"]'), "result": ('["', '"]'), "decision": ('{"', '"}'),
+                  "pill": ('(["', '"])'), "circle": ('(("', '"))')}
+MERMAID_TONES = {
+    "full": "fill:#fee4e2,stroke:#d92d20,color:#7a271a", "std": "fill:#d1e9ff,stroke:#2e90fa,color:#194185",
+    "lite": "fill:#d1fadf,stroke:#039855,color:#054f31", "good": "fill:#d1fadf,stroke:#039855,color:#054f31",
+    "orders": "fill:#d1e9ff,stroke:#2e90fa,color:#194185", "payments": "fill:#fef0c7,stroke:#dc6803,color:#93370d",
+    "warehouse": "fill:#ebe9fe,stroke:#7a5af8,color:#3e1c96", "support": "fill:#fce7f6,stroke:#dd2590,color:#851651",
+    "l10n": "fill:#d1fadf,stroke:#039855,color:#054f31", "qa": "fill:#f2f4f7,stroke:#667085,color:#1d2939",
+    "contract": "fill:#ffffff,stroke:#344054,color:#1d2939,stroke-dasharray:4 3",
+    "gate": "fill:#1d2939,stroke:#1d2939,color:#ffffff",
+}
+FLOW_FENCE = re.compile(r"```mermaid\n(?:.*?\n)?\s*%% flow: (\w+)\n.*?```\n", re.S)
+
+
+def mermaid_for(key):
+    """The Mermaid copy of a flow, as it appears inside the ```mermaid fence."""
+    flow = FLOWS[key]
+    label = lambda text: text.replace('"', "#quot;").replace("\n", "<br>")
+    node = lambda n: "{}{}{}{}".format(n["id"], MERMAID_SHAPES[n["kind"]][0], label(n["label"]), MERMAID_SHAPES[n["kind"]][1])
+    edge = lambda e: "{} -->{} {}".format(e["from"], f'|{e["label"]}|' if e.get("label") else "", e["to"])
+    frames = flow.get("frames", [])
+    direction = "TD" if frames or flow.get("direction") == "TB" else "LR"
+    lines = ["---", "config:", "  flowchart:", "    wrappingWidth: 400", "---", f"flowchart {direction}", f"  %% flow: {key}"]
+    framed = set()
+    for frame in frames:
+        members = set(frame["members"])
+        framed |= members
+        lines += [f'  subgraph {frame["id"]}["{label(frame["label"])}"]', "    direction LR"]
+        lines += [f"    {node(n)}" for n in flow["nodes"] if n["id"] in members]
+        lines += [f"    {edge(e)}" for e in flow["edges"] if e["from"] in members and e["to"] in members]
+        lines.append("  end")
+    lines += [f"  {node(n)}" for n in flow["nodes"] if n["id"] not in framed]
+    lines += [f"  {edge(e)}" for e in flow["edges"]
+              if not any(e["from"] in f["members"] and e["to"] in f["members"] for f in frames)]
+    tones = sorted({n["tone"] for n in flow["nodes"] if n.get("tone")})
+    lines += [f"  classDef {t} {MERMAID_TONES[t]}" for t in tones]
+    for t in tones:
+        lines.append("  class {} {}".format(",".join(n["id"] for n in flow["nodes"] if n.get("tone") == t), t))
+    return "\n".join(lines) + "\n"
+
+
+def sync_flow_fences(path, source, errors, fix):
+    """Check (or rewrite, with --sync) each flow's Mermaid copy against flows.json."""
+    def expected(match):
+        key = match.group(1)
+        if key not in FLOWS:
+            errors.append(f"{path.relative_to(HERE)}: unknown flow '{key}'")
+            return match.group(0)
+        return "```mermaid\n" + mermaid_for(key) + "```\n"
+    synced = FLOW_FENCE.sub(expected, source)
+    if synced != source:
+        if fix:
+            path.write_text(synced, encoding="utf-8")
+            print(f"synced diagrams in {path.relative_to(HERE)}")
+        else:
+            errors.append(f"{path.relative_to(HERE)}: diagram copies differ from diagrams/flows.json; run python build.py --sync")
+    return synced
+
+
+def flow_scripts(prefix):
+    imports = json.dumps({"imports": FLOW_IMPORTS}, indent=1)
+    return (f'<script type="importmap">{imports}</script>\n'
+            f'<script type="module" src="{prefix}diagrams/flow-diagrams.js"></script>')
 
 
 def walk(tokens):
@@ -199,9 +263,9 @@ def render(source, *, highlight_placeholders):
             re.sub(r"\{([^{}\n]{1,160})\}", r'<span class="ph">{\1}</span>', part)
             for part in parts
         )
-    # ```mermaid blocks become diagrams; GitHub renders the same fences natively.
-    body = re.sub(r'<pre><code class="language-mermaid">(.*?)</code></pre>',
-                  r'<pre class="mermaid">\1</pre>', body, flags=re.S)
+    # Flow diagrams: the site draws them with React Flow instead of Mermaid.
+    body = re.sub(r'<pre><code class="language-mermaid">.*?%% flow: (\w+).*?</code></pre>',
+                  r'<div class="flow" data-flow="\1"></div>', body, flags=re.S)
     sections = [token for token in walk(parser.toc_tokens) if token["level"] == 2]
     return body, sections
 
@@ -267,7 +331,7 @@ def page(*, title, source, body, sections, download, home_href, guides_button):
 <div class="toast" id="toast" role="status"></div>
 <script id="md-source" type="application/json">{source_json}</script>
 <script>{JS}</script>
-{MERMAID_JS if 'class="mermaid"' in body else ''}
+{flow_scripts(home_href[:-len("index.html")]) if 'class="flow"' in body else ''}
 </body>
 </html>
 """
@@ -365,6 +429,7 @@ def main():
             errors.append(f"supporting document is missing: {relative_path}")
             continue
         source = path.read_text(encoding="utf-8")
+        source = sync_flow_fences(path, source, errors, fix="--sync" in sys.argv)
         body, sections = render(source, highlight_placeholders=True)
         body = link_pages(body, path, errors)
         output = path.with_suffix(".html")

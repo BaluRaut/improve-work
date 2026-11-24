@@ -23,18 +23,28 @@ config:
     wrappingWidth: 400
 ---
 flowchart TD
+  %% flow: stages
   subgraph DEFINE["Define the work"]
     direction LR
-    S1["1 Request<br>Feature Request Brief"] -->|problem clear| S2["2 Triage<br>size and owner"]
-    S2 -->|accepted| S3["3 Discovery<br>RFC sections 1-5"]
-    S3 -->|scope agreed| S4["4 Technical RFC<br>RFC sections 6-24"]
+    S1["1 Request<br>Feature Request Brief"]
+    S2["2 Triage<br>size and owner"]
+    S3["3 Discovery<br>RFC sections 1-5"]
+    S4["4 Technical RFC<br>RFC sections 6-24"]
+    S1 -->|problem clear| S2
+    S2 -->|accepted| S3
+    S3 -->|scope agreed| S4
   end
   subgraph DELIVER["Deliver the work"]
     direction LR
-    S5["5 Breakdown<br>Delivery Plan"] -->|Definition of Ready| S6["6 Jira handoff<br>epic and stories"]
-    S6 -->|picked in planning| S7["7 Deliver<br>release and review"]
+    S5["5 Breakdown<br>Delivery Plan"]
+    S6["6 Jira handoff<br>epic and stories"]
+    S7["7 Deliver<br>release and review"]
+    S5 -->|Definition of Ready| S6
+    S6 -->|picked in planning| S7
   end
   S4 -->|RFC approved| S5
+  classDef gate fill:#1d2939,stroke:#1d2939,color:#ffffff
+  class S7 gate
 ```
 
 Each arrow is a gate: the label says what must be true to move on.
@@ -72,19 +82,25 @@ config:
     wrappingWidth: 400
 ---
 flowchart TD
-  Q1["1. Touches login, permissions, money,<br>personal data or a production data migration?"]
-  Q1 -->|Yes| FULL["Full"]
-  Q1 -->|No| Q2["2. Can it only ship if several teams deliver<br>work that depends on each other?"]
+  %% flow: sizing
+  Q1{"1. Touches login, permissions, money,<br>personal data or a production data migration?"}
+  Q2{"2. Can it only ship if several teams deliver<br>work that depends on each other?"}
+  Q3{"3. Needs a technical choice, a new API, table<br>or infrastructure, or more than a few stories?"}
+  FULL["Full"]
+  STD["Standard"]
+  LITE["Lite"]
+  Q1 -->|Yes| FULL
+  Q1 -->|No| Q2
   Q2 -->|Yes| FULL
-  Q2 -->|No| Q3["3. Needs a technical choice, a new API, table<br>or infrastructure, or more than a few stories?"]
-  Q3 -->|Yes| STD["Standard"]
-  Q3 -->|No| LITE["Lite"]
+  Q2 -->|No| Q3
+  Q3 -->|Yes| STD
+  Q3 -->|No| LITE
   classDef full fill:#fee4e2,stroke:#d92d20,color:#7a271a
-  classDef std fill:#d1e9ff,stroke:#2e90fa,color:#194185
   classDef lite fill:#d1fadf,stroke:#039855,color:#054f31
+  classDef std fill:#d1e9ff,stroke:#2e90fa,color:#194185
   class FULL full
-  class STD std
   class LITE lite
+  class STD std
 ```
 
 

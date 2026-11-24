@@ -32,10 +32,18 @@ config:
     wrappingWidth: 400
 ---
 flowchart LR
-  E["Effort<br>how much work"] --> P(("Story<br>points"))
-  C["Complexity<br>how hard to get right"] --> P
-  U["Uncertainty<br>how much is unknown"] --> P
-  P --> R["Compare with<br>reference stories"]
+  %% flow: ingredients
+  EF["Effort<br>how much work"]
+  CX["Complexity<br>how hard to get right"]
+  UN["Uncertainty<br>how much is unknown"]
+  PT(("Story<br>points"))
+  RF["Compare with<br>reference stories"]
+  EF --> PT
+  CX --> PT
+  UN --> PT
+  PT --> RF
+  classDef std fill:#d1e9ff,stroke:#2e90fa,color:#194185
+  class PT std
 ```
 
 Points are not hours. A 5 is roughly twice the work and risk of a 2 or 3; it is not "five hours" or "five days".
@@ -79,17 +87,32 @@ config:
     wrappingWidth: 400
 ---
 flowchart TD
-  A["Feature owner reads the item<br>and acceptance criteria"] --> B["Questions first,<br>no numbers yet"]
-  B --> C["Everyone picks a card,<br>all reveal together"]
-  C --> D{"Votes?"}
-  D -->|All the same| R["Record points,<br>confidence, assumptions"]
-  D -->|Different| E["Highest and lowest<br>voters explain why"]
-  D -->|13 or ?| S["Split it, spike first,<br>or back to refinement"]
-  E --> F["Vote again"]
-  F --> G{"Agree now?"}
+  %% flow: poker
+  A["Feature owner reads the item<br>and acceptance criteria"]
+  B["Questions first,<br>no numbers yet"]
+  C["Everyone picks a card,<br>all reveal together"]
+  D{"Votes?"}
+  R["Record points,<br>confidence, assumptions"]
+  E["Highest and lowest<br>voters explain why"]
+  S["Split it, spike first,<br>or back to refinement"]
+  F["Vote again"]
+  G{"Agree now?"}
+  H["Take the higher number<br>or split the item"]
+  A --> B
+  B --> C
+  C --> D
+  D -->|All the same| R
+  D -->|Different| E
+  D -->|13 or ?| S
+  E --> F
+  F --> G
   G -->|Yes| R
-  G -->|No| H["Take the higher number<br>or split the item"]
+  G -->|No| H
   H --> R
+  classDef full fill:#fee4e2,stroke:#d92d20,color:#7a271a
+  classDef lite fill:#d1fadf,stroke:#039855,color:#054f31
+  class S full
+  class R lite
 ```
 
 1. The feature owner reads the item and its acceptance criteria aloud.
@@ -133,11 +156,20 @@ config:
     wrappingWidth: 400
 ---
 flowchart LR
-  A["29 points<br>Orders team items"] --> D
-  B["Velocity 21, 26, 23<br>about 23 a sprint"] --> C["60% for this feature<br>about 14 a sprint"]
-  C --> D["29 / 13 to 16<br>about 2 sprints"]
-  D --> E["Add the spike, Warehouse<br>dependency, staged rollout"]
-  E --> F(["Forecast: 2 to 3 sprints,<br>medium confidence"])
+  %% flow: forecast
+  A["29 points<br>Orders team items"]
+  B["Velocity 21, 26, 23<br>about 23 a sprint"]
+  C["60% for this feature<br>about 14 a sprint"]
+  D["29 / 13 to 16<br>about 2 sprints"]
+  E["Add the spike, Warehouse<br>dependency, staged rollout"]
+  F(["Forecast: 2 to 3 sprints,<br>medium confidence"])
+  A --> D
+  B --> C
+  C --> D
+  D --> E
+  E --> F
+  classDef gate fill:#1d2939,stroke:#1d2939,color:#ffffff
+  class F gate
 ```
 
 Give the forecast as a range with a confidence level, not a single date. Update it after each sprint as real progress replaces the estimate.

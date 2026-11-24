@@ -86,4 +86,16 @@ To view the pages locally, build them and open `index.html`:
 uv run --with markdown python build.py
 ```
 
+### Diagrams
+
+Flow diagrams live in one place, `diagrams/flows.json`: boxes, arrows and labels. The site draws them with [React Flow](https://reactflow.dev/), so readers can zoom, pan and drag boxes, and each diagram has a text version. Each guide also carries a generated Mermaid copy, so the diagrams show when the `.md` files are read on GitHub.
+
+To change a diagram, edit `diagrams/flows.json`, then update the Mermaid copies:
+
+```sh
+uv run --with markdown python build.py --sync
+```
+
+The build fails if a copy no longer matches `flows.json`. To view diagrams locally, serve the folder over HTTP (for example `python3 -m http.server`) rather than opening the files directly.
+
 Generated HTML is not committed (except the hand-written `playbook/index.html`). GitHub Actions builds and validates every pull request, and publishes the site to GitHub Pages when changes reach `main`.

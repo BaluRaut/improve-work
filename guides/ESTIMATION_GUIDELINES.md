@@ -6,7 +6,7 @@ An estimate is a team's assessment of relative effort and uncertainty. It is not
 
 ## Recommended approach
 
-1. Break the work into independently testable deliverables before estimating.
+1. Break the work into independently testable deliverables before estimating; see [Splitting work](SPLITTING_WORK.md).
 2. Estimate with the people who will perform the work and understand the relevant system.
 3. Use the team's established scale and reference stories. Do not introduce a new points scale for this template.
 4. Include implementation, code review, testing, integration and necessary documentation in the estimate.

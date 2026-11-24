@@ -39,6 +39,8 @@
 
 ## 2. Work breakdown summary
 
+> Split by outcome, not by activity or layer. Use the factors and patterns in `guides/SPLITTING_WORK.md`; it includes a worked example.
+
 | Work ID | Workstream | Type | Deliverable / outcome | Owning team | Depends on | Estimate | Confidence | Jira key |
 |---|---|---|---|---|---|---|---|---|
 | WB-01 | {Frontend} | Story | {User-visible outcome} | {Team} | — | {Team estimate / TBD} | {H/M/L} | {FEAT-123} |

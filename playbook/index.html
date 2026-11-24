@@ -113,6 +113,19 @@ td:first-child{font-weight:600;white-space:nowrap}
 .sizes li span{display:block;color:var(--muted);font-size:13px}
 td.size{font-weight:600}
 
+/* splitting */
+.factors{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.factors div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:5px}
+.factors b{font-size:14.5px}
+.factors span{font-size:13.5px;color:var(--muted)}
+.vs{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:14px;align-items:start}
+@media (max-width:820px){.vs{grid-template-columns:1fr}}
+.vs .card ul{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.bad h3{color:var(--brief)}
+.good h3{color:var(--plan)}
+.split-tbl td:first-child{font-family:var(--mono);font-size:12.5px;font-weight:500}
+.split-tbl table{min-width:640px}
+
 /* confluence */
 .conf{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start}
 @media (max-width:820px){.conf{grid-template-columns:1fr}}
@@ -346,6 +359,60 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
     </table>
   </div>
   <p class="note">Risk beats size. A one-line change to login, payments, personal data or a production migration is Full, however small it looks. If unsure between two sizes, pick the bigger one at triage; you can drop sections later with a reason.</p>
+</section>
+
+<section id="split">
+  <span class="eyebrow">Splitting the work</span>
+  <h2>How to split a feature into work items</h2>
+  <p>In stage 5 the feature owner drafts the split with the teams, and each team estimates its own items. Every item should deliver one outcome someone can see or check, fit within a sprint, have one owning team, and be safe to release on its own behind a flag.</p>
+
+  <h3>Factors to consider</h3>
+  <div class="factors">
+    <div><b>User value</b><span>Slice through UI, API and data so each item works end to end, not "backend" and "frontend" halves.</span></div>
+    <div><b>Size</b><span>Finish and verify within a sprint. Split bigger items again; merge items under half a day.</span></div>
+    <div><b>Team boundaries</b><span>One owning team per item. Across teams, agree the API or event contract first, then build in parallel.</span></div>
+    <div><b>Dependencies and order</b><span>Foundations first: schema, queues, flag, contract. Record blockers as Jira links.</span></div>
+    <div><b>Risk and unknowns</b><span>Riskiest work first. Turn open questions into time-boxed spikes.</span></div>
+    <div><b>Release safety</b><span>Feature flag for unfinished work. Data changes as expand, backfill, switch over, clean up.</span></div>
+    <div><b>Testing</b><span>Tests go in each item's acceptance criteria. Separate QA items only for runs across many items.</span></div>
+    <div><b>Cross-cutting work</b><span>Events, translations, monitors and security go inside the item they belong to, unless another team owns them.</span></div>
+    <div><b>Outside lead time</b><span>Vendors, approvals, app store review, translation review: start them early as their own items.</span></div>
+    <div><b>Parallel work</b><span>Split so people touch different screens or services and don't block each other.</span></div>
+    <div><b>Clean-up</b><span>Create items now to remove the flag and old code after launch.</span></div>
+  </div>
+
+  <h3>Example: customers cancel their own orders</h3>
+  <div class="vs">
+    <div class="card bad">
+      <h3>Split by layer: avoid</h3>
+      <ul><li>Cancel API</li><li>Cancel UI</li><li>Refund worker</li><li>Testing</li><li>Tracking</li><li>Translations</li></ul>
+      <p class="hint">Nothing works until all six are done, testing and tracking come last and get cut, and two other teams' work is hidden inside "Cancel API".</p>
+    </div>
+    <div class="card good">
+      <h3>Split by outcome</h3>
+      <div class="tbl-wrap split-tbl">
+        <table>
+          <thead><tr><th>ID</th><th>Item</th><th>Team</th><th>After</th></tr></thead>
+          <tbody>
+            <tr><td>WB-01</td><td>New order columns and refunds table</td><td>Orders</td><td>—</td></tr>
+            <tr><td>WB-02</td><td>Refund queue, dead-letter queue, feature flag (off)</td><td>Orders</td><td>—</td></tr>
+            <tr><td>WB-03</td><td>Refund scope on the payment provider key</td><td>Payments</td><td>—</td></tr>
+            <tr><td>WB-04</td><td>Cancel a cash-on-delivery order on web, with events and strings</td><td>Orders</td><td>01, 02</td></tr>
+            <tr><td>WB-05</td><td>Warehouse stops picking cancelled orders</td><td>Warehouse</td><td>contract</td></tr>
+            <tr><td>WB-06</td><td>Prepaid orders refunded automatically</td><td>Orders</td><td>02, 03</td></tr>
+            <tr><td>WB-07</td><td>Expired-window and packing-started messages; safe retry</td><td>Orders</td><td>04</td></tr>
+            <tr><td>WB-08</td><td>Same flow in the Android and iOS app</td><td>Orders</td><td>04</td></tr>
+            <tr><td>WB-09</td><td>Refund reconciler and Datadog monitors</td><td>Orders</td><td>06</td></tr>
+            <tr><td>WB-10</td><td>Support macro and ticket view</td><td>Support</td><td>04</td></tr>
+            <tr><td>WB-11</td><td>Hindi and Marathi string review</td><td>Localization</td><td>04, 08</td></tr>
+            <tr><td>WB-12</td><td>End-to-end regression before staff testing</td><td>QA</td><td>06–11</td></tr>
+            <tr><td>WB-13</td><td>Remove the flag and old code paths</td><td>Orders</td><td>100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <p>Splitting patterns, things to avoid and the full example with reasons for each item: <a href="../guides/SPLITTING_WORK.html">Splitting work guide</a>.</p>
 </section>
 
 <section id="confluence">
